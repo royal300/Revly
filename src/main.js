@@ -885,6 +885,40 @@ function renderClientProfileTab(p) {
             </span>
           </div>
 
+          <!-- SEO Keywords Management -->
+          <div style="margin-bottom:22px; padding:18px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <label class="input-label" style="margin-bottom:0; display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Google Ranking Keywords (Local SEO)
+              </label>
+              <span style="font-size:11px; font-weight:700; color:#4285f4; background:#eff6ff; padding:2px 8px; border-radius:99px; border:1px solid #bfdbfe;">
+                AI Local SEO
+              </span>
+            </div>
+            <div style="font-size:12px; color:#64748b; line-height:1.5; margin-bottom:12px;">
+              Keywords you want to rank for on Google Maps. The AI intelligently weaves <strong>1 natural keyword</strong> into positive reviews based on questions answered (e.g. ambience or service) without keyword stuffing or inventing fake dish names.
+            </div>
+
+            <textarea id="profKeywords" class="pro-input" rows="3" 
+              style="resize:vertical; font-family:inherit; font-size:13px; line-height:1.6;" 
+              placeholder="e.g. best cafe in madhyagram, cozy cafe to relax, great hospitality cafe, peaceful hangout spot, top rated local cafe">${p.seo_keywords !== undefined && p.seo_keywords !== null ? p.seo_keywords : 'best cafe in madhyagram, cozy cafe to relax, great hospitality cafe, peaceful hangout spot, top rated local cafe'}</textarea>
+
+            <!-- Suggested Preset Chips -->
+            <div style="margin-top:10px;">
+              <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">
+                Click to add suggested keywords:
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('best cafe in madhyagram')" style="padding:4px 10px; font-size:11px;">+ best cafe in madhyagram</button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('cozy cafe to relax')" style="padding:4px 10px; font-size:11px;">+ cozy cafe to relax</button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('great hospitality cafe')" style="padding:4px 10px; font-size:11px;">+ great hospitality cafe</button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('peaceful hangout spot')" style="padding:4px 10px; font-size:11px;">+ peaceful hangout spot</button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('top rated local cafe')" style="padding:4px 10px; font-size:11px;">+ top rated local cafe</button>
+              </div>
+            </div>
+          </div>
+
           <div style="margin-bottom:24px;">
             <label class="input-label">Choose QR Code Color</label>
             <div style="display:flex; gap:10px; margin-top:8px;">
@@ -965,20 +999,35 @@ function selectColor(color) {
   }
 }
 
+function addKeywordChip(keyword) {
+  const el = document.getElementById('profKeywords');
+  if (!el) return;
+  const current = el.value.trim();
+  if (!current) {
+    el.value = keyword;
+  } else {
+    const list = current.split(',').map(s => s.trim().toLowerCase());
+    if (!list.includes(keyword.toLowerCase())) {
+      el.value = current + ', ' + keyword;
+    }
+  }
+}
+
 async function handleSaveProfile(e) {
   e.preventDefault();
   const name = document.getElementById('profName').value;
   const google_review_url = document.getElementById('profGoogleUrl').value;
   const qr_color = document.getElementById('profQrColor').value;
+  const seo_keywords = document.getElementById('profKeywords')?.value.trim();
 
   try {
     const res = await fetch(`${API_BASE}/client/profile/${state.currentUser.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, google_review_url, qr_color })
+      body: JSON.stringify({ name, google_review_url, qr_color, seo_keywords })
     });
     if (res.ok) {
-      alert('Profile updated successfully');
+      alert('Profile and SEO keywords updated successfully');
       await loadClientData();
       render();
     }
@@ -2531,6 +2580,7 @@ window.handleResetPassword = handleResetPassword;
 window.deleteClient = deleteClient;
 window.switchTab = switchTab;
 window.selectColor = selectColor;
+window.addKeywordChip = addKeywordChip;
 window.handleSaveProfile = handleSaveProfile;
 window.downloadQrCode = downloadQrCode;
 window.updateCustomization = updateCustomization;

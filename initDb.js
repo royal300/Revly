@@ -29,6 +29,7 @@ async function initDatabase() {
         bg_color VARCHAR(30) DEFAULT '#f0f6ff',
         logo_url TEXT DEFAULT NULL,
         banner_url TEXT DEFAULT NULL,
+        seo_keywords TEXT DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
@@ -37,8 +38,9 @@ async function initDatabase() {
     try { await pool.query("ALTER TABLE users ADD COLUMN bg_color VARCHAR(30) DEFAULT '#f0f6ff'"); } catch (e) {}
     try { await pool.query("ALTER TABLE users ADD COLUMN logo_url TEXT DEFAULT NULL"); } catch (e) {}
     try { await pool.query("ALTER TABLE users ADD COLUMN banner_url TEXT DEFAULT NULL"); } catch (e) {}
+    try { await pool.query("ALTER TABLE users ADD COLUMN seo_keywords TEXT DEFAULT NULL"); } catch (e) {}
 
-    console.log('✔ users table and customization columns verified');
+    console.log('✔ users table and customization/SEO columns verified');
 
     // 2. categories table
     await pool.query(`

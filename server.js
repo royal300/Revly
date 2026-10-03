@@ -90,16 +90,126 @@ const pool = mysql.createPool({
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 
 /**
+ * Intelligently pick 1 SEO keyword from client's list based on customer feedback
+ */
+function pickIntelligentSeoKeyword(answers = [], rawKeywords = '') {
+  const defaultList = [
+    'best cafe in madhyagram',
+    'cozy cafe to relax',
+    'great hospitality cafe',
+    'peaceful hangout spot',
+    'top rated local cafe'
+  ];
+
+  let list = (rawKeywords && typeof rawKeywords === 'string' && rawKeywords.trim())
+    ? rawKeywords.split(/,|\n/).map(k => k.trim()).filter(k => k.length > 2)
+    : [];
+
+  if (list.length === 0) {
+    list = defaultList;
+  }
+
+  // Calculate sentiment metrics
+  let totalRating = 0;
+  let count = 0;
+  let foodRating = null;
+  let serviceRating = null;
+  let ambienceRating = null;
+
+  for (const a of answers) {
+    const r = Number(a.rating) || 5;
+    totalRating += r;
+    count++;
+    const cat = ((a.category_name || '') + ' ' + (a.question_text || '')).toLowerCase();
+    if (/food|dish|taste|eat|beverage|drink|coffee|menu|snack|flavor/i.test(cat)) {
+      foodRating = r;
+    } else if (/staff|service|hospitality|behavior|team|wait|order/i.test(cat)) {
+      serviceRating = r;
+    } else if (/ambien|vibe|atmosphere|decor|place|music|cozy|interior/i.test(cat)) {
+      ambienceRating = r;
+    }
+  }
+
+  const avgRating = count > 0 ? (totalRating / count) : 4.5;
+
+  // STRICT RULE: If overall experience is poor (<= 3.0), do NOT force superlative ranking keywords
+  if (avgRating <= 3.0) {
+    return ''; // Skip SEO keyword injection for negative/average reviews to maintain authenticity
+  }
+
+  // Filter candidates intelligently
+  let candidates = [...list];
+
+  // If food rating was average or low (<= 3), STRICTLY remove any keywords mentioning food/dishes/drink/coffee
+  if (foodRating !== null && foodRating <= 3) {
+    candidates = candidates.filter(k => !/food|pizza|dish|burger|coffee|taste|eat|menu|drink|beverage|snack|tea/i.test(k));
+  }
+
+  // If service was rated high (>= 4), keywords focusing on service/hospitality get a priority
+  if (serviceRating !== null && serviceRating >= 4) {
+    const serviceMatches = candidates.filter(k => /service|hospitality|staff|friendly|polite/i.test(k));
+    if (serviceMatches.length > 0 && Math.random() < 0.6) {
+      candidates = serviceMatches;
+    }
+  }
+
+  // If ambience was rated high (>= 4), keywords focusing on vibe/cozy/atmosphere get a priority
+  if (ambienceRating !== null && ambienceRating >= 4) {
+    const vibeMatches = candidates.filter(k => /cozy|hangout|vibe|ambien|peaceful|atmosphere|spot/i.test(k));
+    if (vibeMatches.length > 0 && Math.random() < 0.6) {
+      candidates = vibeMatches;
+    }
+  }
+
+  if (candidates.length === 0) {
+    candidates = list.filter(k => !/food|pizza|dish|burger/i.test(k));
+  }
+  if (candidates.length === 0) {
+    candidates = defaultList;
+  }
+
+  // Pick exactly 1 keyword
+  const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+  return chosen || '';
+}
+
+/**
  * Call OpenAI gpt-4o-mini to generate an authentic customer review draft
  */
-async function callGpt4oMini(businessName, answers, customerName, customerComments = 'None provided') {
+async function callGpt4oMini(businessName, answers, customerName, customerComments = 'None provided', seoKeywords = '') {
   return new Promise((resolve, reject) => {
+    const targetKeyword = pickIntelligentSeoKeyword(answers, seoKeywords);
     const ratingsSummary = answers.map(a => `- ${a.category_name}: ${a.rating}/5 stars (Question: "${a.question_text}")`).join('\n');
+
+    let keywordInstruction = '';
+    if (targetKeyword) {
+      keywordInstruction = `
+--------------------------------------------------
+INTELLIGENT LOCAL SEO KEYWORD INTEGRATION
+--------------------------------------------------
+
+Target Ranking Focus: "${targetKeyword}"
+
+CRITICAL RULES FOR KEYWORD & FOOD ITEMS:
+1. NEVER INVENT OR NAME SPECIFIC FOOD DISHES:
+   - NEVER invent, mention, or fabricate any specific food or beverage items (such as "pizza", "burger", "pasta", "cold brew", "shake", "latte", "cake", etc.) unless the customer explicitly wrote that dish name in Customer Comments!
+   - If the customer gave a 3-star (average) or lower rating for food, NEVER write praise like "best pizza I had", "amazing food", or fabricate dish compliments. Keep any food remark honest and casual ("the food was decent...", "food was okay").
+2. NATURAL 1-KEYWORD INTEGRATION:
+   - Weave the target phrase "${targetKeyword}" naturally into 1 sentence only if it fits the customer's positive sentiment.
+   - Example natural customer phrasing:
+     * "Really one of the ${targetKeyword} to chill with friends."
+     * "Found it to be a ${targetKeyword} with great service."
+   - If using the exact keyword feels awkward or unnatural in the customer's casual sentence, smoothly adapt the wording or omit it. Authenticity and genuine human tone ALWAYS take priority over SEO.
+3. NO KEYWORD STUFFING:
+   - Use at most ONE keyword. Never repeat keywords.
+   - Keep the review short, casual, and human (2 to 3 sentences max).
+`;
+    }
 
     const prompt = `You are an AI assistant that helps a customer express their OWN genuine experience as a natural Google review.
 
 Your task is to transform structured customer feedback and ratings into a short, realistic, first-person review.
-
+${keywordInstruction}
 IMPORTANT:
 The customer has provided ratings for different aspects of their experience. These ratings are INTERNAL INPUT ONLY.
 
@@ -793,7 +903,7 @@ app.delete('/api/admin/clients/:id', async (req, res) => {
 app.get('/api/client/profile/:clientId', async (req, res) => {
   const { clientId } = req.params;
   try {
-    const [rows] = await pool.query('SELECT id, name, username, phone, google_review_url, qr_color, bg_color, logo_url, banner_url FROM users WHERE id = ?', [clientId]);
+    const [rows] = await pool.query('SELECT id, name, username, phone, google_review_url, qr_color, bg_color, logo_url, banner_url, seo_keywords FROM users WHERE id = ?', [clientId]);
     if (rows.length === 0) return res.status(404).json({ error: 'Client not found' });
     res.json(rows[0]);
   } catch (err) {
@@ -804,7 +914,7 @@ app.get('/api/client/profile/:clientId', async (req, res) => {
 
 app.put('/api/client/profile/:clientId', async (req, res) => {
   const { clientId } = req.params;
-  const { name, google_review_url, qr_color, bg_color, logo_url, banner_url } = req.body;
+  const { name, google_review_url, qr_color, bg_color, logo_url, banner_url, seo_keywords } = req.body;
   try {
     await pool.query(
       `UPDATE users SET 
@@ -813,9 +923,10 @@ app.put('/api/client/profile/:clientId', async (req, res) => {
         qr_color = COALESCE(?, qr_color),
         bg_color = COALESCE(?, bg_color),
         logo_url = ?,
-        banner_url = ?
+        banner_url = ?,
+        seo_keywords = COALESCE(?, seo_keywords)
        WHERE id = ?`,
-      [name, google_review_url || '', qr_color || '#0f172a', bg_color || '#edf4fc', logo_url || null, banner_url || null, clientId]
+      [name, google_review_url || '', qr_color || '#0f172a', bg_color || '#edf4fc', logo_url || null, banner_url || null, seo_keywords !== undefined ? seo_keywords : null, clientId]
     );
     res.json({ success: true });
   } catch (err) {
@@ -1110,12 +1221,13 @@ app.post('/api/customer/generate-review', async (req, res) => {
   }
 
   try {
-    const [[biz]] = await pool.query('SELECT name, google_review_url FROM users WHERE id = ?', [clientId]);
+    const [[biz]] = await pool.query('SELECT name, google_review_url, seo_keywords FROM users WHERE id = ?', [clientId]);
     const businessName = biz ? biz.name : 'this business';
+    const seoKeywords = biz ? (biz.seo_keywords || '') : '';
 
     // Call OpenAI gpt-4o-mini
     const commentsText = (req.body.customerComments || req.body.comment || '').trim() || 'None provided';
-    const reviewDraft = await callGpt4oMini(businessName, answers, customerName, commentsText);
+    const reviewDraft = await callGpt4oMini(businessName, answers, customerName, commentsText, seoKeywords);
 
     // Save to database
     const [fbResult] = await pool.query(
