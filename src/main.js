@@ -13,6 +13,7 @@ let state = {
   clientQuestions: [],
   clientCustomers: [],
   customerSearchQuery: '',
+  adminSearchQuery: '',
   customizationDraft: null,
   modal: null, // { type, data }
   // Customer Flow State
@@ -24,6 +25,28 @@ let state = {
   generatedReview: '',
   loading: false,
   error: ''
+};
+
+// SVG Icon Suite for Crisp Professional UI
+const Icons = {
+  bolt: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
+  sparkles: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>`,
+  users: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  qr: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M14 20h6"/><path d="M20 14v6"/></svg>`,
+  star: `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  building: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><line x1="8" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg>`,
+  chart: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  palette: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,
+  phone: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,
+  search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+  copy: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  lock: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  user: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  trash: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+  externalLink: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+  plus: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  check: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,
+  google: `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.9 7.5 23.5 12 23.5z"/></svg>`
 };
 
 // Check for direct QR scan route (?scan=username or ?biz=username)
@@ -89,16 +112,23 @@ function renderLoginPage() {
   return `
     <div class="login-split-page">
       <div class="login-card-pro">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
-          <div class="brand-icon" style="width:44px; height:44px; font-size:22px;">⚡</div>
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+          <div class="brand-icon" style="width:44px; height:44px;">
+            ${Icons.bolt}
+          </div>
           <div>
-            <div style="font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.03em;">Revly</div>
-            <div style="font-size:12px; color:#64748b; font-weight:600;">AI Review & Feedback Platform</div>
+            <div style="font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.035em; line-height:1.2;">Revly</div>
+            <div style="font-size:12px; color:#64748b; font-weight:600;">AI Review & Customer Feedback SaaS</div>
           </div>
         </div>
 
+        <div style="display:inline-flex; align-items:center; gap:6px; background:#eef2ff; border:1px solid #e0e7ff; padding:5px 12px; border-radius:99px; margin-bottom:20px;">
+          <span class="live-pill-dot" style="background:#4f46e5; box-shadow:none;"></span>
+          <span style="font-size:11.5px; font-weight:700; color:#4f46e5;">OpenAI GPT-4o-mini Connected</span>
+        </div>
+
         <h2 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:6px;">Sign in to your dashboard</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:24px;">Enter your credentials to access your portal</p>
+        <p style="font-size:13px; color:#64748b; margin-bottom:24px;">Enter your credentials to access your business portal</p>
 
         ${state.error ? `
           <div style="background:#fee2e2; border:1px solid #fecaca; color:#b91c1c; padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
@@ -109,29 +139,39 @@ function renderLoginPage() {
         <form id="loginForm" onsubmit="handleLogin(event)">
           <div style="margin-bottom:18px;">
             <label class="input-label">Username</label>
-            <input type="text" id="loginUsername" class="pro-input" required placeholder="admin or client username" autofocus>
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${Icons.user}
+              </span>
+              <input type="text" id="loginUsername" class="pro-input" required placeholder="admin or client username" style="padding-left:42px;" autofocus>
+            </div>
           </div>
 
           <div style="margin-bottom:24px;">
             <label class="input-label">Password</label>
-            <input type="password" id="loginPassword" class="pro-input" required placeholder="Enter password">
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${Icons.lock}
+              </span>
+              <input type="password" id="loginPassword" class="pro-input" required placeholder="Enter password" style="padding-left:42px;">
+            </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary" style="width:100%; padding:13px;" ${state.loading ? 'disabled' : ''}>
-            ${state.loading ? 'Authenticating...' : 'Sign In to Dashboard &rarr;'}
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;" ${state.loading ? 'disabled' : ''}>
+            ${state.loading ? 'Authenticating...' : 'Sign In to Portal &rarr;'}
           </button>
         </form>
 
-        <div style="margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:11px; color:#64748b;">
+        <div style="margin-top:28px; padding-top:20px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:11.5px; font-weight:600; color:#64748b;">
             Quick demo credentials:
           </div>
           <div style="display:flex; gap:6px;">
             <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="quickFill('admin', 'admin123')">
-              Admin
+              Super Admin
             </button>
             <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="quickFill('royalcafe', 'password123')">
-              Client
+              Royal Cafe
             </button>
           </div>
         </div>
@@ -210,29 +250,39 @@ function renderSuperAdmin() {
   const totalScans = state.clients.reduce((sum, c) => sum + (Number(c.scan_count) || 0), 0);
   const totalGenerated = state.clients.reduce((sum, c) => sum + (Number(c.generated_count) || 0), 0);
 
+  const q = (state.adminSearchQuery || '').toLowerCase().trim();
+  const filteredClients = state.clients.filter(c => {
+    if (!q) return true;
+    return (c.name || '').toLowerCase().includes(q) ||
+           (c.username || '').toLowerCase().includes(q) ||
+           (c.phone || '').toLowerCase().includes(q);
+  });
+
   return `
     <div class="dashboard-shell">
       <!-- Sidebar -->
       <aside class="dash-sidebar">
         <div class="sidebar-header">
-          <div class="brand-icon">⚡</div>
+          <div class="brand-icon">
+            ${Icons.bolt}
+          </div>
           <div>
             <div class="brand-title">Revly</div>
-            <div class="brand-sub">Super Admin</div>
+            <div class="brand-sub">Super Admin Portal</div>
           </div>
         </div>
 
         <nav class="sidebar-nav">
           <div class="nav-category-label">Management</div>
           <button class="nav-link active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            ${Icons.users}
             Client Businesses
           </button>
         </nav>
 
         <div class="sidebar-footer">
           <div class="user-badge">
-            <div class="user-avatar">SA</div>
+            <div class="user-avatar" style="background:#4f46e5;">SA</div>
             <div class="user-meta">
               <div class="user-name">Super Admin</div>
               <div class="user-role">Platform Manager</div>
@@ -256,7 +306,7 @@ function renderSuperAdmin() {
               Live Database Connected
             </span>
             <button class="btn-pro btn-pro-primary" onclick="openModal('create-client')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              ${Icons.plus}
               Create New Client
             </button>
           </div>
@@ -268,18 +318,22 @@ function renderSuperAdmin() {
             <div class="kpi-card">
               <div class="kpi-top">
                 <span class="kpi-label">Active Businesses</span>
-                <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">🏢</div>
+                <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">
+                  ${Icons.building}
+                </div>
               </div>
               <div class="kpi-number">${totalClients}</div>
               <div class="kpi-footer">
-                <span class="badge-pro badge-emerald">Live</span> Registered accounts
+                <span class="badge-pro badge-emerald">Active</span> Registered accounts
               </div>
             </div>
 
             <div class="kpi-card">
               <div class="kpi-top">
                 <span class="kpi-label">Total QR Scans</span>
-                <div class="kpi-icon-bubble" style="background:#f0f9ff; color:#0284c7;">📱</div>
+                <div class="kpi-icon-bubble" style="background:#f0f9ff; color:#0284c7;">
+                  ${Icons.qr}
+                </div>
               </div>
               <div class="kpi-number">${totalScans}</div>
               <div class="kpi-footer">
@@ -290,7 +344,9 @@ function renderSuperAdmin() {
             <div class="kpi-card">
               <div class="kpi-top">
                 <span class="kpi-label">AI Reviews Placed</span>
-                <div class="kpi-icon-bubble" style="background:#fdf2f8; color:#db2777;">✨</div>
+                <div class="kpi-icon-bubble" style="background:#fdf2f8; color:#db2777;">
+                  ${Icons.sparkles}
+                </div>
               </div>
               <div class="kpi-number">${totalGenerated}</div>
               <div class="kpi-footer">
@@ -304,10 +360,11 @@ function renderSuperAdmin() {
             <div class="dash-card-header">
               <div>
                 <h2 class="dash-card-title">All Client Accounts</h2>
-                <div class="dash-card-desc">View business credentials and update passwords</div>
+                <div class="dash-card-desc">View business credentials, preview QR flows, and manage passwords</div>
               </div>
-              <div style="font-size:12px; color:#64748b;">
-                Showing <strong>${totalClients}</strong> clients
+              <div class="search-input-wrap" style="max-width:320px;">
+                ${Icons.search}
+                <input type="text" class="pro-input" placeholder="Search clients..." value="${state.adminSearchQuery || ''}" oninput="state.adminSearchQuery = this.value; render();" style="padding-left:40px;">
               </div>
             </div>
 
@@ -318,47 +375,57 @@ function renderSuperAdmin() {
                     <th>Business Name</th>
                     <th>Username</th>
                     <th>Phone Number</th>
+                    <th>Status</th>
                     <th style="text-align:right;">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${state.clients.length === 0 ? `
+                  ${filteredClients.length === 0 ? `
                     <tr>
-                      <td colspan="4" style="text-align:center; padding:48px 20px; color:#64748b;">
+                      <td colspan="5" style="text-align:center; padding:48px 20px; color:#64748b;">
                         <div style="font-size:32px; margin-bottom:12px;">🏢</div>
-                        <div style="font-weight:700; color:#0f172a; margin-bottom:4px;">No client businesses created yet</div>
-                        <div style="font-size:13px; margin-bottom:16px;">Click the button below to register your first client account.</div>
+                        <div style="font-weight:700; color:#0f172a; margin-bottom:4px;">No client businesses found</div>
+                        <div style="font-size:13px; margin-bottom:16px;">Try adjusting your search query or register a new business client.</div>
                         <button class="btn-pro btn-pro-primary" onclick="openModal('create-client')">+ Create New Client</button>
                       </td>
                     </tr>
-                  ` : state.clients.map(c => `
+                  ` : filteredClients.map(c => `
                     <tr>
                       <td>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                          <div style="width:34px; height:34px; border-radius:8px; background:#eef2ff; color:#4f46e5; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, #eef2ff, #e0e7ff); color:#4f46e5; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; border:1px solid #c7d2fe;">
                             ${c.name.slice(0, 2).toUpperCase()}
                           </div>
-                          <span style="font-weight:700; font-size:14px; color:#0f172a;">${c.name}</span>
+                          <div>
+                            <div style="font-weight:700; font-size:14px; color:#0f172a;">${c.name}</div>
+                            <div style="font-size:11px; color:#64748b;">ID #${c.id}</div>
+                          </div>
                         </div>
                       </td>
                       <td>
-                        <code style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:12px; color:#334155; font-weight:600;">@${c.username}</code>
+                        <code style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:12px; color:#334155; font-weight:600; border:1px solid #e2e8f0;">@${c.username}</code>
                       </td>
                       <td>
-                        <span style="color:#475569; font-size:13px;">${c.phone || '—'}</span>
+                        <span style="color:#475569; font-size:13px; font-family:var(--font-mono);">${c.phone || '—'}</span>
+                      </td>
+                      <td>
+                        <span class="badge-pro badge-emerald">
+                          <span style="width:5px; height:5px; border-radius:50%; background:#10b981;"></span>
+                          Active
+                        </span>
                       </td>
                       <td style="text-align:right;">
                         <div style="display:inline-flex; gap:6px;">
                           <a href="/?scan=${c.username}" target="_blank" class="btn-pro btn-pro-secondary btn-pro-sm" title="Preview Customer QR Flow">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            ${Icons.externalLink}
                             View QR
                           </a>
                           <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="openModal('reset-password', { id: ${c.id}, name: '${c.name.replace(/'/g, "\\'")}' })" title="Reset Client Password">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            Reset Password
+                            ${Icons.lock}
+                            Password
                           </button>
                           <button class="btn-pro btn-pro-danger btn-pro-sm" onclick="deleteClient(${c.id})" title="Delete Client">
-                            Delete
+                            ${Icons.trash}
                           </button>
                         </div>
                       </td>
@@ -486,35 +553,36 @@ function renderClientBusiness() {
         <nav class="sidebar-nav">
           <div class="nav-category-label">Workspace</div>
           <button class="nav-link ${state.currentTab === 'profile' ? 'active' : ''}" onclick="switchTab('profile')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><path d="M14 14h3v3h-3z"></path><path d="M14 20h6"></path><path d="M20 14v6"></path></svg>
+            ${Icons.qr}
             Profile & QR Studio
           </button>
 
           <button class="nav-link ${state.currentTab === 'customization' ? 'active' : ''}" onclick="switchTab('customization')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            ${Icons.palette}
             Customization
+            <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:10px; padding:2px 7px;">Live</span>
           </button>
 
           <button class="nav-link ${state.currentTab === 'analytics' ? 'active' : ''}" onclick="switchTab('analytics')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            ${Icons.chart}
             Analytics & Reviews
           </button>
 
           <button class="nav-link ${state.currentTab === 'customers' ? 'active' : ''}" onclick="switchTab('customers')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            ${Icons.users}
             Customers
             <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:11px; padding:2px 8px;">${custCount}</span>
           </button>
 
           <button class="nav-link ${state.currentTab === 'questions' ? 'active' : ''}" onclick="switchTab('questions')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Questions & Category
           </button>
         </nav>
 
         <div class="sidebar-footer">
           <div class="user-badge">
-            <div class="user-avatar">${(p.name || user.name).slice(0, 1).toUpperCase()}</div>
+            <div class="user-avatar" style="background:#4f46e5;">${(p.name || user.name).slice(0, 1).toUpperCase()}</div>
             <div class="user-meta">
               <div class="user-name">${p.name || user.name}</div>
               <div class="user-role">@${user.username}</div>
@@ -544,7 +612,7 @@ function renderClientBusiness() {
               AI Active (gpt-4o-mini)
             </span>
             <a href="/?scan=${user.username}" target="_blank" class="btn-pro btn-pro-primary">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              ${Icons.externalLink}
               Test Customer QR &rarr;
             </a>
           </div>
@@ -642,14 +710,16 @@ function renderClientProfileTab(p) {
           </div>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="btn-pro btn-pro-primary" onclick="downloadQrCode()">
-            ⬇️ Download QR Image (PNG)
+            ${Icons.qr}
+            Download Tabletop Stand (PNG)
           </button>
 
-          <div style="display:flex; gap:6px;">
-            <input type="text" class="pro-input" style="font-size:12px;" value="${scanUrl}" readonly>
-            <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="navigator.clipboard.writeText('${scanUrl}'); alert('Customer scan link copied to clipboard!');">
+          <div style="display:flex; gap:8px;">
+            <input type="text" class="pro-input" style="font-size:12px; font-family:var(--font-mono);" value="${scanUrl}" readonly>
+            <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="navigator.clipboard.writeText('${scanUrl}'); alert('Customer review scan link copied to clipboard!');">
+              ${Icons.copy}
               Copy
             </button>
           </div>
@@ -836,7 +906,8 @@ function renderClientCustomizationTab(p) {
           </div>
 
           <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;">
-            💾 Save Customization Changes
+            ${Icons.check}
+            Save Customization Changes
           </button>
         </form>
       </div>
@@ -853,6 +924,14 @@ function renderClientCustomizationTab(p) {
           </div>
 
           <div class="mobile-device-screen" style="background:${d.bgColor};">
+            <!-- Mobile Top Status Bar -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0 8px 10px; font-size:11px; font-weight:700; color:#334155; opacity:0.8;">
+              <span>9:41</span>
+              <div style="display:flex; align-items:center; gap:5px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="16" width="3" height="6" rx="1"/><rect x="7" y="12" width="3" height="10" rx="1"/><rect x="13" y="7" width="3" height="15" rx="1"/><rect x="19" y="2" width="3" height="20" rx="1"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="9" width="10" height="6" rx="1"/><path d="M22 11v2"/></svg>
+              </div>
+            </div>
             <!-- Simulated White Card on Screen -->
             <div style="background:#ffffff; border-radius:20px; padding:20px 16px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 24px rgba(0,0,0,0.06); text-align:center; margin-top:10px;">
               <!-- 1. Top Logo -->
@@ -941,8 +1020,10 @@ function renderClientAnalyticsTab(a) {
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-top">
-          <span class="kpi-label">No. of Scans</span>
-          <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">📱</div>
+          <span class="kpi-label">No. of QR Scans</span>
+          <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">
+            ${Icons.qr}
+          </div>
         </div>
         <div class="kpi-number">${a.total_scans}</div>
         <div class="kpi-footer">
@@ -953,11 +1034,26 @@ function renderClientAnalyticsTab(a) {
       <div class="kpi-card">
         <div class="kpi-top">
           <span class="kpi-label">Reviews Generated</span>
-          <div class="kpi-icon-bubble" style="background:#ecfdf5; color:#059669;">✨</div>
+          <div class="kpi-icon-bubble" style="background:#ecfdf5; color:#059669;">
+            ${Icons.sparkles}
+          </div>
         </div>
         <div class="kpi-number">${a.total_generated}</div>
         <div class="kpi-footer">
           AI-assisted review drafts completed
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Conversion Rate</span>
+          <div class="kpi-icon-bubble" style="background:#fffbeb; color:#d97706;">
+            ${Icons.chart}
+          </div>
+        </div>
+        <div class="kpi-number">${a.total_scans > 0 ? Math.round((a.total_generated / a.total_scans) * 100) : 0}%</div>
+        <div class="kpi-footer">
+          Scan to completed review conversion
         </div>
       </div>
     </div>
@@ -1135,7 +1231,9 @@ function renderClientCustomersTab() {
     <!-- Top KPI Cards for Customers -->
     <div class="customer-stats-grid">
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">👥</div>
+        <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">
+          ${Icons.users}
+        </div>
         <div>
           <div class="customer-stat-val">${totalUnique}</div>
           <div class="customer-stat-lbl">Unique Customers</div>
@@ -1143,7 +1241,9 @@ function renderClientCustomersTab() {
       </div>
 
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">📱</div>
+        <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">
+          ${Icons.qr}
+        </div>
         <div>
           <div class="customer-stat-val">${totalVisits}</div>
           <div class="customer-stat-lbl">Total Scans / Visits</div>
@@ -1151,7 +1251,9 @@ function renderClientCustomersTab() {
       </div>
 
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#fffbeb; color:#d97706;">🔁</div>
+        <div class="customer-stat-icon" style="background:#fffbeb; color:#d97706;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </div>
         <div>
           <div class="customer-stat-val">${repeatCount}</div>
           <div class="customer-stat-lbl">Repeat Visitors (${repeatRate}%)</div>
@@ -1159,7 +1261,9 @@ function renderClientCustomersTab() {
       </div>
 
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">⭐</div>
+        <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">
+          ${Icons.star}
+        </div>
         <div>
           <div class="customer-stat-val">${totalDrafts}</div>
           <div class="customer-stat-lbl">Reviews Placed</div>
@@ -1408,12 +1512,13 @@ function renderCustomerFlow() {
         </p>
 
         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; color:#475569; margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:8px;">
-          <span>⏱️</span>
+          ${Icons.bolt}
           <span>Takes less than 45 seconds &bull; 100% genuine</span>
         </div>
       </div>
 
       <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px; background:${s.qrColor || '#4f46e5'};">
+        ${Icons.sparkles}
         Start Feedback &rarr;
       </button>
     `;
@@ -1430,15 +1535,25 @@ function renderCustomerFlow() {
         <form onsubmit="handleCustomerInfoSubmit(event)">
           <div style="margin-bottom:18px;">
             <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Your Name (Optional)</label>
-            <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${state.customerInfo.name}" style="padding:12px 14px; font-size:14px;">
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${Icons.user}
+              </span>
+              <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${state.customerInfo.name}" style="padding-left:42px; font-size:14px;">
+            </div>
           </div>
 
           <div style="margin-bottom:24px;">
             <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Mobile Number (Optional)</label>
-            <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${state.customerInfo.mobile}" style="padding:12px 14px; font-size:14px;">
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${Icons.phone}
+              </span>
+              <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${state.customerInfo.mobile}" style="padding-left:42px; font-size:14px;">
+            </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px;">
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px; background:${s.qrColor || '#4f46e5'};">
             Continue to Questions &rarr;
           </button>
         </form>
@@ -1508,7 +1623,7 @@ function renderCustomerFlow() {
       bodyHtml = `
         <div style="text-align:center; padding:50px 10px;">
           <div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #4f46e5, #06b6d4); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px; margin:0 auto 20px; box-shadow:0 10px 25px rgba(79, 70, 229, 0.3);">
-            ✨
+            ${Icons.sparkles}
           </div>
           <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:8px;">Crafting your review...</h2>
           <p style="font-size:14px; color:#64748b; line-height:1.5;">Our AI is synthesizing your answers into an authentic review draft.</p>
@@ -1519,7 +1634,7 @@ function renderCustomerFlow() {
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <h2 style="font-size:20px; font-weight:800; color:#0f172a;">Your Review Draft</h2>
-            <span class="badge-pro badge-indigo">✨ AI Generated</span>
+            <span class="badge-pro badge-indigo">${Icons.sparkles} AI Generated</span>
           </div>
 
           <p style="font-size:13px; color:#64748b; margin-bottom:16px; line-height:1.4;">
@@ -1529,12 +1644,12 @@ function renderCustomerFlow() {
           <textarea id="editableDraft" class="review-arial-box" rows="7" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${state.generatedReview}</textarea>
 
           <div style="background:#ecfdf5; border:1px solid #bbf7d0; border-radius:10px; padding:12px 14px; font-size:12px; color:#047857; line-height:1.5; margin-bottom:24px; display:flex; align-items:flex-start; gap:8px;">
-            <span style="font-size:16px;">💡</span>
+            <span style="display:flex; margin-top:1px;">${Icons.check}</span>
             <span>Clicking below copies this review and opens ${s.businessName}'s Google review page. Simply paste and post!</span>
           </div>
 
-          <button class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:16px; padding:14px 20px; display:flex; align-items:center; justify-content:center; gap:10px;" onclick="copyAndRedirectToGoogle()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1H12v3.8h5.37c-.52 2.5-2.6 4.33-5.37 4.33-3.04 0-5.5-2.46-5.5-5.5s2.46-5.5 5.5-5.5c1.37 0 2.62.5 3.58 1.42l2.69-2.69C16.89 4.37 14.58 3.5 12 3.5 7.31 3.5 3.5 7.31 3.5 12s3.81 8.5 8.5 8.5c4.97 0 8.25-3.5 8.25-8.4 0-.6-.06-1.3-.15-1.9z"/></svg>
+          <button class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:16px; padding:14px 20px; display:flex; align-items:center; justify-content:center; gap:10px; background:#0f172a;" onclick="copyAndRedirectToGoogle()">
+            ${Icons.google}
             Copy & Continue to Google &rarr;
           </button>
         </div>
@@ -1546,8 +1661,8 @@ function renderCustomerFlow() {
   else if (state.customerStep === 5) {
     bodyHtml = `
       <div style="text-align:center; padding:40px 10px;">
-        <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; border:2px solid #bbf7d0;">
-          ✓
+        <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:32px; margin:0 auto 20px; border:2px solid #bbf7d0;">
+          ${Icons.check}
         </div>
         <h2 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px;">Thank You!</h2>
         <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:28px;">

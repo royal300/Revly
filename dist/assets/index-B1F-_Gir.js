@@ -5,19 +5,26 @@ Make sure your charset is UTF-8`);n=(n>>>8&255)*192+(n&255),e.put(n,13)}},t.expo
 The chosen QR Code version cannot contain this amount of data.
 Minimum version required to store current data is: `+c+`.
 `);let l=M(n,r,o),u=new i(t.getSymbolSize(n));return T(u,n),E(u),D(u,n),k(u,r,0),n>=7&&O(u,n),j(u,l),isNaN(a)&&(a=s.getBestMask(u,k.bind(null,u,r))),s.applyMask(a,u),k(u,r,a),{modules:u,version:n,errorCorrectionLevel:r,maskPattern:a,segments:o}}e.create=function(e,r){if(e===void 0||e===``)throw Error(`No input text`);let i=n.M,a,o;return r!==void 0&&(i=n.from(r.errorCorrectionLevel,n.M),a=v.from(r.version),o=s.from(r.maskPattern),r.toSJISFunc&&t.setToSJISFunction(r.toSJISFunc)),P(e,a,i,o)}})),M=o((e=>{function t(e){if(typeof e==`number`&&(e=e.toString()),typeof e!=`string`)throw Error(`Color should be defined as hex string`);let t=e.slice().replace(`#`,``).split(``);if(t.length<3||t.length===5||t.length>8)throw Error(`Invalid hex color: `+e);(t.length===3||t.length===4)&&(t=Array.prototype.concat.apply([],t.map(function(e){return[e,e]}))),t.length===6&&t.push(`F`,`F`);let n=parseInt(t.join(``),16);return{r:n>>24&255,g:n>>16&255,b:n>>8&255,a:n&255,hex:`#`+t.slice(0,6).join(``)}}e.getOptions=function(e){e||={},e.color||(e.color={});let n=e.margin===void 0||e.margin===null||e.margin<0?4:e.margin,r=e.width&&e.width>=21?e.width:void 0,i=e.scale||4;return{width:r,scale:r?4:i,margin:n,color:{dark:t(e.color.dark||`#000000ff`),light:t(e.color.light||`#ffffffff`)},type:e.type,rendererOpts:e.rendererOpts||{}}},e.getScale=function(e,t){return t.width&&t.width>=e+t.margin*2?t.width/(e+t.margin*2):t.scale},e.getImageWidth=function(t,n){let r=e.getScale(t,n);return Math.floor((t+n.margin*2)*r)},e.qrToImageData=function(t,n,r){let i=n.modules.size,a=n.modules.data,o=e.getScale(i,r),s=Math.floor((i+r.margin*2)*o),c=r.margin*o,l=[r.color.light,r.color.dark];for(let e=0;e<s;e++)for(let n=0;n<s;n++){let u=(e*s+n)*4,d=r.color.light;if(e>=c&&n>=c&&e<s-c&&n<s-c){let t=Math.floor((e-c)/o),r=Math.floor((n-c)/o);d=l[+!!a[t*i+r]]}t[u++]=d.r,t[u++]=d.g,t[u++]=d.b,t[u]=d.a}}})),N=o((e=>{var t=M();function n(e,t,n){e.clearRect(0,0,t.width,t.height),t.style||={},t.height=n,t.width=n,t.style.height=n+`px`,t.style.width=n+`px`}function r(){try{return document.createElement(`canvas`)}catch{throw Error(`You need to specify a canvas element`)}}e.render=function(e,i,a){let o=a,s=i;o===void 0&&(!i||!i.getContext)&&(o=i,i=void 0),i||(s=r()),o=t.getOptions(o);let c=t.getImageWidth(e.modules.size,o),l=s.getContext(`2d`),u=l.createImageData(c,c);return t.qrToImageData(u.data,e,o),n(l,s,c),l.putImageData(u,0,0),s},e.renderToDataURL=function(t,n,r){let i=r;i===void 0&&(!n||!n.getContext)&&(i=n,n=void 0),i||={};let a=e.render(t,n,i),o=i.type||`image/png`,s=i.rendererOpts||{};return a.toDataURL(o,s.quality)}})),P=o((e=>{var t=M();function n(e,t){let n=e.a/255,r=t+`="`+e.hex+`"`;return n<1?r+` `+t+`-opacity="`+n.toFixed(2).slice(1)+`"`:r}function r(e,t,n){let r=e+t;return n!==void 0&&(r+=` `+n),r}function i(e,t,n){let i=``,a=0,o=!1,s=0;for(let c=0;c<e.length;c++){let l=Math.floor(c%t),u=Math.floor(c/t);!l&&!o&&(o=!0),e[c]?(s++,c>0&&l>0&&e[c-1]||(i+=o?r(`M`,l+n,.5+u+n):r(`m`,a,0),a=0,o=!1),l+1<t&&e[c+1]||(i+=r(`h`,s),s=0)):a++}return i}e.render=function(e,r,a){let o=t.getOptions(r),s=e.modules.size,c=e.modules.data,l=s+o.margin*2,u=o.color.light.a?`<path `+n(o.color.light,`fill`)+` d="M0 0h`+l+`v`+l+`H0z"/>`:``,d=`<path `+n(o.color.dark,`stroke`)+` d="`+i(c,s,o.margin)+`"/>`,f=`viewBox="0 0 `+l+` `+l+`"`,p=`<svg xmlns="http://www.w3.org/2000/svg" `+(o.width?`width="`+o.width+`" height="`+o.width+`" `:``)+f+` shape-rendering="crispEdges">`+u+d+`</svg>
-`;return typeof a==`function`&&a(null,p),p}})),F=c(o((e=>{var t=l(),n=j(),r=N(),i=P();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),I=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,L={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,customizationDraft:null,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},R=new URLSearchParams(window.location.search),z=R.get(`scan`)||R.get(`biz`);function B(){let e=document.getElementById(`app`);if(e){if(z){e.innerHTML=ye(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!L.currentUser){e.innerHTML=te();return}if(L.currentUser.role===`admin`){e.innerHTML=U();return}e.innerHTML=J(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&L.currentUser){let t=`${window.location.origin}/?scan=${L.currentUser.username}`;F.toCanvas(e,t,{width:220,margin:2,color:{dark:L.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function te(){return`
+`;return typeof a==`function`&&a(null,p),p}})),F=c(o((e=>{var t=l(),n=j(),r=N(),i=P();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),I=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,L={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,adminSearchQuery:``,customizationDraft:null,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},R={bolt:`<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,sparkles:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>`,users:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,qr:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M14 20h6"/><path d="M20 14v6"/></svg>`,star:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,building:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><line x1="8" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg>`,chart:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,palette:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,phone:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,search:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,copy:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,lock:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,user:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,trash:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,externalLink:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,plus:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,check:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,google:`<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.9 7.5 23.5 12 23.5z"/></svg>`},z=new URLSearchParams(window.location.search),B=z.get(`scan`)||z.get(`biz`);function V(){let e=document.getElementById(`app`);if(e){if(B){e.innerHTML=ye(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!L.currentUser){e.innerHTML=te();return}if(L.currentUser.role===`admin`){e.innerHTML=W();return}e.innerHTML=Y(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&L.currentUser){let t=`${window.location.origin}/?scan=${L.currentUser.username}`;F.toCanvas(e,t,{width:220,margin:2,color:{dark:L.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function te(){return`
     <div class="login-split-page">
       <div class="login-card-pro">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
-          <div class="brand-icon" style="width:44px; height:44px; font-size:22px;">⚡</div>
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+          <div class="brand-icon" style="width:44px; height:44px;">
+            ${R.bolt}
+          </div>
           <div>
-            <div style="font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.03em;">Revly</div>
-            <div style="font-size:12px; color:#64748b; font-weight:600;">AI Review & Feedback Platform</div>
+            <div style="font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.035em; line-height:1.2;">Revly</div>
+            <div style="font-size:12px; color:#64748b; font-weight:600;">AI Review & Customer Feedback SaaS</div>
           </div>
         </div>
 
+        <div style="display:inline-flex; align-items:center; gap:6px; background:#eef2ff; border:1px solid #e0e7ff; padding:5px 12px; border-radius:99px; margin-bottom:20px;">
+          <span class="live-pill-dot" style="background:#4f46e5; box-shadow:none;"></span>
+          <span style="font-size:11.5px; font-weight:700; color:#4f46e5;">OpenAI GPT-4o-mini Connected</span>
+        </div>
+
         <h2 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:6px;">Sign in to your dashboard</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:24px;">Enter your credentials to access your portal</p>
+        <p style="font-size:13px; color:#64748b; margin-bottom:24px;">Enter your credentials to access your business portal</p>
 
         ${L.error?`
           <div style="background:#fee2e2; border:1px solid #fecaca; color:#b91c1c; padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
@@ -28,57 +35,69 @@ Minimum version required to store current data is: `+c+`.
         <form id="loginForm" onsubmit="handleLogin(event)">
           <div style="margin-bottom:18px;">
             <label class="input-label">Username</label>
-            <input type="text" id="loginUsername" class="pro-input" required placeholder="admin or client username" autofocus>
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${R.user}
+              </span>
+              <input type="text" id="loginUsername" class="pro-input" required placeholder="admin or client username" style="padding-left:42px;" autofocus>
+            </div>
           </div>
 
           <div style="margin-bottom:24px;">
             <label class="input-label">Password</label>
-            <input type="password" id="loginPassword" class="pro-input" required placeholder="Enter password">
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${R.lock}
+              </span>
+              <input type="password" id="loginPassword" class="pro-input" required placeholder="Enter password" style="padding-left:42px;">
+            </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary" style="width:100%; padding:13px;" ${L.loading?`disabled`:``}>
-            ${L.loading?`Authenticating...`:`Sign In to Dashboard &rarr;`}
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;" ${L.loading?`disabled`:``}>
+            ${L.loading?`Authenticating...`:`Sign In to Portal &rarr;`}
           </button>
         </form>
 
-        <div style="margin-top:28px; padding-top:20px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:11px; color:#64748b;">
+        <div style="margin-top:28px; padding-top:20px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:11.5px; font-weight:600; color:#64748b;">
             Quick demo credentials:
           </div>
           <div style="display:flex; gap:6px;">
             <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="quickFill('admin', 'admin123')">
-              Admin
+              Super Admin
             </button>
             <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="quickFill('royalcafe', 'password123')">
-              Client
+              Royal Cafe
             </button>
           </div>
         </div>
       </div>
     </div>
-  `}function ne(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function re(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;L.loading=!0,L.error=``,B();try{let e=await fetch(`${I}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(L.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await H():await q()):L.error=r.error||`Login failed`}catch{L.error=`Unable to connect to server`}finally{L.loading=!1,B()}}function V(){L.currentUser=null,localStorage.removeItem(`revly_user`),B()}async function H(){try{let e=await fetch(`${I}/admin/clients`);e.ok&&(L.clients=await e.json())}catch(e){console.error(e)}}function U(){let e=L.clients.length;return`
+  `}function ne(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function re(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;L.loading=!0,L.error=``,V();try{let e=await fetch(`${I}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(L.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await U():await J()):L.error=r.error||`Login failed`}catch{L.error=`Unable to connect to server`}finally{L.loading=!1,V()}}function H(){L.currentUser=null,localStorage.removeItem(`revly_user`),V()}async function U(){try{let e=await fetch(`${I}/admin/clients`);e.ok&&(L.clients=await e.json())}catch(e){console.error(e)}}function W(){let e=L.clients.length,t=L.clients.reduce((e,t)=>e+(Number(t.scan_count)||0),0),n=L.clients.reduce((e,t)=>e+(Number(t.generated_count)||0),0),r=(L.adminSearchQuery||``).toLowerCase().trim(),i=L.clients.filter(e=>!r||(e.name||``).toLowerCase().includes(r)||(e.username||``).toLowerCase().includes(r)||(e.phone||``).toLowerCase().includes(r));return`
     <div class="dashboard-shell">
       <!-- Sidebar -->
       <aside class="dash-sidebar">
         <div class="sidebar-header">
-          <div class="brand-icon">⚡</div>
+          <div class="brand-icon">
+            ${R.bolt}
+          </div>
           <div>
             <div class="brand-title">Revly</div>
-            <div class="brand-sub">Super Admin</div>
+            <div class="brand-sub">Super Admin Portal</div>
           </div>
         </div>
 
         <nav class="sidebar-nav">
           <div class="nav-category-label">Management</div>
           <button class="nav-link active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            ${R.users}
             Client Businesses
           </button>
         </nav>
 
         <div class="sidebar-footer">
           <div class="user-badge">
-            <div class="user-avatar">SA</div>
+            <div class="user-avatar" style="background:#4f46e5;">SA</div>
             <div class="user-meta">
               <div class="user-name">Super Admin</div>
               <div class="user-role">Platform Manager</div>
@@ -102,7 +121,7 @@ Minimum version required to store current data is: `+c+`.
               Live Database Connected
             </span>
             <button class="btn-pro btn-pro-primary" onclick="openModal('create-client')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              ${R.plus}
               Create New Client
             </button>
           </div>
@@ -114,20 +133,24 @@ Minimum version required to store current data is: `+c+`.
             <div class="kpi-card">
               <div class="kpi-top">
                 <span class="kpi-label">Active Businesses</span>
-                <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">🏢</div>
+                <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">
+                  ${R.building}
+                </div>
               </div>
               <div class="kpi-number">${e}</div>
               <div class="kpi-footer">
-                <span class="badge-pro badge-emerald">Live</span> Registered accounts
+                <span class="badge-pro badge-emerald">Active</span> Registered accounts
               </div>
             </div>
 
             <div class="kpi-card">
               <div class="kpi-top">
                 <span class="kpi-label">Total QR Scans</span>
-                <div class="kpi-icon-bubble" style="background:#f0f9ff; color:#0284c7;">📱</div>
+                <div class="kpi-icon-bubble" style="background:#f0f9ff; color:#0284c7;">
+                  ${R.qr}
+                </div>
               </div>
-              <div class="kpi-number">${L.clients.reduce((e,t)=>e+(Number(t.scan_count)||0),0)}</div>
+              <div class="kpi-number">${t}</div>
               <div class="kpi-footer">
                 Platform aggregate visits
               </div>
@@ -136,9 +159,11 @@ Minimum version required to store current data is: `+c+`.
             <div class="kpi-card">
               <div class="kpi-top">
                 <span class="kpi-label">AI Reviews Placed</span>
-                <div class="kpi-icon-bubble" style="background:#fdf2f8; color:#db2777;">✨</div>
+                <div class="kpi-icon-bubble" style="background:#fdf2f8; color:#db2777;">
+                  ${R.sparkles}
+                </div>
               </div>
-              <div class="kpi-number">${L.clients.reduce((e,t)=>e+(Number(t.generated_count)||0),0)}</div>
+              <div class="kpi-number">${n}</div>
               <div class="kpi-footer">
                 Powered by gpt-4o-mini
               </div>
@@ -150,10 +175,11 @@ Minimum version required to store current data is: `+c+`.
             <div class="dash-card-header">
               <div>
                 <h2 class="dash-card-title">All Client Accounts</h2>
-                <div class="dash-card-desc">View business credentials and update passwords</div>
+                <div class="dash-card-desc">View business credentials, preview QR flows, and manage passwords</div>
               </div>
-              <div style="font-size:12px; color:#64748b;">
-                Showing <strong>${e}</strong> clients
+              <div class="search-input-wrap" style="max-width:320px;">
+                ${R.search}
+                <input type="text" class="pro-input" placeholder="Search clients..." value="${L.adminSearchQuery||``}" oninput="state.adminSearchQuery = this.value; render();" style="padding-left:40px;">
               </div>
             </div>
 
@@ -164,47 +190,57 @@ Minimum version required to store current data is: `+c+`.
                     <th>Business Name</th>
                     <th>Username</th>
                     <th>Phone Number</th>
+                    <th>Status</th>
                     <th style="text-align:right;">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${L.clients.length===0?`
+                  ${i.length===0?`
                     <tr>
-                      <td colspan="4" style="text-align:center; padding:48px 20px; color:#64748b;">
+                      <td colspan="5" style="text-align:center; padding:48px 20px; color:#64748b;">
                         <div style="font-size:32px; margin-bottom:12px;">🏢</div>
-                        <div style="font-weight:700; color:#0f172a; margin-bottom:4px;">No client businesses created yet</div>
-                        <div style="font-size:13px; margin-bottom:16px;">Click the button below to register your first client account.</div>
+                        <div style="font-weight:700; color:#0f172a; margin-bottom:4px;">No client businesses found</div>
+                        <div style="font-size:13px; margin-bottom:16px;">Try adjusting your search query or register a new business client.</div>
                         <button class="btn-pro btn-pro-primary" onclick="openModal('create-client')">+ Create New Client</button>
                       </td>
                     </tr>
-                  `:L.clients.map(e=>`
+                  `:i.map(e=>`
                     <tr>
                       <td>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                          <div style="width:34px; height:34px; border-radius:8px; background:#eef2ff; color:#4f46e5; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, #eef2ff, #e0e7ff); color:#4f46e5; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; border:1px solid #c7d2fe;">
                             ${e.name.slice(0,2).toUpperCase()}
                           </div>
-                          <span style="font-weight:700; font-size:14px; color:#0f172a;">${e.name}</span>
+                          <div>
+                            <div style="font-weight:700; font-size:14px; color:#0f172a;">${e.name}</div>
+                            <div style="font-size:11px; color:#64748b;">ID #${e.id}</div>
+                          </div>
                         </div>
                       </td>
                       <td>
-                        <code style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:12px; color:#334155; font-weight:600;">@${e.username}</code>
+                        <code style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-size:12px; color:#334155; font-weight:600; border:1px solid #e2e8f0;">@${e.username}</code>
                       </td>
                       <td>
-                        <span style="color:#475569; font-size:13px;">${e.phone||`—`}</span>
+                        <span style="color:#475569; font-size:13px; font-family:var(--font-mono);">${e.phone||`—`}</span>
+                      </td>
+                      <td>
+                        <span class="badge-pro badge-emerald">
+                          <span style="width:5px; height:5px; border-radius:50%; background:#10b981;"></span>
+                          Active
+                        </span>
                       </td>
                       <td style="text-align:right;">
                         <div style="display:inline-flex; gap:6px;">
                           <a href="/?scan=${e.username}" target="_blank" class="btn-pro btn-pro-secondary btn-pro-sm" title="Preview Customer QR Flow">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            ${R.externalLink}
                             View QR
                           </a>
                           <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="openModal('reset-password', { id: ${e.id}, name: '${e.name.replace(/'/g,`\\'`)}' })" title="Reset Client Password">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            Reset Password
+                            ${R.lock}
+                            Password
                           </button>
                           <button class="btn-pro btn-pro-danger btn-pro-sm" onclick="deleteClient(${e.id})" title="Delete Client">
-                            Delete
+                            ${R.trash}
                           </button>
                         </div>
                       </td>
@@ -219,7 +255,7 @@ Minimum version required to store current data is: `+c+`.
 
       ${$()}
     </div>
-  `}async function W(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${I}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await H(),B()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function G(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${I}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function K(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${I}/admin/clients/${e}`,{method:`DELETE`}),await H(),B()}catch{alert(`Failed to delete client`)}}async function q(){if(!L.currentUser)return;let e=L.currentUser.id;try{let[t,n,r,i,a]=await Promise.all([fetch(`${I}/client/profile/${e}`).then(e=>e.json()),fetch(`${I}/client/analytics/${e}`).then(e=>e.json()),fetch(`${I}/client/categories/${e}`).then(e=>e.json()),fetch(`${I}/client/questions/${e}`).then(e=>e.json()),fetch(`${I}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);L.clientProfile=t,L.clientAnalytics=n,L.clientCategories=r,L.clientQuestions=i,L.clientCustomers=Array.isArray(a)?a:[]}catch(e){console.error(`Error loading client data:`,e)}}function J(){let e=L.currentUser,t=L.clientProfile||e,n=L.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=L.clientCustomers?L.clientCustomers.length:0;return`
+  `}async function G(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${I}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await U(),V()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function K(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${I}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function q(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${I}/admin/clients/${e}`,{method:`DELETE`}),await U(),V()}catch{alert(`Failed to delete client`)}}async function J(){if(!L.currentUser)return;let e=L.currentUser.id;try{let[t,n,r,i,a]=await Promise.all([fetch(`${I}/client/profile/${e}`).then(e=>e.json()),fetch(`${I}/client/analytics/${e}`).then(e=>e.json()),fetch(`${I}/client/categories/${e}`).then(e=>e.json()),fetch(`${I}/client/questions/${e}`).then(e=>e.json()),fetch(`${I}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);L.clientProfile=t,L.clientAnalytics=n,L.clientCategories=r,L.clientQuestions=i,L.clientCustomers=Array.isArray(a)?a:[]}catch(e){console.error(`Error loading client data:`,e)}}function Y(){let e=L.currentUser,t=L.clientProfile||e,n=L.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=L.clientCustomers?L.clientCustomers.length:0;return`
     <div class="dashboard-shell">
       <!-- Modern Sidebar -->
       <aside class="dash-sidebar">
@@ -238,35 +274,36 @@ Minimum version required to store current data is: `+c+`.
         <nav class="sidebar-nav">
           <div class="nav-category-label">Workspace</div>
           <button class="nav-link ${L.currentTab===`profile`?`active`:``}" onclick="switchTab('profile')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><path d="M14 14h3v3h-3z"></path><path d="M14 20h6"></path><path d="M20 14v6"></path></svg>
+            ${R.qr}
             Profile & QR Studio
           </button>
 
           <button class="nav-link ${L.currentTab===`customization`?`active`:``}" onclick="switchTab('customization')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            ${R.palette}
             Customization
+            <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:10px; padding:2px 7px;">Live</span>
           </button>
 
           <button class="nav-link ${L.currentTab===`analytics`?`active`:``}" onclick="switchTab('analytics')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            ${R.chart}
             Analytics & Reviews
           </button>
 
           <button class="nav-link ${L.currentTab===`customers`?`active`:``}" onclick="switchTab('customers')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            ${R.users}
             Customers
             <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:11px; padding:2px 8px;">${r}</span>
           </button>
 
           <button class="nav-link ${L.currentTab===`questions`?`active`:``}" onclick="switchTab('questions')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Questions & Category
           </button>
         </nav>
 
         <div class="sidebar-footer">
           <div class="user-badge">
-            <div class="user-avatar">${(t.name||e.name).slice(0,1).toUpperCase()}</div>
+            <div class="user-avatar" style="background:#4f46e5;">${(t.name||e.name).slice(0,1).toUpperCase()}</div>
             <div class="user-meta">
               <div class="user-name">${t.name||e.name}</div>
               <div class="user-role">@${e.username}</div>
@@ -296,24 +333,24 @@ Minimum version required to store current data is: `+c+`.
               AI Active (gpt-4o-mini)
             </span>
             <a href="/?scan=${e.username}" target="_blank" class="btn-pro btn-pro-primary">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              ${R.externalLink}
               Test Customer QR &rarr;
             </a>
           </div>
         </header>
 
         <div class="dash-content">
-          ${L.currentTab===`profile`?X(t):``}
-          ${L.currentTab===`customization`?se(t):``}
-          ${L.currentTab===`analytics`?ue(n):``}
-          ${L.currentTab===`customers`?fe():``}
-          ${L.currentTab===`questions`?de():``}
+          ${L.currentTab===`profile`?ie(t):``}
+          ${L.currentTab===`customization`?ce(t):``}
+          ${L.currentTab===`analytics`?de(n):``}
+          ${L.currentTab===`customers`?pe():``}
+          ${L.currentTab===`questions`?fe():``}
         </div>
       </main>
 
       ${$()}
     </div>
-  `}function Y(e){L.currentTab=e,B()}function X(e){let t=`${window.location.origin}/?scan=${L.currentUser.username}`;return`
+  `}function X(e){L.currentTab=e,V()}function ie(e){let t=`${window.location.origin}/?scan=${L.currentUser.username}`;return`
     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:flex-start;">
       <!-- Profile Form -->
       <div class="dash-card">
@@ -376,21 +413,23 @@ Minimum version required to store current data is: `+c+`.
           </div>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="btn-pro btn-pro-primary" onclick="downloadQrCode()">
-            ⬇️ Download QR Image (PNG)
+            ${R.qr}
+            Download Tabletop Stand (PNG)
           </button>
 
-          <div style="display:flex; gap:6px;">
-            <input type="text" class="pro-input" style="font-size:12px;" value="${t}" readonly>
-            <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="navigator.clipboard.writeText('${t}'); alert('Customer scan link copied to clipboard!');">
+          <div style="display:flex; gap:8px;">
+            <input type="text" class="pro-input" style="font-size:12px; font-family:var(--font-mono);" value="${t}" readonly>
+            <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="navigator.clipboard.writeText('${t}'); alert('Customer review scan link copied to clipboard!');">
+              ${R.copy}
               Copy
             </button>
           </div>
         </div>
       </div>
     </div>
-  `}function ie(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&L.currentUser){let n=`${window.location.origin}/?scan=${L.currentUser.username}`;F.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}async function ae(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value;try{(await fetch(`${I}/client/profile/${L.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r})})).ok&&(alert(`Profile updated successfully`),await q(),B())}catch{alert(`Failed to save profile`)}}function oe(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${L.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function se(e){L.customizationDraft||={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`};let t=L.customizationDraft;return`
+  `}function ae(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&L.currentUser){let n=`${window.location.origin}/?scan=${L.currentUser.username}`;F.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}async function oe(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value;try{(await fetch(`${I}/client/profile/${L.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r})})).ok&&(alert(`Profile updated successfully`),await J(),V())}catch{alert(`Failed to save profile`)}}function se(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${L.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function ce(e){L.customizationDraft||={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`};let t=L.customizationDraft;return`
     <div class="customization-grid">
       <!-- Left: Customization Settings -->
       <div class="dash-card">
@@ -494,7 +533,8 @@ Minimum version required to store current data is: `+c+`.
           </div>
 
           <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;">
-            💾 Save Customization Changes
+            ${R.check}
+            Save Customization Changes
           </button>
         </form>
       </div>
@@ -511,6 +551,14 @@ Minimum version required to store current data is: `+c+`.
           </div>
 
           <div class="mobile-device-screen" style="background:${t.bgColor};">
+            <!-- Mobile Top Status Bar -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0 8px 10px; font-size:11px; font-weight:700; color:#334155; opacity:0.8;">
+              <span>9:41</span>
+              <div style="display:flex; align-items:center; gap:5px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="16" width="3" height="6" rx="1"/><rect x="7" y="12" width="3" height="10" rx="1"/><rect x="13" y="7" width="3" height="15" rx="1"/><rect x="19" y="2" width="3" height="20" rx="1"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="9" width="10" height="6" rx="1"/><path d="M22 11v2"/></svg>
+              </div>
+            </div>
             <!-- Simulated White Card on Screen -->
             <div style="background:#ffffff; border-radius:20px; padding:20px 16px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 24px rgba(0,0,0,0.06); text-align:center; margin-top:10px;">
               <!-- 1. Top Logo -->
@@ -549,13 +597,15 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function ce(e,t){if(!L.customizationDraft){let e=L.clientProfile||L.currentUser;L.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}L.customizationDraft[e]=t,B()}async function le(e){e.preventDefault();let t=L.customizationDraft;try{(await fetch(`${I}/client/profile/${L.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({bg_color:t.bgColor,logo_url:t.logoUrl,banner_url:t.bannerUrl,qr_color:t.qrColor})})).ok?(alert(`Customization saved successfully!`),await q(),B()):alert(`Failed to save customization`)}catch{alert(`Error saving customization`)}}function ue(e){return`
+  `}function le(e,t){if(!L.customizationDraft){let e=L.clientProfile||L.currentUser;L.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}L.customizationDraft[e]=t,V()}async function ue(e){e.preventDefault();let t=L.customizationDraft;try{(await fetch(`${I}/client/profile/${L.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({bg_color:t.bgColor,logo_url:t.logoUrl,banner_url:t.bannerUrl,qr_color:t.qrColor})})).ok?(alert(`Customization saved successfully!`),await J(),V()):alert(`Failed to save customization`)}catch{alert(`Error saving customization`)}}function de(e){return`
     <!-- Key Metrics Grid -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-top">
-          <span class="kpi-label">No. of Scans</span>
-          <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">📱</div>
+          <span class="kpi-label">No. of QR Scans</span>
+          <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">
+            ${R.qr}
+          </div>
         </div>
         <div class="kpi-number">${e.total_scans}</div>
         <div class="kpi-footer">
@@ -566,11 +616,26 @@ Minimum version required to store current data is: `+c+`.
       <div class="kpi-card">
         <div class="kpi-top">
           <span class="kpi-label">Reviews Generated</span>
-          <div class="kpi-icon-bubble" style="background:#ecfdf5; color:#059669;">✨</div>
+          <div class="kpi-icon-bubble" style="background:#ecfdf5; color:#059669;">
+            ${R.sparkles}
+          </div>
         </div>
         <div class="kpi-number">${e.total_generated}</div>
         <div class="kpi-footer">
           AI-assisted review drafts completed
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Conversion Rate</span>
+          <div class="kpi-icon-bubble" style="background:#fffbeb; color:#d97706;">
+            ${R.chart}
+          </div>
+        </div>
+        <div class="kpi-number">${e.total_scans>0?Math.round(e.total_generated/e.total_scans*100):0}%</div>
+        <div class="kpi-footer">
+          Scan to completed review conversion
         </div>
       </div>
     </div>
@@ -638,7 +703,7 @@ Minimum version required to store current data is: `+c+`.
         `}
       </div>
     </div>
-  `}function de(){return`
+  `}function fe(){return`
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:flex-start;">
       <!-- Categories Section -->
       <div class="dash-card">
@@ -720,11 +785,13 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function fe(){let e=L.clientCustomers||[],t=(L.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length;return`
+  `}function pe(){let e=L.clientCustomers||[],t=(L.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length,o=r>0?Math.round(a/r*100):0,s=e.reduce((e,t)=>e+(Number(t.reviews_count)||0),0);return`
     <!-- Top KPI Cards for Customers -->
     <div class="customer-stats-grid">
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">👥</div>
+        <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">
+          ${R.users}
+        </div>
         <div>
           <div class="customer-stat-val">${r}</div>
           <div class="customer-stat-lbl">Unique Customers</div>
@@ -732,7 +799,9 @@ Minimum version required to store current data is: `+c+`.
       </div>
 
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">📱</div>
+        <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">
+          ${R.qr}
+        </div>
         <div>
           <div class="customer-stat-val">${i}</div>
           <div class="customer-stat-lbl">Total Scans / Visits</div>
@@ -740,17 +809,21 @@ Minimum version required to store current data is: `+c+`.
       </div>
 
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#fffbeb; color:#d97706;">🔁</div>
+        <div class="customer-stat-icon" style="background:#fffbeb; color:#d97706;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </div>
         <div>
           <div class="customer-stat-val">${a}</div>
-          <div class="customer-stat-lbl">Repeat Visitors (${r>0?Math.round(a/r*100):0}%)</div>
+          <div class="customer-stat-lbl">Repeat Visitors (${o}%)</div>
         </div>
       </div>
 
       <div class="customer-stat-box">
-        <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">⭐</div>
+        <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">
+          ${R.star}
+        </div>
         <div>
-          <div class="customer-stat-val">${e.reduce((e,t)=>e+(Number(t.reviews_count)||0),0)}</div>
+          <div class="customer-stat-val">${s}</div>
           <div class="customer-stat-lbl">Reviews Placed</div>
         </div>
       </div>
@@ -840,7 +913,7 @@ Minimum version required to store current data is: `+c+`.
         </div>
       `}
     </div>
-  `}async function pe(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${I}/client/customers/${e}`,{method:`DELETE`})).ok&&(L.clientCustomers=L.clientCustomers.filter(t=>t.id!==e),B())}catch(e){console.error(`Failed to delete customer:`,e)}}async function me(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${I}/client/categories/${L.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await q(),B())}catch{alert(`Failed to add category`)}}async function he(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${I}/client/categories/${e}`,{method:`DELETE`}),await q(),B()}catch{alert(`Failed to delete category`)}}async function ge(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${I}/client/questions/${L.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await q(),B())}catch{alert(`Failed to add question`)}}async function _e(e){if(confirm(`Delete this question?`))try{await fetch(`${I}/client/questions/${e}`,{method:`DELETE`}),await q(),B()}catch{alert(`Failed to delete question`)}}async function ve(){if(!L.customerSession)try{let e=await fetch(`${I}/customer/session/${z}`);e.ok?(L.customerSession=await e.json(),B()):(L.error=`Business not found or invalid QR link`,B())}catch{L.error=`Unable to connect`,B()}}function ye(){if(!L.customerSession&&!L.error)return ve(),`
+  `}async function me(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${I}/client/customers/${e}`,{method:`DELETE`})).ok&&(L.clientCustomers=L.clientCustomers.filter(t=>t.id!==e),V())}catch(e){console.error(`Failed to delete customer:`,e)}}async function he(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${I}/client/categories/${L.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await J(),V())}catch{alert(`Failed to add category`)}}async function ge(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${I}/client/categories/${e}`,{method:`DELETE`}),await J(),V()}catch{alert(`Failed to delete category`)}}async function _e(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${I}/client/questions/${L.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await J(),V())}catch{alert(`Failed to add question`)}}async function Z(e){if(confirm(`Delete this question?`))try{await fetch(`${I}/client/questions/${e}`,{method:`DELETE`}),await J(),V()}catch{alert(`Failed to delete question`)}}async function ve(){if(!L.customerSession)try{let e=await fetch(`${I}/customer/session/${B}`);e.ok?(L.customerSession=await e.json(),V()):(L.error=`Business not found or invalid QR link`,V())}catch{L.error=`Unable to connect`,V()}}function ye(){if(!L.customerSession&&!L.error)return ve(),`
       <div class="customer-clean-page" style="background: #edf4fc;">
         <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
           <div style="width:48px; height:48px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; margin:0 auto 20px; animation:spin 0.8s linear infinite;"></div>
@@ -871,12 +944,13 @@ Minimum version required to store current data is: `+c+`.
         </p>
 
         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; color:#475569; margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:8px;">
-          <span>⏱️</span>
+          ${R.bolt}
           <span>Takes less than 45 seconds &bull; 100% genuine</span>
         </div>
       </div>
 
       <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px; background:${e.qrColor||`#4f46e5`};">
+        ${R.sparkles}
         Start Feedback &rarr;
       </button>
     `;else if(L.customerStep===2)t=`
@@ -888,15 +962,25 @@ Minimum version required to store current data is: `+c+`.
         <form onsubmit="handleCustomerInfoSubmit(event)">
           <div style="margin-bottom:18px;">
             <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Your Name (Optional)</label>
-            <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${L.customerInfo.name}" style="padding:12px 14px; font-size:14px;">
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${R.user}
+              </span>
+              <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${L.customerInfo.name}" style="padding-left:42px; font-size:14px;">
+            </div>
           </div>
 
           <div style="margin-bottom:24px;">
             <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Mobile Number (Optional)</label>
-            <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${L.customerInfo.mobile}" style="padding:12px 14px; font-size:14px;">
+            <div style="position:relative;">
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+                ${R.phone}
+              </span>
+              <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${L.customerInfo.mobile}" style="padding-left:42px; font-size:14px;">
+            </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px;">
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px; background:${e.qrColor||`#4f46e5`};">
             Continue to Questions &rarr;
           </button>
         </form>
@@ -947,7 +1031,7 @@ Minimum version required to store current data is: `+c+`.
       `}}else L.customerStep===4?t=L.loading?`
         <div style="text-align:center; padding:50px 10px;">
           <div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #4f46e5, #06b6d4); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px; margin:0 auto 20px; box-shadow:0 10px 25px rgba(79, 70, 229, 0.3);">
-            ✨
+            ${R.sparkles}
           </div>
           <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:8px;">Crafting your review...</h2>
           <p style="font-size:14px; color:#64748b; line-height:1.5;">Our AI is synthesizing your answers into an authentic review draft.</p>
@@ -956,7 +1040,7 @@ Minimum version required to store current data is: `+c+`.
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <h2 style="font-size:20px; font-weight:800; color:#0f172a;">Your Review Draft</h2>
-            <span class="badge-pro badge-indigo">✨ AI Generated</span>
+            <span class="badge-pro badge-indigo">${R.sparkles} AI Generated</span>
           </div>
 
           <p style="font-size:13px; color:#64748b; margin-bottom:16px; line-height:1.4;">
@@ -966,19 +1050,19 @@ Minimum version required to store current data is: `+c+`.
           <textarea id="editableDraft" class="review-arial-box" rows="7" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${L.generatedReview}</textarea>
 
           <div style="background:#ecfdf5; border:1px solid #bbf7d0; border-radius:10px; padding:12px 14px; font-size:12px; color:#047857; line-height:1.5; margin-bottom:24px; display:flex; align-items:flex-start; gap:8px;">
-            <span style="font-size:16px;">💡</span>
+            <span style="display:flex; margin-top:1px;">${R.check}</span>
             <span>Clicking below copies this review and opens ${e.businessName}'s Google review page. Simply paste and post!</span>
           </div>
 
-          <button class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:16px; padding:14px 20px; display:flex; align-items:center; justify-content:center; gap:10px;" onclick="copyAndRedirectToGoogle()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1H12v3.8h5.37c-.52 2.5-2.6 4.33-5.37 4.33-3.04 0-5.5-2.46-5.5-5.5s2.46-5.5 5.5-5.5c1.37 0 2.62.5 3.58 1.42l2.69-2.69C16.89 4.37 14.58 3.5 12 3.5 7.31 3.5 3.5 7.31 3.5 12s3.81 8.5 8.5 8.5c4.97 0 8.25-3.5 8.25-8.4 0-.6-.06-1.3-.15-1.9z"/></svg>
+          <button class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:16px; padding:14px 20px; display:flex; align-items:center; justify-content:center; gap:10px; background:#0f172a;" onclick="copyAndRedirectToGoogle()">
+            ${R.google}
             Copy & Continue to Google &rarr;
           </button>
         </div>
       `:L.customerStep===5&&(t=`
       <div style="text-align:center; padding:40px 10px;">
-        <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; border:2px solid #bbf7d0;">
-          ✓
+        <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:32px; margin:0 auto 20px; border:2px solid #bbf7d0;">
+          ${R.check}
         </div>
         <h2 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px;">Thank You!</h2>
         <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:28px;">
@@ -1004,7 +1088,7 @@ Minimum version required to store current data is: `+c+`.
         ${t}
       </div>
     </div>
-  `}function be(e){L.customerStep=e,B()}function xe(){L.customerInfo.name=`Guest`,L.customerInfo.mobile=``,L.customerStep=3,L.currentQuestionIdx=0,L.customerAnswers=[],B()}function Se(e){e.preventDefault(),L.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),L.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),L.customerInfo.mobile&&L.customerSession&&fetch(`${I}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:L.customerSession.clientId,name:L.customerInfo.name,mobile:L.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),L.customerStep=3,L.currentQuestionIdx=0,L.customerAnswers=[],B()}function Z(e,t,n,r){L.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r});let i=L.customerSession.questions.length;L.currentQuestionIdx<i-1?(L.currentQuestionIdx+=1,B()):Ce()}async function Ce(){L.customerStep=4,L.loading=!0,B();try{let e=await(await fetch(`${I}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:L.customerSession.clientId,customerName:L.customerInfo.name||`Anonymous`,customerMobile:L.customerInfo.mobile||``,answers:L.customerAnswers})})).json();L.generatedReview=e.reviewDraft,L.feedbackId=e.feedbackId,L.googleReviewUrl=e.googleReviewUrl}catch{L.generatedReview=`I had a great experience at ${L.customerSession.businessName}. The service was excellent!`}finally{L.loading=!1,B()}}async function we(){let e=L.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}L.feedbackId&&fetch(`${I}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:L.feedbackId})});let t=L.googleReviewUrl||L.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),L.customerStep=5,B()}function Te(e,t=null){L.modal={type:e,data:t},B()}function Q(){L.modal=null,B()}function $(){if(!L.modal)return``;let{type:e,data:t}=L.modal;return e===`create-client`?`
+  `}function be(e){L.customerStep=e,V()}function xe(){L.customerInfo.name=`Guest`,L.customerInfo.mobile=``,L.customerStep=3,L.currentQuestionIdx=0,L.customerAnswers=[],V()}function Se(e){e.preventDefault(),L.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),L.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),L.customerInfo.mobile&&L.customerSession&&fetch(`${I}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:L.customerSession.clientId,name:L.customerInfo.name,mobile:L.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),L.customerStep=3,L.currentQuestionIdx=0,L.customerAnswers=[],V()}function Ce(e,t,n,r){L.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r});let i=L.customerSession.questions.length;L.currentQuestionIdx<i-1?(L.currentQuestionIdx+=1,V()):we()}async function we(){L.customerStep=4,L.loading=!0,V();try{let e=await(await fetch(`${I}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:L.customerSession.clientId,customerName:L.customerInfo.name||`Anonymous`,customerMobile:L.customerInfo.mobile||``,answers:L.customerAnswers})})).json();L.generatedReview=e.reviewDraft,L.feedbackId=e.feedbackId,L.googleReviewUrl=e.googleReviewUrl}catch{L.generatedReview=`I had a great experience at ${L.customerSession.businessName}. The service was excellent!`}finally{L.loading=!1,V()}}async function Te(){let e=L.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}L.feedbackId&&fetch(`${I}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:L.feedbackId})});let t=L.googleReviewUrl||L.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),L.customerStep=5,V()}function Ee(e,t=null){L.modal={type:e,data:t},V()}function Q(){L.modal=null,V()}function $(){if(!L.modal)return``;let{type:e,data:t}=L.modal;return e===`create-client`?`
       <div class="pro-modal-backdrop" onclick="closeModal()">
         <div class="pro-modal-box" onclick="event.stopPropagation()">
           <div class="pro-modal-header">
@@ -1111,4 +1195,4 @@ Minimum version required to store current data is: `+c+`.
           </form>
         </div>
       </div>
-    `:``}window.handleLogin=re,window.handleLogout=V,window.quickFill=ne,window.openModal=Te,window.closeModal=Q,window.handleCreateClient=W,window.handleResetPassword=G,window.deleteClient=K,window.switchTab=Y,window.selectColor=ie,window.handleSaveProfile=ae,window.downloadQrCode=oe,window.updateCustomization=ce,window.handleSaveCustomization=le,window.handleAddCategory=me,window.deleteCategory=he,window.handleAddQuestion=ge,window.deleteQuestion=_e,window.customerNextStep=be,window.skipCustomerInfo=xe,window.handleCustomerInfoSubmit=Se,window.rateStar=Z,window.copyAndRedirectToGoogle=we,window.deleteCustomer=pe,L.currentUser?L.currentUser.role===`admin`?H().then(B):q().then(B):B();
+    `:``}window.handleLogin=re,window.handleLogout=H,window.quickFill=ne,window.openModal=Ee,window.closeModal=Q,window.handleCreateClient=G,window.handleResetPassword=K,window.deleteClient=q,window.switchTab=X,window.selectColor=ae,window.handleSaveProfile=oe,window.downloadQrCode=se,window.updateCustomization=le,window.handleSaveCustomization=ue,window.handleAddCategory=he,window.deleteCategory=ge,window.handleAddQuestion=_e,window.deleteQuestion=Z,window.customerNextStep=be,window.skipCustomerInfo=xe,window.handleCustomerInfoSubmit=Se,window.rateStar=Ce,window.copyAndRedirectToGoogle=Te,window.deleteCustomer=me,L.currentUser?L.currentUser.role===`admin`?U().then(V):J().then(V):V();
