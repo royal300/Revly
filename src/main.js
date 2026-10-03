@@ -5,6 +5,7 @@ const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:30
 // App State
 let state = {
   currentUser: JSON.parse(localStorage.getItem('revly_user') || 'null'),
+  authView: (new URLSearchParams(window.location.search).get('view') === 'login' || window.location.hash === '#login') ? 'login' : 'landing',
   currentTab: 'profile', // 'profile' | 'analytics' | 'questions'
   clients: [], // For Super Admin
   clientProfile: null,
@@ -76,9 +77,13 @@ function render() {
     return;
   }
 
-  // 2. If not logged in, render Modern Login Page
+  // 2. If not logged in, render Minimalist Landing Page (Default) or Login Page
   if (!state.currentUser) {
-    app.innerHTML = renderLoginPage();
+    if (state.authView === 'login') {
+      app.innerHTML = renderLoginPage();
+    } else {
+      app.innerHTML = renderLandingPage();
+    }
     return;
   }
 
@@ -108,6 +113,200 @@ function render() {
   }, 50);
 }
 
+// Auth View Switcher
+function switchAuthView(view) {
+  state.authView = view;
+  state.error = '';
+  if (view === 'login') {
+    window.location.hash = '#login';
+  } else {
+    if (window.location.hash === '#login') {
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+  render();
+}
+
+// -------------------------------------------------------------
+// 0. GOOGLE-THEMED MINIMALIST FULLSCREEN LANDING PAGE
+// -------------------------------------------------------------
+function renderLandingPage() {
+  return `
+    <div class="landing-viewport">
+      <!-- Google 4-Color Brand Ribbon -->
+      <div class="google-brand-strip"></div>
+
+      <!-- Minimalist Navigation Bar -->
+      <header class="landing-header">
+        <div class="landing-nav-inner">
+          <div class="landing-brand" onclick="switchAuthView('landing')">
+            <svg width="26" height="26" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.9 7.5 23.5 12 23.5z"/></svg>
+            <span class="landing-brand-title">Revly</span>
+            <span class="landing-brand-pill">Google Review Station</span>
+          </div>
+
+          <div class="landing-nav-right">
+            <a href="/?scan=royalcafe" target="_blank" class="landing-nav-link">
+              Live QR Demo
+            </a>
+            <button type="button" class="landing-login-btn" onclick="switchAuthView('login')">
+              <span>Sign In / Login</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Hero Section & Visual Centerpiece -->
+      <main class="landing-hero-section">
+        <div class="landing-hero-container">
+          <!-- Left Column: Value Prop & Calls-to-Action -->
+          <div class="landing-hero-content">
+            <div class="landing-badge">
+              <div class="google-dots-row">
+                <span class="g-dot dot-blue"></span>
+                <span class="g-dot dot-red"></span>
+                <span class="g-dot dot-yellow"></span>
+                <span class="g-dot dot-green"></span>
+              </div>
+              <span>Google Review Acceleration for In-Store Businesses</span>
+            </div>
+
+            <h1 class="landing-hero-title">
+              Turn In-Store Visits into <br>
+              <span class="hero-highlight">5-Star Google Reviews</span>.
+            </h1>
+
+            <p class="landing-hero-subtitle">
+              Smart QR counter stands paired with an on-device feedback assistant. Customers answer 3 rapid questions, and our AI drafts authentic, Google-ready reviews in 45 seconds.
+            </p>
+
+            <div class="landing-cta-row">
+              <a href="/?scan=royalcafe" target="_blank" class="landing-btn-primary">
+                ${Icons.qr}
+                Test Live Customer QR &rarr;
+              </a>
+              <button type="button" class="landing-btn-secondary" onclick="switchAuthView('login')">
+                Client Portal Login
+              </button>
+            </div>
+
+            <div class="landing-trust-row">
+              <div class="trust-item">
+                <div class="trust-stars">★★★★★</div>
+                <div class="trust-caption">4.9 / 5.0 Average Rating</div>
+              </div>
+              <div class="trust-divider"></div>
+              <div class="trust-item">
+                <div class="trust-stat">45 Seconds</div>
+                <div class="trust-caption">Zero-Friction Feedback</div>
+              </div>
+              <div class="trust-divider"></div>
+              <div class="trust-item">
+                <div class="trust-stat">100% Genuine</div>
+                <div class="trust-caption">Google Policy Compliant</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Minimalist Acrylic Google Stand Mockup -->
+          <div class="landing-hero-visual">
+            <div class="acrylic-stand-card">
+              <div class="stand-header">
+                ${Icons.google}
+                <span class="stand-header-text">Review Us on Google</span>
+              </div>
+
+              <div class="stand-stars-row">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+
+              <div class="stand-qr-box">
+                <div class="stand-qr-graphic">
+                  <svg width="105" height="105" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.8"><rect x="2" y="2" width="8" height="8" rx="2"/><rect x="14" y="2" width="8" height="8" rx="2"/><rect x="2" y="14" width="8" height="8" rx="2"/><rect x="5" y="5" width="2" height="2" fill="#0f172a"/><rect x="17" y="5" width="2" height="2" fill="#0f172a"/><rect x="5" y="17" width="2" height="2" fill="#0f172a"/><path d="M14 14h2v2h-2z" fill="#0f172a"/><path d="M18 14h4v2h-4z" fill="#0f172a"/><path d="M14 18h4v4h-4z" fill="#0f172a"/><path d="M20 18h2v4h-2z" fill="#0f172a"/></svg>
+                </div>
+                <div class="stand-scan-prompt">
+                  <span>📱</span>
+                  <span>Point camera or tap NFC stand</span>
+                </div>
+              </div>
+
+              <div class="stand-floating-review">
+                <div class="floating-review-user">
+                  <div class="avatar-mini">A</div>
+                  <div>
+                    <div class="user-name">Amit K.</div>
+                    <div class="user-rating">★★★★★ &bull; Verified Customer</div>
+                  </div>
+                </div>
+                <p class="review-sample-quote">
+                  "Had a wonderful experience at Royal Cafe! The food was delicious and the staff were very polite and attentive."
+                </p>
+                <div class="posted-google-tag">
+                  ${Icons.google}
+                  <span>Verified Google Review</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Minimalist Feature Pillars -->
+        <div class="landing-features-grid">
+          <div class="feature-item-card">
+            <div class="feature-icon" style="background:#e8f0fe; color:#1a73e8;">
+              ${Icons.qr}
+            </div>
+            <div class="feature-text">
+              <h4>Smart Acrylic Stands</h4>
+              <p>Custom-branded counter stands. Instant mobile camera scan with zero apps needed.</p>
+            </div>
+          </div>
+
+          <div class="feature-item-card">
+            <div class="feature-icon" style="background:#fef7e0; color:#b06000;">
+              ${Icons.star}
+            </div>
+            <div class="feature-text">
+              <h4>3-Question Star Survey</h4>
+              <p>Customers answer 3 quick star questions positioned comfortably at eye level.</p>
+            </div>
+          </div>
+
+          <div class="feature-item-card">
+            <div class="feature-icon" style="background:#e6f4ea; color:#137333;">
+              ${Icons.sparkles}
+            </div>
+            <div class="feature-text">
+              <h4>Authentic AI Review Draft</h4>
+              <p>Translates customer sentiment into natural first-person reviews. Zero hallucinations.</p>
+            </div>
+          </div>
+
+          <div class="feature-item-card">
+            <div class="feature-icon" style="background:#fce8e6; color:#c5221f;">
+              ${Icons.chart}
+            </div>
+            <div class="feature-text">
+              <h4>Real-Time Analytics</h4>
+              <p>Track scans, review completion rates, and repeat customer visits by day, week, or month.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Minimalist Footer -->
+      <footer class="landing-footer-strip">
+        <div>&copy; 2026 Revly &bull; Google Maps Review & Reputation Engine</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="color:#34a853;">●</span>
+          <span>100% Compliant with Google Review & Community Guidelines</span>
+        </div>
+      </footer>
+    </div>
+  `;
+}
+
 // -------------------------------------------------------------
 // 1. MODERN PROFESSIONAL LOGIN PAGE
 // -------------------------------------------------------------
@@ -115,19 +314,25 @@ function renderLoginPage() {
   return `
     <div class="login-split-page">
       <div class="login-card-pro">
+        <div style="margin-bottom:18px;">
+          <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="switchAuthView('landing')" style="display:inline-flex; align-items:center; gap:6px;">
+            &larr; Back to Home
+          </button>
+        </div>
+
         <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
           <div class="brand-icon" style="width:44px; height:44px;">
             ${Icons.bolt}
           </div>
           <div>
             <div style="font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.035em; line-height:1.2;">Revly</div>
-            <div style="font-size:12px; color:#64748b; font-weight:600;">AI Review & Customer Feedback SaaS</div>
+            <div style="font-size:12px; color:#64748b; font-weight:600;">Google Review & Customer Feedback SaaS</div>
           </div>
         </div>
 
-        <div style="display:inline-flex; align-items:center; gap:6px; background:#eef2ff; border:1px solid #e0e7ff; padding:5px 12px; border-radius:99px; margin-bottom:20px;">
-          <span class="live-pill-dot" style="background:#4f46e5; box-shadow:none;"></span>
-          <span style="font-size:11.5px; font-weight:700; color:#4f46e5;">OpenAI GPT-4o-mini Connected</span>
+        <div style="display:inline-flex; align-items:center; gap:6px; background:#e8f0fe; border:1px solid #d2e3fc; padding:5px 12px; border-radius:99px; margin-bottom:20px;">
+          ${Icons.google}
+          <span style="font-size:11.5px; font-weight:700; color:#1a73e8;">Google Business Partner Station</span>
         </div>
 
         <h2 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:6px;">Sign in to your dashboard</h2>
@@ -227,7 +432,11 @@ async function handleLogin(e) {
 
 function handleLogout() {
   state.currentUser = null;
+  state.authView = 'landing';
   localStorage.removeItem('revly_user');
+  if (window.location.hash === '#login') {
+    history.replaceState(null, '', window.location.pathname);
+  }
   render();
 }
 
@@ -2311,6 +2520,7 @@ function renderModal() {
 }
 
 // Global window mappings for inline event triggers
+window.switchAuthView = switchAuthView;
 window.handleLogin = handleLogin;
 window.handleLogout = handleLogout;
 window.quickFill = quickFill;
