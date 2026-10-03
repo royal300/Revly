@@ -810,77 +810,114 @@ function renderClientCustomizationTab(p) {
           <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
             <label class="input-label">Screen Background Color (Solid)</label>
             <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
-              Select a solid background tone for the customer review page.
+              Select a solid background tone for the customer review page. Pick from presets or choose any custom hex color.
             </div>
 
             <div class="color-swatches-row">
               ${presets.map(opt => `
                 <button type="button" 
-                  class="color-swatch-circle ${d.bgColor === opt.color ? 'active' : ''}" 
+                  class="color-swatch-circle bg-color-swatch ${d.bgColor.toLowerCase() === opt.color.toLowerCase() ? 'active' : ''}" 
                   style="background:${opt.color};"
+                  data-color="${opt.color}"
                   title="${opt.name}"
-                  onclick="updateCustomization('bgColor', '${opt.color}')">
+                  onclick="selectBgColorPreset('${opt.color}')">
                 </button>
               `).join('')}
 
-              <div style="display:flex; align-items:center; gap:8px; margin-left:8px;">
-                <input type="color" value="${d.bgColor && d.bgColor.startsWith('#') && d.bgColor.length === 7 ? d.bgColor : '#edf4fc'}" 
-                  style="width:36px; height:36px; border:none; border-radius:8px; cursor:pointer;" 
-                  oninput="updateCustomization('bgColor', this.value)" title="Choose custom color">
-                <span style="font-family:var(--font-mono); font-size:12px; color:#475569;">${d.bgColor}</span>
+              <div style="display:flex; align-items:center; gap:8px; margin-left:8px; padding:4px 8px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px;">
+                <input type="color" id="customBgColorPicker" 
+                  value="${d.bgColor && d.bgColor.startsWith('#') && d.bgColor.length === 7 ? d.bgColor : '#edf4fc'}" 
+                  style="width:32px; height:32px; border:none; border-radius:6px; cursor:pointer; padding:0; background:transparent;" 
+                  oninput="handleColorPickerInput(this.value)" 
+                  onchange="handleColorPickerChange(this.value)"
+                  title="Choose custom color">
+                <span id="bgColorHexLabel" style="font-family:var(--font-mono); font-weight:700; font-size:13px; color:#334155;">${d.bgColor}</span>
               </div>
             </div>
           </div>
 
-          <!-- 2. Business Logo -->
+          <!-- 2. Business Logo Upload -->
           <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
-            <label class="input-label">Business Logo Image URL</label>
-            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
-              Appears at the very top of the review page.
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <label class="input-label" style="margin-bottom:0;">Business Logo Image</label>
+              <span class="badge-pro badge-indigo" style="font-size:11px; font-weight:700;">1:1 Ratio</span>
             </div>
-            <input type="url" class="pro-input" placeholder="https://example.com/logo.png" 
-              value="${d.logoUrl || ''}" 
-              oninput="updateCustomization('logoUrl', this.value)">
             
-            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
-                onclick="updateCustomization('logoUrl', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80')">
-                Coffee Cup Logo
-              </button>
-              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
-                onclick="updateCustomization('logoUrl', 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200&q=80')">
-                Dining Logo
-              </button>
-              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
-                onclick="updateCustomization('logoUrl', '')" style="color:#ef4444;">
-                Reset to Initials
-              </button>
+            <div style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:16px;">
+              <!-- Recommended Size Guideline -->
+              <div style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#3730a3; background:#eef2ff; padding:9px 12px; border-radius:8px; margin-bottom:14px; border:1px solid #e0e7ff;">
+                <span style="font-size:15px;">📐</span>
+                <span><strong>Perfect Size:</strong> 1:1 Square (Recommended: <strong>500 × 500 px</strong>, PNG / JPG / SVG, max 5MB)</span>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:16px;">
+                <!-- Logo Preview Thumbnail -->
+                <div id="logoPreviewWrap" style="width:68px; height:68px; border-radius:16px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; border:2px solid #ffffff; box-shadow:0 3px 10px rgba(0,0,0,0.08);">
+                  ${d.logoUrl ? `
+                    <img id="logoPreviewThumb" src="${d.logoUrl}" style="width:100%; height:100%; object-fit:cover;">
+                  ` : `
+                    <span id="logoPreviewThumbText" style="font-size:22px; font-weight:800; color:#64748b;">${(p.name || 'R').slice(0, 2).toUpperCase()}</span>
+                  `}
+                </div>
+
+                <div style="flex:1;">
+                  <input type="file" id="logoFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display:none;" onchange="handleImageUpload(event, 'logoUrl')">
+                  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="document.getElementById('logoFileInput').click()" style="display:inline-flex; align-items:center; gap:6px;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      Upload Logo Image
+                    </button>
+                    ${d.logoUrl ? `
+                      <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="removeLogoImage()" style="color:#ef4444; border-color:#fee2e2;">
+                        Remove Logo
+                      </button>
+                    ` : ''}
+                  </div>
+                  <div id="logoUrlUploadStatus" style="margin-top:6px; font-size:11px; min-height:16px;"></div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- 3. Rectangular Banner Image -->
+          <!-- 3. Cover / Rectangular Banner Image Upload -->
           <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
-            <label class="input-label">Cover / Rectangular Image Banner</label>
-            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
-              Appears below the logo on the first customer page.
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <label class="input-label" style="margin-bottom:0;">Cover / Banner Rectangular Image</label>
+              <span class="badge-pro badge-indigo" style="font-size:11px; font-weight:700;">16:9 Landscape</span>
             </div>
-            <input type="url" class="pro-input" placeholder="https://example.com/banner.jpg" 
-              value="${d.bannerUrl || ''}" 
-              oninput="updateCustomization('bannerUrl', this.value)">
-            
-            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
-                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80')">
-                Cozy Cafe
-              </button>
-              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
-                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80')">
-                Fine Dining
-              </button>
-              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
-                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80')">
-                Lounge Bar
-              </button>
+
+            <div style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:16px;">
+              <!-- Recommended Size Guideline -->
+              <div style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#3730a3; background:#eef2ff; padding:9px 12px; border-radius:8px; margin-bottom:14px; border:1px solid #e0e7ff;">
+                <span style="font-size:15px;">📐</span>
+                <span><strong>Perfect Size:</strong> Landscape Rectangular (Recommended: <strong>1200 × 500 px</strong> or <strong>800 × 350 px</strong>, 16:9 ratio, max 5MB)</span>
+              </div>
+
+              <!-- Banner Preview Thumbnail -->
+              <div style="margin-bottom:14px; border-radius:10px; overflow:hidden; border:1px solid #e2e8f0; height:120px; background:#e2e8f0; position:relative;">
+                <img id="bannerPreviewThumb" src="${d.bannerUrl || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80'}" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+
+              <input type="file" id="bannerFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="handleImageUpload(event, 'bannerUrl')">
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="document.getElementById('bannerFileInput').click()" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Upload Banner Image
+                </button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                  onclick="setBannerPreset('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80')">
+                  Cozy Cafe
+                </button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                  onclick="setBannerPreset('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80')">
+                  Fine Dining
+                </button>
+                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                  onclick="setBannerPreset('https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80')">
+                  Lounge Bar
+                </button>
+              </div>
+              <div id="bannerUrlUploadStatus" style="margin-top:6px; font-size:11px; min-height:16px;"></div>
             </div>
           </div>
 
@@ -896,10 +933,11 @@ function renderClientCustomizationTab(p) {
                 { color: '#dc2626', name: 'Crimson' }
               ].map(opt => `
                 <button type="button" 
-                  class="color-swatch-circle ${d.qrColor === opt.color ? 'active' : ''}" 
+                  class="color-swatch-circle qr-color-swatch ${d.qrColor === opt.color ? 'active' : ''}" 
                   style="background:${opt.color};"
+                  data-color="${opt.color}"
                   title="${opt.name}"
-                  onclick="updateCustomization('qrColor', '${opt.color}')">
+                  onclick="selectQrColorPreset('${opt.color}')">
                 </button>
               `).join('')}
             </div>
@@ -923,7 +961,7 @@ function renderClientCustomizationTab(p) {
             <div class="mobile-notch-dot"></div>
           </div>
 
-          <div class="mobile-device-screen" style="background:${d.bgColor};">
+          <div id="mockupDeviceScreen" class="mobile-device-screen" style="background:${d.bgColor};">
             <!-- Mobile Top Status Bar -->
             <div style="display:flex; justify-content:space-between; align-items:center; padding:0 8px 10px; font-size:11px; font-weight:700; color:#334155; opacity:0.8;">
               <span>9:41</span>
@@ -935,17 +973,19 @@ function renderClientCustomizationTab(p) {
             <!-- Simulated White Card on Screen -->
             <div style="background:#ffffff; border-radius:20px; padding:20px 16px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 24px rgba(0,0,0,0.06); text-align:center; margin-top:10px;">
               <!-- 1. Top Logo -->
-              ${d.logoUrl ? `
-                <img src="${d.logoUrl}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px;">
-              ` : `
-                <div class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; background:#4f46e5; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; margin:0 auto 12px;">
-                  ${(p.name || 'R').slice(0, 2).toUpperCase()}
-                </div>
-              `}
+              <div id="mockupLogoContainer">
+                ${d.logoUrl ? `
+                  <img src="${d.logoUrl}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px; object-fit:cover;">
+                ` : `
+                  <div class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; background:#4f46e5; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; margin:0 auto 12px;">
+                    ${(p.name || 'R').slice(0, 2).toUpperCase()}
+                  </div>
+                `}
+              </div>
 
               <!-- 2. Rectangular Banner Image -->
-              <img src="${d.bannerUrl || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80'}" 
-                class="customer-banner-img" style="height:110px; border-radius:10px; margin-bottom:14px;">
+              <img id="mockupBannerImg" src="${d.bannerUrl || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80'}" 
+                class="customer-banner-img" style="height:110px; border-radius:10px; margin-bottom:14px; object-fit:cover;">
 
               <!-- 3. Business Name & Description -->
               <h3 style="font-size:17px; font-weight:800; color:#0f172a; margin-bottom:6px;">${p.name || 'Your Business'}</h3>
@@ -958,7 +998,7 @@ function renderClientCustomizationTab(p) {
               </div>
 
               <!-- Button with Brand Color -->
-              <div style="background:${d.qrColor || '#4f46e5'}; color:#ffffff; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+              <div id="mockupButtonPreview" style="background:${d.qrColor || '#4f46e5'}; color:#ffffff; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
                 Start Feedback &rarr;
               </div>
             </div>
@@ -971,6 +1011,184 @@ function renderClientCustomizationTab(p) {
       </div>
     </div>
   `;
+}
+
+// Non-destructive smooth color picker handling
+function handleColorPickerInput(color) {
+  if (!state.customizationDraft) {
+    const p = state.clientProfile || state.currentUser;
+    state.customizationDraft = {
+      bgColor: p.bg_color || '#edf4fc',
+      logoUrl: p.logo_url || '',
+      bannerUrl: p.banner_url || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      qrColor: p.qr_color || '#0f172a'
+    };
+  }
+  state.customizationDraft.bgColor = color;
+  
+  // Directly update mockup DOM without destroying the color picker input
+  const screen = document.getElementById('mockupDeviceScreen');
+  if (screen) screen.style.backgroundColor = color;
+  
+  const hexLabel = document.getElementById('bgColorHexLabel');
+  if (hexLabel) hexLabel.textContent = color;
+  
+  // Update swatch buttons active state
+  document.querySelectorAll('.bg-color-swatch').forEach(btn => {
+    if (btn.getAttribute('data-color') && btn.getAttribute('data-color').toLowerCase() === color.toLowerCase()) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function handleColorPickerChange(color) {
+  handleColorPickerInput(color);
+}
+
+function selectBgColorPreset(color) {
+  handleColorPickerInput(color);
+  const picker = document.getElementById('customBgColorPicker');
+  if (picker && color.startsWith('#') && color.length === 7) {
+    picker.value = color;
+  }
+}
+
+function selectQrColorPreset(color) {
+  if (!state.customizationDraft) {
+    const p = state.clientProfile || state.currentUser;
+    state.customizationDraft = {
+      bgColor: p.bg_color || '#edf4fc',
+      logoUrl: p.logo_url || '',
+      bannerUrl: p.banner_url || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      qrColor: p.qr_color || '#0f172a'
+    };
+  }
+  state.customizationDraft.qrColor = color;
+  const btn = document.getElementById('mockupButtonPreview');
+  if (btn) btn.style.backgroundColor = color;
+  document.querySelectorAll('.qr-color-swatch').forEach(el => {
+    if (el.getAttribute('data-color') === color) el.classList.add('active');
+    else el.classList.remove('active');
+  });
+}
+
+// Direct Image Upload Handler for Logo and Banner
+async function handleImageUpload(event, field) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert('Selected image exceeds 10MB limit. Please choose a smaller image.');
+    return;
+  }
+
+  const statusEl = document.getElementById(`${field}UploadStatus`);
+  if (statusEl) {
+    statusEl.innerHTML = `<span style="color:#4f46e5; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:12px; height:12px; border:2px solid #4f46e5; border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></span>
+      Uploading image to server...
+    </span>`;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64Data = e.target.result;
+
+    if (!state.customizationDraft) {
+      const p = state.clientProfile || state.currentUser;
+      state.customizationDraft = {
+        bgColor: p.bg_color || '#edf4fc',
+        logoUrl: p.logo_url || '',
+        bannerUrl: p.banner_url || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+        qrColor: p.qr_color || '#0f172a'
+      };
+    }
+    state.customizationDraft[field] = base64Data;
+
+    // Instant live UI and Mockup updates
+    if (field === 'logoUrl') {
+      const logoWrap = document.getElementById('logoPreviewWrap');
+      if (logoWrap) {
+        logoWrap.innerHTML = `<img id="logoPreviewThumb" src="${base64Data}" style="width:100%; height:100%; object-fit:cover;">`;
+      }
+      const mockupLogo = document.getElementById('mockupLogoContainer');
+      if (mockupLogo) {
+        mockupLogo.innerHTML = `<img src="${base64Data}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px; object-fit:cover;">`;
+      }
+    } else if (field === 'bannerUrl') {
+      const bannerThumb = document.getElementById('bannerPreviewThumb');
+      if (bannerThumb) bannerThumb.src = base64Data;
+      const mockupBanner = document.getElementById('mockupBannerImg');
+      if (mockupBanner) mockupBanner.src = base64Data;
+    }
+
+    // Upload to server
+    try {
+      const res = await fetch(`${API_BASE}/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: base64Data,
+          filename: file.name
+        })
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        if (result.url) {
+          state.customizationDraft[field] = result.url;
+          if (statusEl) {
+            statusEl.innerHTML = `<span style="color:#10b981; font-size:12px; font-weight:600;">✓ Uploaded successfully</span>`;
+          }
+        }
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        if (statusEl) {
+          statusEl.innerHTML = `<span style="color:#f59e0b; font-size:12px; font-weight:600;">⚠️ ${errData.error || 'Server upload failed, using local preview'}</span>`;
+        }
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color:#f59e0b; font-size:12px; font-weight:600;">⚠️ Network error during upload, preview is active</span>`;
+      }
+    }
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function removeLogoImage() {
+  if (!state.customizationDraft) {
+    const p = state.clientProfile || state.currentUser;
+    state.customizationDraft = {
+      bgColor: p.bg_color || '#edf4fc',
+      logoUrl: '',
+      bannerUrl: p.banner_url || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      qrColor: p.qr_color || '#0f172a'
+    };
+  }
+  state.customizationDraft.logoUrl = '';
+  render();
+}
+
+function setBannerPreset(url) {
+  if (!state.customizationDraft) {
+    const p = state.clientProfile || state.currentUser;
+    state.customizationDraft = {
+      bgColor: p.bg_color || '#edf4fc',
+      logoUrl: '',
+      bannerUrl: url,
+      qrColor: p.qr_color || '#0f172a'
+    };
+  }
+  state.customizationDraft.bannerUrl = url;
+  const mockupBanner = document.getElementById('mockupBannerImg');
+  if (mockupBanner) mockupBanner.src = url;
+  const thumb = document.getElementById('bannerPreviewThumb');
+  if (thumb) thumb.src = url;
 }
 
 function updateCustomization(field, value) {
@@ -1966,6 +2184,13 @@ window.selectColor = selectColor;
 window.handleSaveProfile = handleSaveProfile;
 window.downloadQrCode = downloadQrCode;
 window.updateCustomization = updateCustomization;
+window.handleColorPickerInput = handleColorPickerInput;
+window.handleColorPickerChange = handleColorPickerChange;
+window.selectBgColorPreset = selectBgColorPreset;
+window.selectQrColorPreset = selectQrColorPreset;
+window.handleImageUpload = handleImageUpload;
+window.removeLogoImage = removeLogoImage;
+window.setBannerPreset = setBannerPreset;
 window.handleSaveCustomization = handleSaveCustomization;
 window.handleAddCategory = handleAddCategory;
 window.deleteCategory = deleteCategory;

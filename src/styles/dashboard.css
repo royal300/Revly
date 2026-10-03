@@ -797,26 +797,66 @@ body {
   transition: background-color 0.25s ease;
 }
 
+/* Card Floating Animation with Vivid Neon Light Border Glow */
+@keyframes neonCardFloat {
+  0%, 100% {
+    transform: translateY(0px);
+    box-shadow: 0 0 18px rgba(99, 102, 241, 0.45),
+                0 0 38px rgba(99, 102, 241, 0.22),
+                0 0 60px rgba(56, 189, 248, 0.16),
+                0 18px 36px -6px rgba(15, 23, 42, 0.12);
+    border-color: rgba(99, 102, 241, 0.65);
+  }
+  50% {
+    transform: translateY(-10px);
+    box-shadow: 0 0 28px rgba(99, 102, 241, 0.75),
+                0 0 55px rgba(129, 140, 248, 0.45),
+                0 0 85px rgba(56, 189, 248, 0.28),
+                0 30px 55px -10px rgba(15, 23, 42, 0.18);
+    border-color: rgba(129, 140, 248, 1);
+  }
+}
+
 .customer-clean-card {
   width: 100%;
   max-width: 490px;
   background: #ffffff;
   border-radius: var(--radius-xl);
-  box-shadow: 0 16px 40px -6px rgba(15, 23, 42, 0.09), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 2.5px solid rgba(99, 102, 241, 0.65);
+  box-shadow: 0 0 18px rgba(99, 102, 241, 0.45), 0 0 38px rgba(99, 102, 241, 0.22), 0 18px 36px -6px rgba(15, 23, 42, 0.12);
   padding: 36px 30px;
   display: flex;
   flex-direction: column;
   position: relative;
+  animation: neonCardFloat 4s ease-in-out infinite;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 @media (max-width: 640px) {
+  @keyframes neonCardFloatMobile {
+    0%, 100% {
+      transform: translateY(0px);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4),
+                  0 0 30px rgba(56, 189, 248, 0.15),
+                  0 12px 24px -4px rgba(15, 23, 42, 0.1);
+      border-color: rgba(99, 102, 241, 0.6);
+    }
+    50% {
+      transform: translateY(-6px);
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.65),
+                  0 0 45px rgba(129, 140, 248, 0.3),
+                  0 18px 32px -6px rgba(15, 23, 42, 0.14);
+      border-color: rgba(129, 140, 248, 0.95);
+    }
+  }
   .customer-clean-page {
     padding: 24px 14px 60px;
   }
   .customer-clean-card {
     padding: 26px 20px;
     border-radius: var(--radius-lg);
+    border-width: 2px;
+    animation: neonCardFloatMobile 4s ease-in-out infinite;
   }
 }
 

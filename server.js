@@ -32,10 +32,49 @@ const DB_PASS = process.env.DB_PASS || 'mypass';
 const DB_NAME = process.env.DB_NAME || 'revly';
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '15mb' }));
+app.use(express.urlencoded({ extended: true, limit: '15mb' }));
+
+// Ensure uploads directory exists and is statically served
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
 
 // Serve static frontend from dist
 app.use(express.static(path.join(__dirname, 'dist')));
+
+// Image Upload Endpoint (Handles direct image uploads for Logo and Banner)
+app.post('/api/upload', async (req, res) => {
+  const { data, filename } = req.body;
+  if (!data) {
+    return res.status(400).json({ error: 'No image data provided' });
+  }
+
+  try {
+    const matches = data.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+    if (!matches) {
+      return res.status(400).json({ error: 'Invalid image format. Expected base64 Data URL.' });
+    }
+    const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+
+    if (buffer.length > 10 * 1024 * 1024) {
+      return res.status(400).json({ error: 'Image exceeds maximum 10MB limit' });
+    }
+
+    const safeName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
+    const filePath = path.join(uploadsDir, safeName);
+    fs.writeFileSync(filePath, buffer);
+
+    const publicUrl = `/uploads/${safeName}`;
+    res.json({ success: true, url: publicUrl });
+  } catch (err) {
+    console.error('Error in /api/upload:', err);
+    res.status(500).json({ error: 'Failed to process image upload' });
+  }
+});
 
 // MySQL Pool Connection to revly database
 const pool = mysql.createPool({
