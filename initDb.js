@@ -26,10 +26,19 @@ async function initDatabase() {
         phone VARCHAR(50) DEFAULT '',
         google_review_url TEXT DEFAULT NULL,
         qr_color VARCHAR(20) DEFAULT '#0f172a',
+        bg_color VARCHAR(30) DEFAULT '#f0f6ff',
+        logo_url TEXT DEFAULT NULL,
+        banner_url TEXT DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
-    console.log('✔ users table verified');
+    
+    // Add columns if table already existed without them
+    try { await pool.query("ALTER TABLE users ADD COLUMN bg_color VARCHAR(30) DEFAULT '#f0f6ff'"); } catch (e) {}
+    try { await pool.query("ALTER TABLE users ADD COLUMN logo_url TEXT DEFAULT NULL"); } catch (e) {}
+    try { await pool.query("ALTER TABLE users ADD COLUMN banner_url TEXT DEFAULT NULL"); } catch (e) {}
+
+    console.log('✔ users table and customization columns verified');
 
     // 2. categories table
     await pool.query(`

@@ -13,6 +13,7 @@ let state = {
   clientQuestions: [],
   clientCustomers: [],
   customerSearchQuery: '',
+  customizationDraft: null,
   modal: null, // { type, data }
   // Customer Flow State
   customerSession: null,
@@ -489,6 +490,11 @@ function renderClientBusiness() {
             Profile & QR Studio
           </button>
 
+          <button class="nav-link ${state.currentTab === 'customization' ? 'active' : ''}" onclick="switchTab('customization')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Customization
+          </button>
+
           <button class="nav-link ${state.currentTab === 'analytics' ? 'active' : ''}" onclick="switchTab('analytics')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
             Analytics & Reviews
@@ -526,6 +532,7 @@ function renderClientBusiness() {
           <div class="topbar-left">
             <h1 class="page-heading">
               ${state.currentTab === 'profile' ? 'Profile & QR Studio' : ''}
+              ${state.currentTab === 'customization' ? 'Review Page Customization & Mobile Studio' : ''}
               ${state.currentTab === 'analytics' ? 'Analytics & Performance' : ''}
               ${state.currentTab === 'customers' ? 'Customer Directory & Unique Visitors' : ''}
               ${state.currentTab === 'questions' ? 'Questions & Categories' : ''}
@@ -545,6 +552,7 @@ function renderClientBusiness() {
 
         <div class="dash-content">
           ${state.currentTab === 'profile' ? renderClientProfileTab(p) : ''}
+          ${state.currentTab === 'customization' ? renderClientCustomizationTab(p) : ''}
           ${state.currentTab === 'analytics' ? renderClientAnalyticsTab(a) : ''}
           ${state.currentTab === 'customers' ? renderClientCustomersTab() : ''}
           ${state.currentTab === 'questions' ? renderClientQuestionsTab() : ''}
@@ -695,6 +703,235 @@ function downloadQrCode() {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
+}
+
+// Client Tab: Customization & Live Mobile Screen Studio
+function renderClientCustomizationTab(p) {
+  if (!state.customizationDraft) {
+    state.customizationDraft = {
+      bgColor: p.bg_color || '#edf4fc',
+      logoUrl: p.logo_url || '',
+      bannerUrl: p.banner_url || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      qrColor: p.qr_color || '#0f172a'
+    };
+  }
+
+  const d = state.customizationDraft;
+  const presets = [
+    { name: 'Soft Bluish', color: '#edf4fc' },
+    { name: 'Sky Blue', color: '#e0f2fe' },
+    { name: 'Indigo Mist', color: '#eef2ff' },
+    { name: 'Cool Slate', color: '#f1f5f9' },
+    { name: 'Pure White', color: '#ffffff' },
+    { name: 'Dark Slate', color: '#0f172a' }
+  ];
+
+  return `
+    <div class="customization-grid">
+      <!-- Left: Customization Settings -->
+      <div class="dash-card">
+        <h2 class="dash-card-title">Review Page Appearance</h2>
+        <div class="dash-card-desc" style="margin-bottom:24px;">
+          Customize how customers see your review station. Changes preview live in the mobile screen on the right.
+        </div>
+
+        <form onsubmit="handleSaveCustomization(event)">
+          <!-- 1. Background Color -->
+          <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+            <label class="input-label">Screen Background Color (Solid)</label>
+            <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
+              Select a solid background tone for the customer review page.
+            </div>
+
+            <div class="color-swatches-row">
+              ${presets.map(opt => `
+                <button type="button" 
+                  class="color-swatch-circle ${d.bgColor === opt.color ? 'active' : ''}" 
+                  style="background:${opt.color};"
+                  title="${opt.name}"
+                  onclick="updateCustomization('bgColor', '${opt.color}')">
+                </button>
+              `).join('')}
+
+              <div style="display:flex; align-items:center; gap:8px; margin-left:8px;">
+                <input type="color" value="${d.bgColor && d.bgColor.startsWith('#') && d.bgColor.length === 7 ? d.bgColor : '#edf4fc'}" 
+                  style="width:36px; height:36px; border:none; border-radius:8px; cursor:pointer;" 
+                  oninput="updateCustomization('bgColor', this.value)" title="Choose custom color">
+                <span style="font-family:var(--font-mono); font-size:12px; color:#475569;">${d.bgColor}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Business Logo -->
+          <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+            <label class="input-label">Business Logo Image URL</label>
+            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
+              Appears at the very top of the review page.
+            </div>
+            <input type="url" class="pro-input" placeholder="https://example.com/logo.png" 
+              value="${d.logoUrl || ''}" 
+              oninput="updateCustomization('logoUrl', this.value)">
+            
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('logoUrl', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80')">
+                Coffee Cup Logo
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('logoUrl', 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200&q=80')">
+                Dining Logo
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('logoUrl', '')" style="color:#ef4444;">
+                Reset to Initials
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Rectangular Banner Image -->
+          <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+            <label class="input-label">Cover / Rectangular Image Banner</label>
+            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
+              Appears below the logo on the first customer page.
+            </div>
+            <input type="url" class="pro-input" placeholder="https://example.com/banner.jpg" 
+              value="${d.bannerUrl || ''}" 
+              oninput="updateCustomization('bannerUrl', this.value)">
+            
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80')">
+                Cozy Cafe
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80')">
+                Fine Dining
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80')">
+                Lounge Bar
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Action Button Color -->
+          <div style="margin-bottom:28px;">
+            <label class="input-label">Brand Button & QR Accent Color</label>
+            <div class="color-swatches-row">
+              ${[
+                { color: '#0f172a', name: 'Dark Slate' },
+                { color: '#4f46e5', name: 'Royal Indigo' },
+                { color: '#0284c7', name: 'Sky Ocean' },
+                { color: '#059669', name: 'Emerald' },
+                { color: '#dc2626', name: 'Crimson' }
+              ].map(opt => `
+                <button type="button" 
+                  class="color-swatch-circle ${d.qrColor === opt.color ? 'active' : ''}" 
+                  style="background:${opt.color};"
+                  title="${opt.name}"
+                  onclick="updateCustomization('qrColor', '${opt.color}')">
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;">
+            💾 Save Customization Changes
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Live Mobile Screen Simulator -->
+      <div class="mobile-preview-wrapper">
+        <div style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">
+          Live Mobile Screen Preview
+        </div>
+
+        <div class="mobile-device-mockup">
+          <div class="mobile-notch">
+            <div class="mobile-notch-dot"></div>
+          </div>
+
+          <div class="mobile-device-screen" style="background:${d.bgColor};">
+            <!-- Simulated White Card on Screen -->
+            <div style="background:#ffffff; border-radius:20px; padding:20px 16px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 24px rgba(0,0,0,0.06); text-align:center; margin-top:10px;">
+              <!-- 1. Top Logo -->
+              ${d.logoUrl ? `
+                <img src="${d.logoUrl}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px;">
+              ` : `
+                <div class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; background:#4f46e5; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; margin:0 auto 12px;">
+                  ${(p.name || 'R').slice(0, 2).toUpperCase()}
+                </div>
+              `}
+
+              <!-- 2. Rectangular Banner Image -->
+              <img src="${d.bannerUrl || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80'}" 
+                class="customer-banner-img" style="height:110px; border-radius:10px; margin-bottom:14px;">
+
+              <!-- 3. Business Name & Description -->
+              <h3 style="font-size:17px; font-weight:800; color:#0f172a; margin-bottom:6px;">${p.name || 'Your Business'}</h3>
+              <p style="font-size:11px; color:#64748b; line-height:1.4; margin-bottom:14px;">
+                Share your experience in 3 quick questions. Our AI prepares your review.
+              </p>
+
+              <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:6px 10px; font-size:10px; color:#475569; margin-bottom:18px;">
+                ⏱️ 45 seconds &bull; 100% genuine
+              </div>
+
+              <!-- Button with Brand Color -->
+              <div style="background:${d.qrColor || '#4f46e5'}; color:#ffffff; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+                Start Feedback &rarr;
+              </div>
+            </div>
+
+            <div style="text-align:center; margin-top:auto; padding-top:14px; font-size:10px; color:#64748b;">
+              &bull; Live customer view &bull;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function updateCustomization(field, value) {
+  if (!state.customizationDraft) {
+    const p = state.clientProfile || state.currentUser;
+    state.customizationDraft = {
+      bgColor: p.bg_color || '#edf4fc',
+      logoUrl: p.logo_url || '',
+      bannerUrl: p.banner_url || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      qrColor: p.qr_color || '#0f172a'
+    };
+  }
+  state.customizationDraft[field] = value;
+  render();
+}
+
+async function handleSaveCustomization(e) {
+  e.preventDefault();
+  const d = state.customizationDraft;
+  try {
+    const res = await fetch(`${API_BASE}/client/profile/${state.currentUser.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        bg_color: d.bgColor,
+        logo_url: d.logoUrl,
+        banner_url: d.bannerUrl,
+        qr_color: d.qrColor
+      })
+    });
+    if (res.ok) {
+      alert('Customization saved successfully!');
+      await loadClientData();
+      render();
+    } else {
+      alert('Failed to save customization');
+    }
+  } catch (err) {
+    alert('Error saving customization');
+  }
 }
 
 // Client Tab 2: Analytics
@@ -1120,7 +1357,7 @@ function renderCustomerFlow() {
   if (!state.customerSession && !state.error) {
     initCustomerSession();
     return `
-      <div class="customer-clean-page">
+      <div class="customer-clean-page" style="background: #edf4fc;">
         <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
           <div style="width:48px; height:48px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; margin:0 auto 20px; animation:spin 0.8s linear infinite;"></div>
           <div style="font-size:16px; font-weight:700; color:#0f172a;">Connecting to review station...</div>
@@ -1132,7 +1369,7 @@ function renderCustomerFlow() {
 
   if (state.error) {
     return `
-      <div class="customer-clean-page">
+      <div class="customer-clean-page" style="background: #edf4fc;">
         <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
           <div style="font-size:36px; margin-bottom:16px;">⚠️</div>
           <h2 style="font-size:20px; font-weight:800; color:#ef4444; margin-bottom:8px;">Notice</h2>
@@ -1148,23 +1385,35 @@ function renderCustomerFlow() {
 
   // Step 1: Welcome
   if (state.customerStep === 1) {
+    const logoHtml = s.logoUrl
+      ? `<img src="${s.logoUrl}" alt="${s.businessName}" class="customer-logo-img">`
+      : `<div class="customer-logo-img" style="background:${s.qrColor || '#4f46e5'}; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin:0 auto 14px;">${s.businessName.slice(0, 2).toUpperCase()}</div>`;
+
+    const bannerHtml = s.bannerUrl
+      ? `<img src="${s.bannerUrl}" alt="${s.businessName} cover" class="customer-banner-img">`
+      : `<img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="${s.businessName} banner" class="customer-banner-img">`;
+
     bodyHtml = `
-      <div style="text-align:center; margin-top:8px;">
-        <div style="width:72px; height:72px; border-radius:20px; background:#4f46e5; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; margin:0 auto 20px; box-shadow:0 8px 20px rgba(79, 70, 229, 0.25);">
-          ${s.businessName.slice(0, 2).toUpperCase()}
-        </div>
+      <div style="text-align:center;">
+        <!-- 1. Top Logo -->
+        ${logoHtml}
+
+        <!-- 2. Rectangular Image Banner -->
+        ${bannerHtml}
+
+        <!-- 3. Rest of Content -->
         <h1 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px; line-height:1.3;">${s.businessName}</h1>
-        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:28px;">
+        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:24px;">
           Share your experience in 3 quick questions. Our AI will help prepare your review draft.
         </p>
 
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; font-size:13px; color:#475569; margin-bottom:32px; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; color:#475569; margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:8px;">
           <span>⏱️</span>
           <span>Takes less than 45 seconds &bull; 100% genuine</span>
         </div>
       </div>
 
-      <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px;">
+      <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px; background:${s.qrColor || '#4f46e5'};">
         Start Feedback &rarr;
       </button>
     `;
@@ -1312,16 +1561,20 @@ function renderCustomerFlow() {
     `;
   }
 
+  const topHeader = state.customerStep > 1 ? `
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:18px;">⭐</span>
+        <span style="font-weight:700; font-size:15px; color:#0f172a;">${s.businessName}</span>
+      </div>
+      <span style="font-size:12px; font-weight:600; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:4px 10px; border-radius:99px;">Verified Review</span>
+    </div>
+  ` : '';
+
   return `
-    <div class="customer-clean-page">
+    <div class="customer-clean-page" style="background: ${s.bgColor || '#edf4fc'};">
       <div class="customer-clean-card">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:18px;">⭐</span>
-            <span style="font-weight:700; font-size:15px; color:#0f172a;">${s.businessName}</span>
-          </div>
-          <span style="font-size:12px; font-weight:600; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:4px 10px; border-radius:99px;">Verified Review</span>
-        </div>
+        ${topHeader}
         ${bodyHtml}
       </div>
     </div>
@@ -1597,6 +1850,8 @@ window.switchTab = switchTab;
 window.selectColor = selectColor;
 window.handleSaveProfile = handleSaveProfile;
 window.downloadQrCode = downloadQrCode;
+window.updateCustomization = updateCustomization;
+window.handleSaveCustomization = handleSaveCustomization;
 window.handleAddCategory = handleAddCategory;
 window.deleteCategory = deleteCategory;
 window.handleAddQuestion = handleAddQuestion;

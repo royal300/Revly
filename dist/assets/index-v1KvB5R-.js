@@ -1,11 +1,11 @@
 var e=Object.create,t=Object.defineProperty,n=Object.getOwnPropertyDescriptor,r=Object.getOwnPropertyNames,i=Object.getPrototypeOf,a=Object.prototype.hasOwnProperty,o=(e,t)=>()=>(t||(e((t={exports:{}}).exports,t),e=null),t.exports),s=(e,i,o,s)=>{if(i&&typeof i==`object`||typeof i==`function`)for(var c=r(i),l=0,u=c.length,d;l<u;l++)d=c[l],!a.call(e,d)&&d!==o&&t(e,d,{get:(e=>i[e]).bind(null,d),enumerable:!(s=n(i,d))||s.enumerable});return e},c=(n,r,o)=>(o=n==null?{}:e(i(n)),s(r||!n||!n.__esModule||!a.call(n,`default`)?t(o,`default`,{value:n,enumerable:!0}):o,n));(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),t.credentials=e.crossOrigin===`use-credentials`?`include`:e.crossOrigin===`anonymous`?`omit`:`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var l=o(((e,t)=>{t.exports=function(){return typeof Promise==`function`&&Promise.prototype&&Promise.prototype.then}})),u=o((e=>{var t,n=[0,26,44,70,100,134,172,196,242,292,346,404,466,532,581,655,733,815,901,991,1085,1156,1258,1364,1474,1588,1706,1828,1921,2051,2185,2323,2465,2611,2761,2876,3034,3196,3362,3532,3706];e.getSymbolSize=function(e){if(!e)throw Error(`"version" cannot be null or undefined`);if(e<1||e>40)throw Error(`"version" should be in range from 1 to 40`);return e*4+17},e.getSymbolTotalCodewords=function(e){return n[e]},e.getBCHDigit=function(e){let t=0;for(;e!==0;)t++,e>>>=1;return t},e.setToSJISFunction=function(e){if(typeof e!=`function`)throw Error(`"toSJISFunc" is not a valid function.`);t=e},e.isKanjiModeEnabled=function(){return t!==void 0},e.toSJIS=function(e){return t(e)}})),d=o((e=>{e.L={bit:1},e.M={bit:0},e.Q={bit:3},e.H={bit:2};function t(t){if(typeof t!=`string`)throw Error(`Param is not a string`);switch(t.toLowerCase()){case`l`:case`low`:return e.L;case`m`:case`medium`:return e.M;case`q`:case`quartile`:return e.Q;case`h`:case`high`:return e.H;default:throw Error(`Unknown EC Level: `+t)}}e.isValid=function(e){return e&&e.bit!==void 0&&e.bit>=0&&e.bit<4},e.from=function(n,r){if(e.isValid(n))return n;try{return t(n)}catch{return r}}})),f=o(((e,t)=>{function n(){this.buffer=[],this.length=0}n.prototype={get:function(e){let t=Math.floor(e/8);return(this.buffer[t]>>>7-e%8&1)==1},put:function(e,t){for(let n=0;n<t;n++)this.putBit((e>>>t-n-1&1)==1)},getLengthInBits:function(){return this.length},putBit:function(e){let t=Math.floor(this.length/8);this.buffer.length<=t&&this.buffer.push(0),e&&(this.buffer[t]|=128>>>this.length%8),this.length++}},t.exports=n})),p=o(((e,t)=>{function n(e){if(!e||e<1)throw Error(`BitMatrix size must be defined and greater than 0`);this.size=e,this.data=new Uint8Array(e*e),this.reservedBit=new Uint8Array(e*e)}n.prototype.set=function(e,t,n,r){let i=e*this.size+t;this.data[i]=n,r&&(this.reservedBit[i]=!0)},n.prototype.get=function(e,t){return this.data[e*this.size+t]},n.prototype.xor=function(e,t,n){this.data[e*this.size+t]^=n},n.prototype.isReserved=function(e,t){return this.reservedBit[e*this.size+t]},t.exports=n})),m=o((e=>{var t=u().getSymbolSize;e.getRowColCoords=function(e){if(e===1)return[];let n=Math.floor(e/7)+2,r=t(e),i=r===145?26:Math.ceil((r-13)/(2*n-2))*2,a=[r-7];for(let e=1;e<n-1;e++)a[e]=a[e-1]-i;return a.push(6),a.reverse()},e.getPositions=function(t){let n=[],r=e.getRowColCoords(t),i=r.length;for(let e=0;e<i;e++)for(let t=0;t<i;t++)e===0&&t===0||e===0&&t===i-1||e===i-1&&t===0||n.push([r[e],r[t]]);return n}})),h=o((e=>{var t=u().getSymbolSize,n=7;e.getPositions=function(e){let r=t(e);return[[0,0],[r-n,0],[0,r-n]]}})),g=o((e=>{e.Patterns={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7};var t={N1:3,N2:3,N3:40,N4:10};e.isValid=function(e){return e!=null&&e!==``&&!isNaN(e)&&e>=0&&e<=7},e.from=function(t){return e.isValid(t)?parseInt(t,10):void 0},e.getPenaltyN1=function(e){let n=e.size,r=0,i=0,a=0,o=null,s=null;for(let c=0;c<n;c++){i=a=0,o=s=null;for(let l=0;l<n;l++){let n=e.get(c,l);n===o?i++:(i>=5&&(r+=t.N1+(i-5)),o=n,i=1),n=e.get(l,c),n===s?a++:(a>=5&&(r+=t.N1+(a-5)),s=n,a=1)}i>=5&&(r+=t.N1+(i-5)),a>=5&&(r+=t.N1+(a-5))}return r},e.getPenaltyN2=function(e){let n=e.size,r=0;for(let t=0;t<n-1;t++)for(let i=0;i<n-1;i++){let n=e.get(t,i)+e.get(t,i+1)+e.get(t+1,i)+e.get(t+1,i+1);(n===4||n===0)&&r++}return r*t.N2},e.getPenaltyN3=function(e){let n=e.size,r=0,i=0,a=0;for(let t=0;t<n;t++){i=a=0;for(let o=0;o<n;o++)i=i<<1&2047|e.get(t,o),o>=10&&(i===1488||i===93)&&r++,a=a<<1&2047|e.get(o,t),o>=10&&(a===1488||a===93)&&r++}return r*t.N3},e.getPenaltyN4=function(e){let n=0,r=e.data.length;for(let t=0;t<r;t++)n+=e.data[t];return Math.abs(Math.ceil(n*100/r/5)-10)*t.N4};function n(t,n,r){switch(t){case e.Patterns.PATTERN000:return(n+r)%2==0;case e.Patterns.PATTERN001:return n%2==0;case e.Patterns.PATTERN010:return r%3==0;case e.Patterns.PATTERN011:return(n+r)%3==0;case e.Patterns.PATTERN100:return(Math.floor(n/2)+Math.floor(r/3))%2==0;case e.Patterns.PATTERN101:return n*r%2+n*r%3==0;case e.Patterns.PATTERN110:return(n*r%2+n*r%3)%2==0;case e.Patterns.PATTERN111:return(n*r%3+(n+r)%2)%2==0;default:throw Error(`bad maskPattern:`+t)}}e.applyMask=function(e,t){let r=t.size;for(let i=0;i<r;i++)for(let a=0;a<r;a++)t.isReserved(a,i)||t.xor(a,i,n(e,a,i))},e.getBestMask=function(t,n){let r=Object.keys(e.Patterns).length,i=0,a=1/0;for(let o=0;o<r;o++){n(o),e.applyMask(o,t);let r=e.getPenaltyN1(t)+e.getPenaltyN2(t)+e.getPenaltyN3(t)+e.getPenaltyN4(t);e.applyMask(o,t),r<a&&(a=r,i=o)}return i}})),_=o((e=>{var t=d(),n=[1,1,1,1,1,1,1,1,1,1,2,2,1,2,2,4,1,2,4,4,2,4,4,4,2,4,6,5,2,4,6,6,2,5,8,8,4,5,8,8,4,5,8,11,4,8,10,11,4,9,12,16,4,9,16,16,6,10,12,18,6,10,17,16,6,11,16,19,6,13,18,21,7,14,21,25,8,16,20,25,8,17,23,25,9,17,23,34,9,18,25,30,10,20,27,32,12,21,29,35,12,23,34,37,12,25,34,40,13,26,35,42,14,28,38,45,15,29,40,48,16,31,43,51,17,33,45,54,18,35,48,57,19,37,51,60,19,38,53,63,20,40,56,66,21,43,59,70,22,45,62,74,24,47,65,77,25,49,68,81],r=[7,10,13,17,10,16,22,28,15,26,36,44,20,36,52,64,26,48,72,88,36,64,96,112,40,72,108,130,48,88,132,156,60,110,160,192,72,130,192,224,80,150,224,264,96,176,260,308,104,198,288,352,120,216,320,384,132,240,360,432,144,280,408,480,168,308,448,532,180,338,504,588,196,364,546,650,224,416,600,700,224,442,644,750,252,476,690,816,270,504,750,900,300,560,810,960,312,588,870,1050,336,644,952,1110,360,700,1020,1200,390,728,1050,1260,420,784,1140,1350,450,812,1200,1440,480,868,1290,1530,510,924,1350,1620,540,980,1440,1710,570,1036,1530,1800,570,1064,1590,1890,600,1120,1680,1980,630,1204,1770,2100,660,1260,1860,2220,720,1316,1950,2310,750,1372,2040,2430];e.getBlocksCount=function(e,r){switch(r){case t.L:return n[(e-1)*4+0];case t.M:return n[(e-1)*4+1];case t.Q:return n[(e-1)*4+2];case t.H:return n[(e-1)*4+3];default:return}},e.getTotalCodewordsCount=function(e,n){switch(n){case t.L:return r[(e-1)*4+0];case t.M:return r[(e-1)*4+1];case t.Q:return r[(e-1)*4+2];case t.H:return r[(e-1)*4+3];default:return}}})),v=o((e=>{var t=new Uint8Array(512),n=new Uint8Array(256);(function(){let e=1;for(let r=0;r<255;r++)t[r]=e,n[e]=r,e<<=1,e&256&&(e^=285);for(let e=255;e<512;e++)t[e]=t[e-255]})(),e.log=function(e){if(e<1)throw Error(`log(`+e+`)`);return n[e]},e.exp=function(e){return t[e]},e.mul=function(e,r){return e===0||r===0?0:t[n[e]+n[r]]}})),y=o((e=>{var t=v();e.mul=function(e,n){let r=new Uint8Array(e.length+n.length-1);for(let i=0;i<e.length;i++)for(let a=0;a<n.length;a++)r[i+a]^=t.mul(e[i],n[a]);return r},e.mod=function(e,n){let r=new Uint8Array(e);for(;r.length-n.length>=0;){let e=r[0];for(let i=0;i<n.length;i++)r[i]^=t.mul(n[i],e);let i=0;for(;i<r.length&&r[i]===0;)i++;r=r.slice(i)}return r},e.generateECPolynomial=function(n){let r=new Uint8Array([1]);for(let i=0;i<n;i++)r=e.mul(r,new Uint8Array([1,t.exp(i)]));return r}})),b=o(((e,t)=>{var n=y();function r(e){this.genPoly=void 0,this.degree=e,this.degree&&this.initialize(this.degree)}r.prototype.initialize=function(e){this.degree=e,this.genPoly=n.generateECPolynomial(this.degree)},r.prototype.encode=function(e){if(!this.genPoly)throw Error(`Encoder not initialized`);let t=new Uint8Array(e.length+this.degree);t.set(e);let r=n.mod(t,this.genPoly),i=this.degree-r.length;if(i>0){let e=new Uint8Array(this.degree);return e.set(r,i),e}return r},t.exports=r})),x=o((e=>{e.isValid=function(e){return!isNaN(e)&&e>=1&&e<=40}})),S=o((e=>{var t=`[0-9]+`,n=`[A-Z $%*+\\-./:]+`,r=`(?:[u3000-u303F]|[u3040-u309F]|[u30A0-u30FF]|[uFF00-uFFEF]|[u4E00-u9FAF]|[u2605-u2606]|[u2190-u2195]|u203B|[u2010u2015u2018u2019u2025u2026u201Cu201Du2225u2260]|[u0391-u0451]|[u00A7u00A8u00B1u00B4u00D7u00F7])+`;r=r.replace(/u/g,`\\u`);var i=`(?:(?![A-Z0-9 $%*+\\-./:]|`+r+`)(?:.|[\r
-]))+`;e.KANJI=new RegExp(r,`g`),e.BYTE_KANJI=RegExp(`[^A-Z0-9 $%*+\\-./:]+`,`g`),e.BYTE=new RegExp(i,`g`),e.NUMERIC=new RegExp(t,`g`),e.ALPHANUMERIC=new RegExp(n,`g`);var a=RegExp(`^`+r+`$`),o=RegExp(`^[0-9]+$`),s=RegExp(`^[A-Z0-9 $%*+\\-./:]+$`);e.testKanji=function(e){return a.test(e)},e.testNumeric=function(e){return o.test(e)},e.testAlphanumeric=function(e){return s.test(e)}})),C=o((e=>{var t=x(),n=S();e.NUMERIC={id:`Numeric`,bit:1,ccBits:[10,12,14]},e.ALPHANUMERIC={id:`Alphanumeric`,bit:2,ccBits:[9,11,13]},e.BYTE={id:`Byte`,bit:4,ccBits:[8,16,16]},e.KANJI={id:`Kanji`,bit:8,ccBits:[8,10,12]},e.MIXED={bit:-1},e.getCharCountIndicator=function(e,n){if(!e.ccBits)throw Error(`Invalid mode: `+e);if(!t.isValid(n))throw Error(`Invalid version: `+n);return n>=1&&n<10?e.ccBits[0]:n<27?e.ccBits[1]:e.ccBits[2]},e.getBestModeForData=function(t){return n.testNumeric(t)?e.NUMERIC:n.testAlphanumeric(t)?e.ALPHANUMERIC:n.testKanji(t)?e.KANJI:e.BYTE},e.toString=function(e){if(e&&e.id)return e.id;throw Error(`Invalid mode`)},e.isValid=function(e){return e&&e.bit&&e.ccBits};function r(t){if(typeof t!=`string`)throw Error(`Param is not a string`);switch(t.toLowerCase()){case`numeric`:return e.NUMERIC;case`alphanumeric`:return e.ALPHANUMERIC;case`kanji`:return e.KANJI;case`byte`:return e.BYTE;default:throw Error(`Unknown mode: `+t)}}e.from=function(t,n){if(e.isValid(t))return t;try{return r(t)}catch{return n}}})),w=o((e=>{var t=u(),n=_(),r=d(),i=C(),a=x(),o=7973,s=t.getBCHDigit(o);function c(t,n,r){for(let i=1;i<=40;i++)if(n<=e.getCapacity(i,r,t))return i}function l(e,t){return i.getCharCountIndicator(e,t)+4}function f(e,t){let n=0;return e.forEach(function(e){let r=l(e.mode,t);n+=r+e.getBitsLength()}),n}function p(t,n){for(let r=1;r<=40;r++)if(f(t,r)<=e.getCapacity(r,n,i.MIXED))return r}e.from=function(e,t){return a.isValid(e)?parseInt(e,10):t},e.getCapacity=function(e,r,o){if(!a.isValid(e))throw Error(`Invalid QR Code version`);o===void 0&&(o=i.BYTE);let s=(t.getSymbolTotalCodewords(e)-n.getTotalCodewordsCount(e,r))*8;if(o===i.MIXED)return s;let c=s-l(o,e);switch(o){case i.NUMERIC:return Math.floor(c/10*3);case i.ALPHANUMERIC:return Math.floor(c/11*2);case i.KANJI:return Math.floor(c/13);case i.BYTE:default:return Math.floor(c/8)}},e.getBestVersionForData=function(e,t){let n,i=r.from(t,r.M);if(Array.isArray(e)){if(e.length>1)return p(e,i);if(e.length===0)return 1;n=e[0]}else n=e;return c(n.mode,n.getLength(),i)},e.getEncodedBits=function(e){if(!a.isValid(e)||e<7)throw Error(`Invalid QR Code version`);let n=e<<12;for(;t.getBCHDigit(n)-s>=0;)n^=o<<t.getBCHDigit(n)-s;return e<<12|n}})),T=o((e=>{var t=u(),n=1335,r=21522,i=t.getBCHDigit(n);e.getEncodedBits=function(e,a){let o=e.bit<<3|a,s=o<<10;for(;t.getBCHDigit(s)-i>=0;)s^=n<<t.getBCHDigit(s)-i;return(o<<10|s)^r}})),E=o(((e,t)=>{var n=C();function r(e){this.mode=n.NUMERIC,this.data=e.toString()}r.getBitsLength=function(e){return 10*Math.floor(e/3)+(e%3?e%3*3+1:0)},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){let t,n,r;for(t=0;t+3<=this.data.length;t+=3)n=this.data.substr(t,3),r=parseInt(n,10),e.put(r,10);let i=this.data.length-t;i>0&&(n=this.data.substr(t),r=parseInt(n,10),e.put(r,i*3+1))},t.exports=r})),D=o(((e,t)=>{var n=C(),r=`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:`.split(``);function i(e){this.mode=n.ALPHANUMERIC,this.data=e}i.getBitsLength=function(e){return 11*Math.floor(e/2)+e%2*6},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t+2<=this.data.length;t+=2){let n=r.indexOf(this.data[t])*45;n+=r.indexOf(this.data[t+1]),e.put(n,11)}this.data.length%2&&e.put(r.indexOf(this.data[t]),6)},t.exports=i})),O=o(((e,t)=>{var n=C();function r(e){this.mode=n.BYTE,this.data=typeof e==`string`?new TextEncoder().encode(e):new Uint8Array(e)}r.getBitsLength=function(e){return e*8},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){for(let t=0,n=this.data.length;t<n;t++)e.put(this.data[t],8)},t.exports=r})),k=o(((e,t)=>{var n=C(),r=u();function i(e){this.mode=n.KANJI,this.data=e}i.getBitsLength=function(e){return e*13},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t<this.data.length;t++){let n=r.toSJIS(this.data[t]);if(n>=33088&&n<=40956)n-=33088;else if(n>=57408&&n<=60351)n-=49472;else throw Error(`Invalid SJIS character: `+this.data[t]+`
-Make sure your charset is UTF-8`);n=(n>>>8&255)*192+(n&255),e.put(n,13)}},t.exports=i})),A=o(((e,t)=>{var n={single_source_shortest_paths:function(e,t,r){var i={},a={};a[t]=0;var o=n.PriorityQueue.make();o.push(t,0);for(var s,c,l,u,d,f,p,m,h;!o.empty();)for(l in s=o.pop(),c=s.value,u=s.cost,d=e[c]||{},d)d.hasOwnProperty(l)&&(f=d[l],p=u+f,m=a[l],h=a[l]===void 0,(h||m>p)&&(a[l]=p,o.push(l,p),i[l]=c));if(r!==void 0&&a[r]===void 0){var g=[`Could not find a path from `,t,` to `,r,`.`].join(``);throw Error(g)}return i},extract_shortest_path_from_predecessor_list:function(e,t){for(var n=[],r=t;r;)n.push(r),e[r],r=e[r];return n.reverse(),n},find_path:function(e,t,r){var i=n.single_source_shortest_paths(e,t,r);return n.extract_shortest_path_from_predecessor_list(i,r)},PriorityQueue:{make:function(e){var t=n.PriorityQueue,r={},i;for(i in e||={},t)t.hasOwnProperty(i)&&(r[i]=t[i]);return r.queue=[],r.sorter=e.sorter||t.default_sorter,r},default_sorter:function(e,t){return e.cost-t.cost},push:function(e,t){var n={value:e,cost:t};this.queue.push(n),this.queue.sort(this.sorter)},pop:function(){return this.queue.shift()},empty:function(){return this.queue.length===0}}};t!==void 0&&(t.exports=n)})),j=o((e=>{var t=C(),n=E(),r=D(),i=O(),a=k(),o=S(),s=u(),c=A();function l(e){return unescape(encodeURIComponent(e)).length}function d(e,t,n){let r=[],i;for(;(i=e.exec(n))!==null;)r.push({data:i[0],index:i.index,mode:t,length:i[0].length});return r}function f(e){let n=d(o.NUMERIC,t.NUMERIC,e),r=d(o.ALPHANUMERIC,t.ALPHANUMERIC,e),i,a;return s.isKanjiModeEnabled()?(i=d(o.BYTE,t.BYTE,e),a=d(o.KANJI,t.KANJI,e)):(i=d(o.BYTE_KANJI,t.BYTE,e),a=[]),n.concat(r,i,a).sort(function(e,t){return e.index-t.index}).map(function(e){return{data:e.data,mode:e.mode,length:e.length}})}function p(e,o){switch(o){case t.NUMERIC:return n.getBitsLength(e);case t.ALPHANUMERIC:return r.getBitsLength(e);case t.KANJI:return a.getBitsLength(e);case t.BYTE:return i.getBitsLength(e)}}function m(e){return e.reduce(function(e,t){let n=e.length-1>=0?e[e.length-1]:null;return n&&n.mode===t.mode?(e[e.length-1].data+=t.data,e):(e.push(t),e)},[])}function h(e){let n=[];for(let r=0;r<e.length;r++){let i=e[r];switch(i.mode){case t.NUMERIC:n.push([i,{data:i.data,mode:t.ALPHANUMERIC,length:i.length},{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.ALPHANUMERIC:n.push([i,{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.KANJI:n.push([i,{data:i.data,mode:t.BYTE,length:l(i.data)}]);break;case t.BYTE:n.push([{data:i.data,mode:t.BYTE,length:l(i.data)}])}}return n}function g(e,n){let r={},i={start:{}},a=[`start`];for(let o=0;o<e.length;o++){let s=e[o],c=[];for(let e=0;e<s.length;e++){let l=s[e],u=``+o+e;c.push(u),r[u]={node:l,lastCount:0},i[u]={};for(let e=0;e<a.length;e++){let o=a[e];r[o]&&r[o].node.mode===l.mode?(i[o][u]=p(r[o].lastCount+l.length,l.mode)-p(r[o].lastCount,l.mode),r[o].lastCount+=l.length):(r[o]&&(r[o].lastCount=l.length),i[o][u]=p(l.length,l.mode)+4+t.getCharCountIndicator(l.mode,n))}}a=c}for(let e=0;e<a.length;e++)i[a[e]].end=0;return{map:i,table:r}}function _(e,o){let c,l=t.getBestModeForData(e);if(c=t.from(o,l),c!==t.BYTE&&c.bit<l.bit)throw Error(`"`+e+`" cannot be encoded with mode `+t.toString(c)+`.
- Suggested mode is: `+t.toString(l));switch(c===t.KANJI&&!s.isKanjiModeEnabled()&&(c=t.BYTE),c){case t.NUMERIC:return new n(e);case t.ALPHANUMERIC:return new r(e);case t.KANJI:return new a(e);case t.BYTE:return new i(e)}}e.fromArray=function(e){return e.reduce(function(e,t){return typeof t==`string`?e.push(_(t,null)):t.data&&e.push(_(t.data,t.mode)),e},[])},e.fromString=function(t,n){let r=g(h(f(t,s.isKanjiModeEnabled())),n),i=c.find_path(r.map,`start`,`end`),a=[];for(let e=1;e<i.length-1;e++)a.push(r.table[i[e]].node);return e.fromArray(m(a))},e.rawSplit=function(t){return e.fromArray(f(t,s.isKanjiModeEnabled()))}})),M=o((e=>{var t=u(),n=d(),r=f(),i=p(),a=m(),o=h(),s=g(),c=_(),l=b(),v=w(),y=T(),x=C(),S=j();function E(e,t){let n=e.size,r=o.getPositions(t);for(let t=0;t<r.length;t++){let i=r[t][0],a=r[t][1];for(let t=-1;t<=7;t++)if(!(i+t<=-1||n<=i+t))for(let r=-1;r<=7;r++)a+r<=-1||n<=a+r||(t>=0&&t<=6&&(r===0||r===6)||r>=0&&r<=6&&(t===0||t===6)||t>=2&&t<=4&&r>=2&&r<=4?e.set(i+t,a+r,!0,!0):e.set(i+t,a+r,!1,!0))}}function D(e){let t=e.size;for(let n=8;n<t-8;n++){let t=n%2==0;e.set(n,6,t,!0),e.set(6,n,t,!0)}}function O(e,t){let n=a.getPositions(t);for(let t=0;t<n.length;t++){let r=n[t][0],i=n[t][1];for(let t=-2;t<=2;t++)for(let n=-2;n<=2;n++)t===-2||t===2||n===-2||n===2||t===0&&n===0?e.set(r+t,i+n,!0,!0):e.set(r+t,i+n,!1,!0)}}function k(e,t){let n=e.size,r=v.getEncodedBits(t),i,a,o;for(let t=0;t<18;t++)i=Math.floor(t/3),a=t%3+n-8-3,o=(r>>t&1)==1,e.set(i,a,o,!0),e.set(a,i,o,!0)}function A(e,t,n){let r=e.size,i=y.getEncodedBits(t,n),a,o;for(a=0;a<15;a++)o=(i>>a&1)==1,a<6?e.set(a,8,o,!0):a<8?e.set(a+1,8,o,!0):e.set(r-15+a,8,o,!0),a<8?e.set(8,r-a-1,o,!0):a<9?e.set(8,15-a-1+1,o,!0):e.set(8,15-a-1,o,!0);e.set(r-8,8,1,!0)}function M(e,t){let n=e.size,r=-1,i=n-1,a=7,o=0;for(let s=n-1;s>0;s-=2)for(s===6&&s--;;){for(let n=0;n<2;n++)if(!e.isReserved(i,s-n)){let r=!1;o<t.length&&(r=(t[o]>>>a&1)==1),e.set(i,s-n,r),a--,a===-1&&(o++,a=7)}if(i+=r,i<0||n<=i){i-=r,r=-r;break}}}function N(e,n,i){let a=new r;i.forEach(function(t){a.put(t.mode.bit,4),a.put(t.getLength(),x.getCharCountIndicator(t.mode,e)),t.write(a)});let o=(t.getSymbolTotalCodewords(e)-c.getTotalCodewordsCount(e,n))*8;for(a.getLengthInBits()+4<=o&&a.put(0,4);a.getLengthInBits()%8!=0;)a.putBit(0);let s=(o-a.getLengthInBits())/8;for(let e=0;e<s;e++)a.put(e%2?17:236,8);return P(a,e,n)}function P(e,n,r){let i=t.getSymbolTotalCodewords(n),a=i-c.getTotalCodewordsCount(n,r),o=c.getBlocksCount(n,r),s=o-i%o,u=Math.floor(i/o),d=Math.floor(a/o),f=d+1,p=u-d,m=new l(p),h=0,g=Array(o),_=Array(o),v=0,y=new Uint8Array(e.buffer);for(let e=0;e<o;e++){let t=e<s?d:f;g[e]=y.slice(h,h+t),_[e]=m.encode(g[e]),h+=t,v=Math.max(v,t)}let b=new Uint8Array(i),x=0,S,C;for(S=0;S<v;S++)for(C=0;C<o;C++)S<g[C].length&&(b[x++]=g[C][S]);for(S=0;S<p;S++)for(C=0;C<o;C++)b[x++]=_[C][S];return b}function F(e,n,r,a){let o;if(Array.isArray(e))o=S.fromArray(e);else if(typeof e==`string`){let t=n;if(!t){let n=S.rawSplit(e);t=v.getBestVersionForData(n,r)}o=S.fromString(e,t||40)}else throw Error(`Invalid data`);let c=v.getBestVersionForData(o,r);if(!c)throw Error(`The amount of data is too big to be stored in a QR Code`);if(!n)n=c;else if(n<c)throw Error(`
+]))+`;e.KANJI=new RegExp(r,`g`),e.BYTE_KANJI=RegExp(`[^A-Z0-9 $%*+\\-./:]+`,`g`),e.BYTE=new RegExp(i,`g`),e.NUMERIC=new RegExp(t,`g`),e.ALPHANUMERIC=new RegExp(n,`g`);var a=RegExp(`^`+r+`$`),o=RegExp(`^[0-9]+$`),s=RegExp(`^[A-Z0-9 $%*+\\-./:]+$`);e.testKanji=function(e){return a.test(e)},e.testNumeric=function(e){return o.test(e)},e.testAlphanumeric=function(e){return s.test(e)}})),C=o((e=>{var t=x(),n=S();e.NUMERIC={id:`Numeric`,bit:1,ccBits:[10,12,14]},e.ALPHANUMERIC={id:`Alphanumeric`,bit:2,ccBits:[9,11,13]},e.BYTE={id:`Byte`,bit:4,ccBits:[8,16,16]},e.KANJI={id:`Kanji`,bit:8,ccBits:[8,10,12]},e.MIXED={bit:-1},e.getCharCountIndicator=function(e,n){if(!e.ccBits)throw Error(`Invalid mode: `+e);if(!t.isValid(n))throw Error(`Invalid version: `+n);return n>=1&&n<10?e.ccBits[0]:n<27?e.ccBits[1]:e.ccBits[2]},e.getBestModeForData=function(t){return n.testNumeric(t)?e.NUMERIC:n.testAlphanumeric(t)?e.ALPHANUMERIC:n.testKanji(t)?e.KANJI:e.BYTE},e.toString=function(e){if(e&&e.id)return e.id;throw Error(`Invalid mode`)},e.isValid=function(e){return e&&e.bit&&e.ccBits};function r(t){if(typeof t!=`string`)throw Error(`Param is not a string`);switch(t.toLowerCase()){case`numeric`:return e.NUMERIC;case`alphanumeric`:return e.ALPHANUMERIC;case`kanji`:return e.KANJI;case`byte`:return e.BYTE;default:throw Error(`Unknown mode: `+t)}}e.from=function(t,n){if(e.isValid(t))return t;try{return r(t)}catch{return n}}})),w=o((e=>{var t=u(),n=_(),r=d(),i=C(),a=x(),o=7973,s=t.getBCHDigit(o);function c(t,n,r){for(let i=1;i<=40;i++)if(n<=e.getCapacity(i,r,t))return i}function l(e,t){return i.getCharCountIndicator(e,t)+4}function f(e,t){let n=0;return e.forEach(function(e){let r=l(e.mode,t);n+=r+e.getBitsLength()}),n}function p(t,n){for(let r=1;r<=40;r++)if(f(t,r)<=e.getCapacity(r,n,i.MIXED))return r}e.from=function(e,t){return a.isValid(e)?parseInt(e,10):t},e.getCapacity=function(e,r,o){if(!a.isValid(e))throw Error(`Invalid QR Code version`);o===void 0&&(o=i.BYTE);let s=(t.getSymbolTotalCodewords(e)-n.getTotalCodewordsCount(e,r))*8;if(o===i.MIXED)return s;let c=s-l(o,e);switch(o){case i.NUMERIC:return Math.floor(c/10*3);case i.ALPHANUMERIC:return Math.floor(c/11*2);case i.KANJI:return Math.floor(c/13);case i.BYTE:default:return Math.floor(c/8)}},e.getBestVersionForData=function(e,t){let n,i=r.from(t,r.M);if(Array.isArray(e)){if(e.length>1)return p(e,i);if(e.length===0)return 1;n=e[0]}else n=e;return c(n.mode,n.getLength(),i)},e.getEncodedBits=function(e){if(!a.isValid(e)||e<7)throw Error(`Invalid QR Code version`);let n=e<<12;for(;t.getBCHDigit(n)-s>=0;)n^=o<<t.getBCHDigit(n)-s;return e<<12|n}})),ee=o((e=>{var t=u(),n=1335,r=21522,i=t.getBCHDigit(n);e.getEncodedBits=function(e,a){let o=e.bit<<3|a,s=o<<10;for(;t.getBCHDigit(s)-i>=0;)s^=n<<t.getBCHDigit(s)-i;return(o<<10|s)^r}})),T=o(((e,t)=>{var n=C();function r(e){this.mode=n.NUMERIC,this.data=e.toString()}r.getBitsLength=function(e){return 10*Math.floor(e/3)+(e%3?e%3*3+1:0)},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){let t,n,r;for(t=0;t+3<=this.data.length;t+=3)n=this.data.substr(t,3),r=parseInt(n,10),e.put(r,10);let i=this.data.length-t;i>0&&(n=this.data.substr(t),r=parseInt(n,10),e.put(r,i*3+1))},t.exports=r})),E=o(((e,t)=>{var n=C(),r=`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:`.split(``);function i(e){this.mode=n.ALPHANUMERIC,this.data=e}i.getBitsLength=function(e){return 11*Math.floor(e/2)+e%2*6},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t+2<=this.data.length;t+=2){let n=r.indexOf(this.data[t])*45;n+=r.indexOf(this.data[t+1]),e.put(n,11)}this.data.length%2&&e.put(r.indexOf(this.data[t]),6)},t.exports=i})),D=o(((e,t)=>{var n=C();function r(e){this.mode=n.BYTE,this.data=typeof e==`string`?new TextEncoder().encode(e):new Uint8Array(e)}r.getBitsLength=function(e){return e*8},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){for(let t=0,n=this.data.length;t<n;t++)e.put(this.data[t],8)},t.exports=r})),O=o(((e,t)=>{var n=C(),r=u();function i(e){this.mode=n.KANJI,this.data=e}i.getBitsLength=function(e){return e*13},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t<this.data.length;t++){let n=r.toSJIS(this.data[t]);if(n>=33088&&n<=40956)n-=33088;else if(n>=57408&&n<=60351)n-=49472;else throw Error(`Invalid SJIS character: `+this.data[t]+`
+Make sure your charset is UTF-8`);n=(n>>>8&255)*192+(n&255),e.put(n,13)}},t.exports=i})),k=o(((e,t)=>{var n={single_source_shortest_paths:function(e,t,r){var i={},a={};a[t]=0;var o=n.PriorityQueue.make();o.push(t,0);for(var s,c,l,u,d,f,p,m,h;!o.empty();)for(l in s=o.pop(),c=s.value,u=s.cost,d=e[c]||{},d)d.hasOwnProperty(l)&&(f=d[l],p=u+f,m=a[l],h=a[l]===void 0,(h||m>p)&&(a[l]=p,o.push(l,p),i[l]=c));if(r!==void 0&&a[r]===void 0){var g=[`Could not find a path from `,t,` to `,r,`.`].join(``);throw Error(g)}return i},extract_shortest_path_from_predecessor_list:function(e,t){for(var n=[],r=t;r;)n.push(r),e[r],r=e[r];return n.reverse(),n},find_path:function(e,t,r){var i=n.single_source_shortest_paths(e,t,r);return n.extract_shortest_path_from_predecessor_list(i,r)},PriorityQueue:{make:function(e){var t=n.PriorityQueue,r={},i;for(i in e||={},t)t.hasOwnProperty(i)&&(r[i]=t[i]);return r.queue=[],r.sorter=e.sorter||t.default_sorter,r},default_sorter:function(e,t){return e.cost-t.cost},push:function(e,t){var n={value:e,cost:t};this.queue.push(n),this.queue.sort(this.sorter)},pop:function(){return this.queue.shift()},empty:function(){return this.queue.length===0}}};t!==void 0&&(t.exports=n)})),A=o((e=>{var t=C(),n=T(),r=E(),i=D(),a=O(),o=S(),s=u(),c=k();function l(e){return unescape(encodeURIComponent(e)).length}function d(e,t,n){let r=[],i;for(;(i=e.exec(n))!==null;)r.push({data:i[0],index:i.index,mode:t,length:i[0].length});return r}function f(e){let n=d(o.NUMERIC,t.NUMERIC,e),r=d(o.ALPHANUMERIC,t.ALPHANUMERIC,e),i,a;return s.isKanjiModeEnabled()?(i=d(o.BYTE,t.BYTE,e),a=d(o.KANJI,t.KANJI,e)):(i=d(o.BYTE_KANJI,t.BYTE,e),a=[]),n.concat(r,i,a).sort(function(e,t){return e.index-t.index}).map(function(e){return{data:e.data,mode:e.mode,length:e.length}})}function p(e,o){switch(o){case t.NUMERIC:return n.getBitsLength(e);case t.ALPHANUMERIC:return r.getBitsLength(e);case t.KANJI:return a.getBitsLength(e);case t.BYTE:return i.getBitsLength(e)}}function m(e){return e.reduce(function(e,t){let n=e.length-1>=0?e[e.length-1]:null;return n&&n.mode===t.mode?(e[e.length-1].data+=t.data,e):(e.push(t),e)},[])}function h(e){let n=[];for(let r=0;r<e.length;r++){let i=e[r];switch(i.mode){case t.NUMERIC:n.push([i,{data:i.data,mode:t.ALPHANUMERIC,length:i.length},{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.ALPHANUMERIC:n.push([i,{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.KANJI:n.push([i,{data:i.data,mode:t.BYTE,length:l(i.data)}]);break;case t.BYTE:n.push([{data:i.data,mode:t.BYTE,length:l(i.data)}])}}return n}function g(e,n){let r={},i={start:{}},a=[`start`];for(let o=0;o<e.length;o++){let s=e[o],c=[];for(let e=0;e<s.length;e++){let l=s[e],u=``+o+e;c.push(u),r[u]={node:l,lastCount:0},i[u]={};for(let e=0;e<a.length;e++){let o=a[e];r[o]&&r[o].node.mode===l.mode?(i[o][u]=p(r[o].lastCount+l.length,l.mode)-p(r[o].lastCount,l.mode),r[o].lastCount+=l.length):(r[o]&&(r[o].lastCount=l.length),i[o][u]=p(l.length,l.mode)+4+t.getCharCountIndicator(l.mode,n))}}a=c}for(let e=0;e<a.length;e++)i[a[e]].end=0;return{map:i,table:r}}function _(e,o){let c,l=t.getBestModeForData(e);if(c=t.from(o,l),c!==t.BYTE&&c.bit<l.bit)throw Error(`"`+e+`" cannot be encoded with mode `+t.toString(c)+`.
+ Suggested mode is: `+t.toString(l));switch(c===t.KANJI&&!s.isKanjiModeEnabled()&&(c=t.BYTE),c){case t.NUMERIC:return new n(e);case t.ALPHANUMERIC:return new r(e);case t.KANJI:return new a(e);case t.BYTE:return new i(e)}}e.fromArray=function(e){return e.reduce(function(e,t){return typeof t==`string`?e.push(_(t,null)):t.data&&e.push(_(t.data,t.mode)),e},[])},e.fromString=function(t,n){let r=g(h(f(t,s.isKanjiModeEnabled())),n),i=c.find_path(r.map,`start`,`end`),a=[];for(let e=1;e<i.length-1;e++)a.push(r.table[i[e]].node);return e.fromArray(m(a))},e.rawSplit=function(t){return e.fromArray(f(t,s.isKanjiModeEnabled()))}})),j=o((e=>{var t=u(),n=d(),r=f(),i=p(),a=m(),o=h(),s=g(),c=_(),l=b(),v=w(),y=ee(),x=C(),S=A();function T(e,t){let n=e.size,r=o.getPositions(t);for(let t=0;t<r.length;t++){let i=r[t][0],a=r[t][1];for(let t=-1;t<=7;t++)if(!(i+t<=-1||n<=i+t))for(let r=-1;r<=7;r++)a+r<=-1||n<=a+r||(t>=0&&t<=6&&(r===0||r===6)||r>=0&&r<=6&&(t===0||t===6)||t>=2&&t<=4&&r>=2&&r<=4?e.set(i+t,a+r,!0,!0):e.set(i+t,a+r,!1,!0))}}function E(e){let t=e.size;for(let n=8;n<t-8;n++){let t=n%2==0;e.set(n,6,t,!0),e.set(6,n,t,!0)}}function D(e,t){let n=a.getPositions(t);for(let t=0;t<n.length;t++){let r=n[t][0],i=n[t][1];for(let t=-2;t<=2;t++)for(let n=-2;n<=2;n++)t===-2||t===2||n===-2||n===2||t===0&&n===0?e.set(r+t,i+n,!0,!0):e.set(r+t,i+n,!1,!0)}}function O(e,t){let n=e.size,r=v.getEncodedBits(t),i,a,o;for(let t=0;t<18;t++)i=Math.floor(t/3),a=t%3+n-8-3,o=(r>>t&1)==1,e.set(i,a,o,!0),e.set(a,i,o,!0)}function k(e,t,n){let r=e.size,i=y.getEncodedBits(t,n),a,o;for(a=0;a<15;a++)o=(i>>a&1)==1,a<6?e.set(a,8,o,!0):a<8?e.set(a+1,8,o,!0):e.set(r-15+a,8,o,!0),a<8?e.set(8,r-a-1,o,!0):a<9?e.set(8,15-a-1+1,o,!0):e.set(8,15-a-1,o,!0);e.set(r-8,8,1,!0)}function j(e,t){let n=e.size,r=-1,i=n-1,a=7,o=0;for(let s=n-1;s>0;s-=2)for(s===6&&s--;;){for(let n=0;n<2;n++)if(!e.isReserved(i,s-n)){let r=!1;o<t.length&&(r=(t[o]>>>a&1)==1),e.set(i,s-n,r),a--,a===-1&&(o++,a=7)}if(i+=r,i<0||n<=i){i-=r,r=-r;break}}}function M(e,n,i){let a=new r;i.forEach(function(t){a.put(t.mode.bit,4),a.put(t.getLength(),x.getCharCountIndicator(t.mode,e)),t.write(a)});let o=(t.getSymbolTotalCodewords(e)-c.getTotalCodewordsCount(e,n))*8;for(a.getLengthInBits()+4<=o&&a.put(0,4);a.getLengthInBits()%8!=0;)a.putBit(0);let s=(o-a.getLengthInBits())/8;for(let e=0;e<s;e++)a.put(e%2?17:236,8);return N(a,e,n)}function N(e,n,r){let i=t.getSymbolTotalCodewords(n),a=i-c.getTotalCodewordsCount(n,r),o=c.getBlocksCount(n,r),s=o-i%o,u=Math.floor(i/o),d=Math.floor(a/o),f=d+1,p=u-d,m=new l(p),h=0,g=Array(o),_=Array(o),v=0,y=new Uint8Array(e.buffer);for(let e=0;e<o;e++){let t=e<s?d:f;g[e]=y.slice(h,h+t),_[e]=m.encode(g[e]),h+=t,v=Math.max(v,t)}let b=new Uint8Array(i),x=0,S,C;for(S=0;S<v;S++)for(C=0;C<o;C++)S<g[C].length&&(b[x++]=g[C][S]);for(S=0;S<p;S++)for(C=0;C<o;C++)b[x++]=_[C][S];return b}function P(e,n,r,a){let o;if(Array.isArray(e))o=S.fromArray(e);else if(typeof e==`string`){let t=n;if(!t){let n=S.rawSplit(e);t=v.getBestVersionForData(n,r)}o=S.fromString(e,t||40)}else throw Error(`Invalid data`);let c=v.getBestVersionForData(o,r);if(!c)throw Error(`The amount of data is too big to be stored in a QR Code`);if(!n)n=c;else if(n<c)throw Error(`
 The chosen QR Code version cannot contain this amount of data.
 Minimum version required to store current data is: `+c+`.
-`);let l=N(n,r,o),u=new i(t.getSymbolSize(n));return E(u,n),D(u),O(u,n),A(u,r,0),n>=7&&k(u,n),M(u,l),isNaN(a)&&(a=s.getBestMask(u,A.bind(null,u,r))),s.applyMask(a,u),A(u,r,a),{modules:u,version:n,errorCorrectionLevel:r,maskPattern:a,segments:o}}e.create=function(e,r){if(e===void 0||e===``)throw Error(`No input text`);let i=n.M,a,o;return r!==void 0&&(i=n.from(r.errorCorrectionLevel,n.M),a=v.from(r.version),o=s.from(r.maskPattern),r.toSJISFunc&&t.setToSJISFunction(r.toSJISFunc)),F(e,a,i,o)}})),N=o((e=>{function t(e){if(typeof e==`number`&&(e=e.toString()),typeof e!=`string`)throw Error(`Color should be defined as hex string`);let t=e.slice().replace(`#`,``).split(``);if(t.length<3||t.length===5||t.length>8)throw Error(`Invalid hex color: `+e);(t.length===3||t.length===4)&&(t=Array.prototype.concat.apply([],t.map(function(e){return[e,e]}))),t.length===6&&t.push(`F`,`F`);let n=parseInt(t.join(``),16);return{r:n>>24&255,g:n>>16&255,b:n>>8&255,a:n&255,hex:`#`+t.slice(0,6).join(``)}}e.getOptions=function(e){e||={},e.color||(e.color={});let n=e.margin===void 0||e.margin===null||e.margin<0?4:e.margin,r=e.width&&e.width>=21?e.width:void 0,i=e.scale||4;return{width:r,scale:r?4:i,margin:n,color:{dark:t(e.color.dark||`#000000ff`),light:t(e.color.light||`#ffffffff`)},type:e.type,rendererOpts:e.rendererOpts||{}}},e.getScale=function(e,t){return t.width&&t.width>=e+t.margin*2?t.width/(e+t.margin*2):t.scale},e.getImageWidth=function(t,n){let r=e.getScale(t,n);return Math.floor((t+n.margin*2)*r)},e.qrToImageData=function(t,n,r){let i=n.modules.size,a=n.modules.data,o=e.getScale(i,r),s=Math.floor((i+r.margin*2)*o),c=r.margin*o,l=[r.color.light,r.color.dark];for(let e=0;e<s;e++)for(let n=0;n<s;n++){let u=(e*s+n)*4,d=r.color.light;if(e>=c&&n>=c&&e<s-c&&n<s-c){let t=Math.floor((e-c)/o),r=Math.floor((n-c)/o);d=l[+!!a[t*i+r]]}t[u++]=d.r,t[u++]=d.g,t[u++]=d.b,t[u]=d.a}}})),P=o((e=>{var t=N();function n(e,t,n){e.clearRect(0,0,t.width,t.height),t.style||={},t.height=n,t.width=n,t.style.height=n+`px`,t.style.width=n+`px`}function r(){try{return document.createElement(`canvas`)}catch{throw Error(`You need to specify a canvas element`)}}e.render=function(e,i,a){let o=a,s=i;o===void 0&&(!i||!i.getContext)&&(o=i,i=void 0),i||(s=r()),o=t.getOptions(o);let c=t.getImageWidth(e.modules.size,o),l=s.getContext(`2d`),u=l.createImageData(c,c);return t.qrToImageData(u.data,e,o),n(l,s,c),l.putImageData(u,0,0),s},e.renderToDataURL=function(t,n,r){let i=r;i===void 0&&(!n||!n.getContext)&&(i=n,n=void 0),i||={};let a=e.render(t,n,i),o=i.type||`image/png`,s=i.rendererOpts||{};return a.toDataURL(o,s.quality)}})),F=o((e=>{var t=N();function n(e,t){let n=e.a/255,r=t+`="`+e.hex+`"`;return n<1?r+` `+t+`-opacity="`+n.toFixed(2).slice(1)+`"`:r}function r(e,t,n){let r=e+t;return n!==void 0&&(r+=` `+n),r}function i(e,t,n){let i=``,a=0,o=!1,s=0;for(let c=0;c<e.length;c++){let l=Math.floor(c%t),u=Math.floor(c/t);!l&&!o&&(o=!0),e[c]?(s++,c>0&&l>0&&e[c-1]||(i+=o?r(`M`,l+n,.5+u+n):r(`m`,a,0),a=0,o=!1),l+1<t&&e[c+1]||(i+=r(`h`,s),s=0)):a++}return i}e.render=function(e,r,a){let o=t.getOptions(r),s=e.modules.size,c=e.modules.data,l=s+o.margin*2,u=o.color.light.a?`<path `+n(o.color.light,`fill`)+` d="M0 0h`+l+`v`+l+`H0z"/>`:``,d=`<path `+n(o.color.dark,`stroke`)+` d="`+i(c,s,o.margin)+`"/>`,f=`viewBox="0 0 `+l+` `+l+`"`,p=`<svg xmlns="http://www.w3.org/2000/svg" `+(o.width?`width="`+o.width+`" height="`+o.width+`" `:``)+f+` shape-rendering="crispEdges">`+u+d+`</svg>
-`;return typeof a==`function`&&a(null,p),p}})),I=c(o((e=>{var t=l(),n=M(),r=P(),i=F();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),L=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,R={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},z=new URLSearchParams(window.location.search),B=z.get(`scan`)||z.get(`biz`);function V(){let e=document.getElementById(`app`);if(e){if(B){e.innerHTML=he(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!R.currentUser){e.innerHTML=ee();return}if(R.currentUser.role===`admin`){e.innerHTML=W();return}e.innerHTML=Y(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&R.currentUser){let t=`${window.location.origin}/?scan=${R.currentUser.username}`;I.toCanvas(e,t,{width:220,margin:2,color:{dark:R.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function ee(){return`
+`);let l=M(n,r,o),u=new i(t.getSymbolSize(n));return T(u,n),E(u),D(u,n),k(u,r,0),n>=7&&O(u,n),j(u,l),isNaN(a)&&(a=s.getBestMask(u,k.bind(null,u,r))),s.applyMask(a,u),k(u,r,a),{modules:u,version:n,errorCorrectionLevel:r,maskPattern:a,segments:o}}e.create=function(e,r){if(e===void 0||e===``)throw Error(`No input text`);let i=n.M,a,o;return r!==void 0&&(i=n.from(r.errorCorrectionLevel,n.M),a=v.from(r.version),o=s.from(r.maskPattern),r.toSJISFunc&&t.setToSJISFunction(r.toSJISFunc)),P(e,a,i,o)}})),M=o((e=>{function t(e){if(typeof e==`number`&&(e=e.toString()),typeof e!=`string`)throw Error(`Color should be defined as hex string`);let t=e.slice().replace(`#`,``).split(``);if(t.length<3||t.length===5||t.length>8)throw Error(`Invalid hex color: `+e);(t.length===3||t.length===4)&&(t=Array.prototype.concat.apply([],t.map(function(e){return[e,e]}))),t.length===6&&t.push(`F`,`F`);let n=parseInt(t.join(``),16);return{r:n>>24&255,g:n>>16&255,b:n>>8&255,a:n&255,hex:`#`+t.slice(0,6).join(``)}}e.getOptions=function(e){e||={},e.color||(e.color={});let n=e.margin===void 0||e.margin===null||e.margin<0?4:e.margin,r=e.width&&e.width>=21?e.width:void 0,i=e.scale||4;return{width:r,scale:r?4:i,margin:n,color:{dark:t(e.color.dark||`#000000ff`),light:t(e.color.light||`#ffffffff`)},type:e.type,rendererOpts:e.rendererOpts||{}}},e.getScale=function(e,t){return t.width&&t.width>=e+t.margin*2?t.width/(e+t.margin*2):t.scale},e.getImageWidth=function(t,n){let r=e.getScale(t,n);return Math.floor((t+n.margin*2)*r)},e.qrToImageData=function(t,n,r){let i=n.modules.size,a=n.modules.data,o=e.getScale(i,r),s=Math.floor((i+r.margin*2)*o),c=r.margin*o,l=[r.color.light,r.color.dark];for(let e=0;e<s;e++)for(let n=0;n<s;n++){let u=(e*s+n)*4,d=r.color.light;if(e>=c&&n>=c&&e<s-c&&n<s-c){let t=Math.floor((e-c)/o),r=Math.floor((n-c)/o);d=l[+!!a[t*i+r]]}t[u++]=d.r,t[u++]=d.g,t[u++]=d.b,t[u]=d.a}}})),N=o((e=>{var t=M();function n(e,t,n){e.clearRect(0,0,t.width,t.height),t.style||={},t.height=n,t.width=n,t.style.height=n+`px`,t.style.width=n+`px`}function r(){try{return document.createElement(`canvas`)}catch{throw Error(`You need to specify a canvas element`)}}e.render=function(e,i,a){let o=a,s=i;o===void 0&&(!i||!i.getContext)&&(o=i,i=void 0),i||(s=r()),o=t.getOptions(o);let c=t.getImageWidth(e.modules.size,o),l=s.getContext(`2d`),u=l.createImageData(c,c);return t.qrToImageData(u.data,e,o),n(l,s,c),l.putImageData(u,0,0),s},e.renderToDataURL=function(t,n,r){let i=r;i===void 0&&(!n||!n.getContext)&&(i=n,n=void 0),i||={};let a=e.render(t,n,i),o=i.type||`image/png`,s=i.rendererOpts||{};return a.toDataURL(o,s.quality)}})),P=o((e=>{var t=M();function n(e,t){let n=e.a/255,r=t+`="`+e.hex+`"`;return n<1?r+` `+t+`-opacity="`+n.toFixed(2).slice(1)+`"`:r}function r(e,t,n){let r=e+t;return n!==void 0&&(r+=` `+n),r}function i(e,t,n){let i=``,a=0,o=!1,s=0;for(let c=0;c<e.length;c++){let l=Math.floor(c%t),u=Math.floor(c/t);!l&&!o&&(o=!0),e[c]?(s++,c>0&&l>0&&e[c-1]||(i+=o?r(`M`,l+n,.5+u+n):r(`m`,a,0),a=0,o=!1),l+1<t&&e[c+1]||(i+=r(`h`,s),s=0)):a++}return i}e.render=function(e,r,a){let o=t.getOptions(r),s=e.modules.size,c=e.modules.data,l=s+o.margin*2,u=o.color.light.a?`<path `+n(o.color.light,`fill`)+` d="M0 0h`+l+`v`+l+`H0z"/>`:``,d=`<path `+n(o.color.dark,`stroke`)+` d="`+i(c,s,o.margin)+`"/>`,f=`viewBox="0 0 `+l+` `+l+`"`,p=`<svg xmlns="http://www.w3.org/2000/svg" `+(o.width?`width="`+o.width+`" height="`+o.width+`" `:``)+f+` shape-rendering="crispEdges">`+u+d+`</svg>
+`;return typeof a==`function`&&a(null,p),p}})),F=c(o((e=>{var t=l(),n=j(),r=N(),i=P();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),I=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,L={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,customizationDraft:null,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},R=new URLSearchParams(window.location.search),z=R.get(`scan`)||R.get(`biz`);function B(){let e=document.getElementById(`app`);if(e){if(z){e.innerHTML=ye(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!L.currentUser){e.innerHTML=te();return}if(L.currentUser.role===`admin`){e.innerHTML=U();return}e.innerHTML=J(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&L.currentUser){let t=`${window.location.origin}/?scan=${L.currentUser.username}`;F.toCanvas(e,t,{width:220,margin:2,color:{dark:L.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function te(){return`
     <div class="login-split-page">
       <div class="login-card-pro">
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
@@ -19,9 +19,9 @@ Minimum version required to store current data is: `+c+`.
         <h2 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:6px;">Sign in to your dashboard</h2>
         <p style="font-size:13px; color:#64748b; margin-bottom:24px;">Enter your credentials to access your portal</p>
 
-        ${R.error?`
+        ${L.error?`
           <div style="background:#fee2e2; border:1px solid #fecaca; color:#b91c1c; padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
-            <span>⚠️</span> <span>${R.error}</span>
+            <span>⚠️</span> <span>${L.error}</span>
           </div>
         `:``}
 
@@ -36,8 +36,8 @@ Minimum version required to store current data is: `+c+`.
             <input type="password" id="loginPassword" class="pro-input" required placeholder="Enter password">
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary" style="width:100%; padding:13px;" ${R.loading?`disabled`:``}>
-            ${R.loading?`Authenticating...`:`Sign In to Dashboard &rarr;`}
+          <button type="submit" class="btn-pro btn-pro-primary" style="width:100%; padding:13px;" ${L.loading?`disabled`:``}>
+            ${L.loading?`Authenticating...`:`Sign In to Dashboard &rarr;`}
           </button>
         </form>
 
@@ -56,7 +56,7 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function te(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function ne(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;R.loading=!0,R.error=``,V();try{let e=await fetch(`${L}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(R.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await U():await J()):R.error=r.error||`Login failed`}catch{R.error=`Unable to connect to server`}finally{R.loading=!1,V()}}function H(){R.currentUser=null,localStorage.removeItem(`revly_user`),V()}async function U(){try{let e=await fetch(`${L}/admin/clients`);e.ok&&(R.clients=await e.json())}catch(e){console.error(e)}}function W(){let e=R.clients.length;return`
+  `}function ne(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function re(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;L.loading=!0,L.error=``,B();try{let e=await fetch(`${I}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(L.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await H():await q()):L.error=r.error||`Login failed`}catch{L.error=`Unable to connect to server`}finally{L.loading=!1,B()}}function V(){L.currentUser=null,localStorage.removeItem(`revly_user`),B()}async function H(){try{let e=await fetch(`${I}/admin/clients`);e.ok&&(L.clients=await e.json())}catch(e){console.error(e)}}function U(){let e=L.clients.length;return`
     <div class="dashboard-shell">
       <!-- Sidebar -->
       <aside class="dash-sidebar">
@@ -127,7 +127,7 @@ Minimum version required to store current data is: `+c+`.
                 <span class="kpi-label">Total QR Scans</span>
                 <div class="kpi-icon-bubble" style="background:#f0f9ff; color:#0284c7;">📱</div>
               </div>
-              <div class="kpi-number">${R.clients.reduce((e,t)=>e+(Number(t.scan_count)||0),0)}</div>
+              <div class="kpi-number">${L.clients.reduce((e,t)=>e+(Number(t.scan_count)||0),0)}</div>
               <div class="kpi-footer">
                 Platform aggregate visits
               </div>
@@ -138,7 +138,7 @@ Minimum version required to store current data is: `+c+`.
                 <span class="kpi-label">AI Reviews Placed</span>
                 <div class="kpi-icon-bubble" style="background:#fdf2f8; color:#db2777;">✨</div>
               </div>
-              <div class="kpi-number">${R.clients.reduce((e,t)=>e+(Number(t.generated_count)||0),0)}</div>
+              <div class="kpi-number">${L.clients.reduce((e,t)=>e+(Number(t.generated_count)||0),0)}</div>
               <div class="kpi-footer">
                 Powered by gpt-4o-mini
               </div>
@@ -168,7 +168,7 @@ Minimum version required to store current data is: `+c+`.
                   </tr>
                 </thead>
                 <tbody>
-                  ${R.clients.length===0?`
+                  ${L.clients.length===0?`
                     <tr>
                       <td colspan="4" style="text-align:center; padding:48px 20px; color:#64748b;">
                         <div style="font-size:32px; margin-bottom:12px;">🏢</div>
@@ -177,7 +177,7 @@ Minimum version required to store current data is: `+c+`.
                         <button class="btn-pro btn-pro-primary" onclick="openModal('create-client')">+ Create New Client</button>
                       </td>
                     </tr>
-                  `:R.clients.map(e=>`
+                  `:L.clients.map(e=>`
                     <tr>
                       <td>
                         <div style="display:flex; align-items:center; gap:10px;">
@@ -219,7 +219,7 @@ Minimum version required to store current data is: `+c+`.
 
       ${$()}
     </div>
-  `}async function G(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${L}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await U(),V()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function K(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${L}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function q(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${L}/admin/clients/${e}`,{method:`DELETE`}),await U(),V()}catch{alert(`Failed to delete client`)}}async function J(){if(!R.currentUser)return;let e=R.currentUser.id;try{let[t,n,r,i,a]=await Promise.all([fetch(`${L}/client/profile/${e}`).then(e=>e.json()),fetch(`${L}/client/analytics/${e}`).then(e=>e.json()),fetch(`${L}/client/categories/${e}`).then(e=>e.json()),fetch(`${L}/client/questions/${e}`).then(e=>e.json()),fetch(`${L}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);R.clientProfile=t,R.clientAnalytics=n,R.clientCategories=r,R.clientQuestions=i,R.clientCustomers=Array.isArray(a)?a:[]}catch(e){console.error(`Error loading client data:`,e)}}function Y(){let e=R.currentUser,t=R.clientProfile||e,n=R.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=R.clientCustomers?R.clientCustomers.length:0;return`
+  `}async function W(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${I}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await H(),B()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function G(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${I}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function K(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${I}/admin/clients/${e}`,{method:`DELETE`}),await H(),B()}catch{alert(`Failed to delete client`)}}async function q(){if(!L.currentUser)return;let e=L.currentUser.id;try{let[t,n,r,i,a]=await Promise.all([fetch(`${I}/client/profile/${e}`).then(e=>e.json()),fetch(`${I}/client/analytics/${e}`).then(e=>e.json()),fetch(`${I}/client/categories/${e}`).then(e=>e.json()),fetch(`${I}/client/questions/${e}`).then(e=>e.json()),fetch(`${I}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);L.clientProfile=t,L.clientAnalytics=n,L.clientCategories=r,L.clientQuestions=i,L.clientCustomers=Array.isArray(a)?a:[]}catch(e){console.error(`Error loading client data:`,e)}}function J(){let e=L.currentUser,t=L.clientProfile||e,n=L.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=L.clientCustomers?L.clientCustomers.length:0;return`
     <div class="dashboard-shell">
       <!-- Modern Sidebar -->
       <aside class="dash-sidebar">
@@ -237,23 +237,28 @@ Minimum version required to store current data is: `+c+`.
 
         <nav class="sidebar-nav">
           <div class="nav-category-label">Workspace</div>
-          <button class="nav-link ${R.currentTab===`profile`?`active`:``}" onclick="switchTab('profile')">
+          <button class="nav-link ${L.currentTab===`profile`?`active`:``}" onclick="switchTab('profile')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><path d="M14 14h3v3h-3z"></path><path d="M14 20h6"></path><path d="M20 14v6"></path></svg>
             Profile & QR Studio
           </button>
 
-          <button class="nav-link ${R.currentTab===`analytics`?`active`:``}" onclick="switchTab('analytics')">
+          <button class="nav-link ${L.currentTab===`customization`?`active`:``}" onclick="switchTab('customization')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Customization
+          </button>
+
+          <button class="nav-link ${L.currentTab===`analytics`?`active`:``}" onclick="switchTab('analytics')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
             Analytics & Reviews
           </button>
 
-          <button class="nav-link ${R.currentTab===`customers`?`active`:``}" onclick="switchTab('customers')">
+          <button class="nav-link ${L.currentTab===`customers`?`active`:``}" onclick="switchTab('customers')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             Customers
             <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:11px; padding:2px 8px;">${r}</span>
           </button>
 
-          <button class="nav-link ${R.currentTab===`questions`?`active`:``}" onclick="switchTab('questions')">
+          <button class="nav-link ${L.currentTab===`questions`?`active`:``}" onclick="switchTab('questions')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             Questions & Category
           </button>
@@ -278,10 +283,11 @@ Minimum version required to store current data is: `+c+`.
         <header class="dash-topbar">
           <div class="topbar-left">
             <h1 class="page-heading">
-              ${R.currentTab===`profile`?`Profile & QR Studio`:``}
-              ${R.currentTab===`analytics`?`Analytics & Performance`:``}
-              ${R.currentTab===`customers`?`Customer Directory & Unique Visitors`:``}
-              ${R.currentTab===`questions`?`Questions & Categories`:``}
+              ${L.currentTab===`profile`?`Profile & QR Studio`:``}
+              ${L.currentTab===`customization`?`Review Page Customization & Mobile Studio`:``}
+              ${L.currentTab===`analytics`?`Analytics & Performance`:``}
+              ${L.currentTab===`customers`?`Customer Directory & Unique Visitors`:``}
+              ${L.currentTab===`questions`?`Questions & Categories`:``}
             </h1>
           </div>
           <div class="topbar-right">
@@ -297,16 +303,17 @@ Minimum version required to store current data is: `+c+`.
         </header>
 
         <div class="dash-content">
-          ${R.currentTab===`profile`?Z(t):``}
-          ${R.currentTab===`analytics`?oe(n):``}
-          ${R.currentTab===`customers`?ce():``}
-          ${R.currentTab===`questions`?se():``}
+          ${L.currentTab===`profile`?X(t):``}
+          ${L.currentTab===`customization`?se(t):``}
+          ${L.currentTab===`analytics`?ue(n):``}
+          ${L.currentTab===`customers`?fe():``}
+          ${L.currentTab===`questions`?de():``}
         </div>
       </main>
 
       ${$()}
     </div>
-  `}function X(e){R.currentTab=e,V()}function Z(e){let t=`${window.location.origin}/?scan=${R.currentUser.username}`;return`
+  `}function Y(e){L.currentTab=e,B()}function X(e){let t=`${window.location.origin}/?scan=${L.currentUser.username}`;return`
     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:flex-start;">
       <!-- Profile Form -->
       <div class="dash-card">
@@ -357,7 +364,7 @@ Minimum version required to store current data is: `+c+`.
             Scan to Review
           </div>
           <div style="font-size:17px; font-weight:800; color:#0f172a; margin-bottom:12px;">
-            ${e.name||R.currentUser.name}
+            ${e.name||L.currentUser.name}
           </div>
 
           <div style="background:#f8fafc; padding:12px; border-radius:14px; border:1px solid #e2e8f0; display:inline-block;">
@@ -383,7 +390,166 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function re(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&R.currentUser){let n=`${window.location.origin}/?scan=${R.currentUser.username}`;I.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}async function ie(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value;try{(await fetch(`${L}/client/profile/${R.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r})})).ok&&(alert(`Profile updated successfully`),await J(),V())}catch{alert(`Failed to save profile`)}}function ae(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${R.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function oe(e){return`
+  `}function ie(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&L.currentUser){let n=`${window.location.origin}/?scan=${L.currentUser.username}`;F.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}async function ae(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value;try{(await fetch(`${I}/client/profile/${L.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r})})).ok&&(alert(`Profile updated successfully`),await q(),B())}catch{alert(`Failed to save profile`)}}function oe(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${L.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function se(e){L.customizationDraft||={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`};let t=L.customizationDraft;return`
+    <div class="customization-grid">
+      <!-- Left: Customization Settings -->
+      <div class="dash-card">
+        <h2 class="dash-card-title">Review Page Appearance</h2>
+        <div class="dash-card-desc" style="margin-bottom:24px;">
+          Customize how customers see your review station. Changes preview live in the mobile screen on the right.
+        </div>
+
+        <form onsubmit="handleSaveCustomization(event)">
+          <!-- 1. Background Color -->
+          <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+            <label class="input-label">Screen Background Color (Solid)</label>
+            <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
+              Select a solid background tone for the customer review page.
+            </div>
+
+            <div class="color-swatches-row">
+              ${[{name:`Soft Bluish`,color:`#edf4fc`},{name:`Sky Blue`,color:`#e0f2fe`},{name:`Indigo Mist`,color:`#eef2ff`},{name:`Cool Slate`,color:`#f1f5f9`},{name:`Pure White`,color:`#ffffff`},{name:`Dark Slate`,color:`#0f172a`}].map(e=>`
+                <button type="button" 
+                  class="color-swatch-circle ${t.bgColor===e.color?`active`:``}" 
+                  style="background:${e.color};"
+                  title="${e.name}"
+                  onclick="updateCustomization('bgColor', '${e.color}')">
+                </button>
+              `).join(``)}
+
+              <div style="display:flex; align-items:center; gap:8px; margin-left:8px;">
+                <input type="color" value="${t.bgColor&&t.bgColor.startsWith(`#`)&&t.bgColor.length===7?t.bgColor:`#edf4fc`}" 
+                  style="width:36px; height:36px; border:none; border-radius:8px; cursor:pointer;" 
+                  oninput="updateCustomization('bgColor', this.value)" title="Choose custom color">
+                <span style="font-family:var(--font-mono); font-size:12px; color:#475569;">${t.bgColor}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Business Logo -->
+          <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+            <label class="input-label">Business Logo Image URL</label>
+            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
+              Appears at the very top of the review page.
+            </div>
+            <input type="url" class="pro-input" placeholder="https://example.com/logo.png" 
+              value="${t.logoUrl||``}" 
+              oninput="updateCustomization('logoUrl', this.value)">
+            
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('logoUrl', 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80')">
+                Coffee Cup Logo
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('logoUrl', 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200&q=80')">
+                Dining Logo
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('logoUrl', '')" style="color:#ef4444;">
+                Reset to Initials
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Rectangular Banner Image -->
+          <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+            <label class="input-label">Cover / Rectangular Image Banner</label>
+            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
+              Appears below the logo on the first customer page.
+            </div>
+            <input type="url" class="pro-input" placeholder="https://example.com/banner.jpg" 
+              value="${t.bannerUrl||``}" 
+              oninput="updateCustomization('bannerUrl', this.value)">
+            
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80')">
+                Cozy Cafe
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80')">
+                Fine Dining
+              </button>
+              <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" 
+                onclick="updateCustomization('bannerUrl', 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80')">
+                Lounge Bar
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Action Button Color -->
+          <div style="margin-bottom:28px;">
+            <label class="input-label">Brand Button & QR Accent Color</label>
+            <div class="color-swatches-row">
+              ${[{color:`#0f172a`,name:`Dark Slate`},{color:`#4f46e5`,name:`Royal Indigo`},{color:`#0284c7`,name:`Sky Ocean`},{color:`#059669`,name:`Emerald`},{color:`#dc2626`,name:`Crimson`}].map(e=>`
+                <button type="button" 
+                  class="color-swatch-circle ${t.qrColor===e.color?`active`:``}" 
+                  style="background:${e.color};"
+                  title="${e.name}"
+                  onclick="updateCustomization('qrColor', '${e.color}')">
+                </button>
+              `).join(``)}
+            </div>
+          </div>
+
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;">
+            💾 Save Customization Changes
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Live Mobile Screen Simulator -->
+      <div class="mobile-preview-wrapper">
+        <div style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">
+          Live Mobile Screen Preview
+        </div>
+
+        <div class="mobile-device-mockup">
+          <div class="mobile-notch">
+            <div class="mobile-notch-dot"></div>
+          </div>
+
+          <div class="mobile-device-screen" style="background:${t.bgColor};">
+            <!-- Simulated White Card on Screen -->
+            <div style="background:#ffffff; border-radius:20px; padding:20px 16px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 24px rgba(0,0,0,0.06); text-align:center; margin-top:10px;">
+              <!-- 1. Top Logo -->
+              ${t.logoUrl?`
+                <img src="${t.logoUrl}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px;">
+              `:`
+                <div class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; background:#4f46e5; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; margin:0 auto 12px;">
+                  ${(e.name||`R`).slice(0,2).toUpperCase()}
+                </div>
+              `}
+
+              <!-- 2. Rectangular Banner Image -->
+              <img src="${t.bannerUrl||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`}" 
+                class="customer-banner-img" style="height:110px; border-radius:10px; margin-bottom:14px;">
+
+              <!-- 3. Business Name & Description -->
+              <h3 style="font-size:17px; font-weight:800; color:#0f172a; margin-bottom:6px;">${e.name||`Your Business`}</h3>
+              <p style="font-size:11px; color:#64748b; line-height:1.4; margin-bottom:14px;">
+                Share your experience in 3 quick questions. Our AI prepares your review.
+              </p>
+
+              <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:6px 10px; font-size:10px; color:#475569; margin-bottom:18px;">
+                ⏱️ 45 seconds &bull; 100% genuine
+              </div>
+
+              <!-- Button with Brand Color -->
+              <div style="background:${t.qrColor||`#4f46e5`}; color:#ffffff; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+                Start Feedback &rarr;
+              </div>
+            </div>
+
+            <div style="text-align:center; margin-top:auto; padding-top:14px; font-size:10px; color:#64748b;">
+              &bull; Live customer view &bull;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `}function ce(e,t){if(!L.customizationDraft){let e=L.clientProfile||L.currentUser;L.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}L.customizationDraft[e]=t,B()}async function le(e){e.preventDefault();let t=L.customizationDraft;try{(await fetch(`${I}/client/profile/${L.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({bg_color:t.bgColor,logo_url:t.logoUrl,banner_url:t.bannerUrl,qr_color:t.qrColor})})).ok?(alert(`Customization saved successfully!`),await q(),B()):alert(`Failed to save customization`)}catch{alert(`Error saving customization`)}}function ue(e){return`
     <!-- Key Metrics Grid -->
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -472,7 +638,7 @@ Minimum version required to store current data is: `+c+`.
         `}
       </div>
     </div>
-  `}function se(){return`
+  `}function de(){return`
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:flex-start;">
       <!-- Categories Section -->
       <div class="dash-card">
@@ -496,11 +662,11 @@ Minimum version required to store current data is: `+c+`.
               </tr>
             </thead>
             <tbody>
-              ${R.clientCategories.length===0?`
+              ${L.clientCategories.length===0?`
                 <tr>
                   <td colspan="3" style="text-align:center; padding:24px; color:#64748b;">No categories created yet.</td>
                 </tr>
-              `:R.clientCategories.map(e=>`
+              `:L.clientCategories.map(e=>`
                 <tr>
                   <td><strong style="color:#0f172a;">${e.name}</strong></td>
                   <td><span class="badge-pro badge-indigo">${e.question_count} questions</span></td>
@@ -536,11 +702,11 @@ Minimum version required to store current data is: `+c+`.
               </tr>
             </thead>
             <tbody>
-              ${R.clientQuestions.length===0?`
+              ${L.clientQuestions.length===0?`
                 <tr>
                   <td colspan="3" style="text-align:center; padding:24px; color:#64748b;">No questions added yet.</td>
                 </tr>
-              `:R.clientQuestions.map(e=>`
+              `:L.clientQuestions.map(e=>`
                 <tr>
                   <td style="font-weight:600; color:#0f172a; max-width:240px;">${e.question_text}</td>
                   <td><span class="badge-pro badge-indigo">${e.category_name}</span></td>
@@ -554,7 +720,7 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function ce(){let e=R.clientCustomers||[],t=(R.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length;return`
+  `}function fe(){let e=L.clientCustomers||[],t=(L.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length;return`
     <!-- Top KPI Cards for Customers -->
     <div class="customer-stats-grid">
       <div class="customer-stat-box">
@@ -600,7 +766,7 @@ Minimum version required to store current data is: `+c+`.
 
         <div class="search-input-wrap">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" class="pro-input" placeholder="Search by name or mobile number..." value="${R.customerSearchQuery||``}" oninput="state.customerSearchQuery = this.value; render();">
+          <input type="text" class="pro-input" placeholder="Search by name or mobile number..." value="${L.customerSearchQuery||``}" oninput="state.customerSearchQuery = this.value; render();">
         </div>
       </div>
 
@@ -674,42 +840,46 @@ Minimum version required to store current data is: `+c+`.
         </div>
       `}
     </div>
-  `}async function le(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${L}/client/customers/${e}`,{method:`DELETE`})).ok&&(R.clientCustomers=R.clientCustomers.filter(t=>t.id!==e),V())}catch(e){console.error(`Failed to delete customer:`,e)}}async function ue(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${L}/client/categories/${R.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await J(),V())}catch{alert(`Failed to add category`)}}async function de(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${L}/client/categories/${e}`,{method:`DELETE`}),await J(),V()}catch{alert(`Failed to delete category`)}}async function fe(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${L}/client/questions/${R.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await J(),V())}catch{alert(`Failed to add question`)}}async function pe(e){if(confirm(`Delete this question?`))try{await fetch(`${L}/client/questions/${e}`,{method:`DELETE`}),await J(),V()}catch{alert(`Failed to delete question`)}}async function me(){if(!R.customerSession)try{let e=await fetch(`${L}/customer/session/${B}`);e.ok?(R.customerSession=await e.json(),V()):(R.error=`Business not found or invalid QR link`,V())}catch{R.error=`Unable to connect`,V()}}function he(){if(!R.customerSession&&!R.error)return me(),`
-      <div class="customer-clean-page">
+  `}async function pe(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${I}/client/customers/${e}`,{method:`DELETE`})).ok&&(L.clientCustomers=L.clientCustomers.filter(t=>t.id!==e),B())}catch(e){console.error(`Failed to delete customer:`,e)}}async function me(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${I}/client/categories/${L.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await q(),B())}catch{alert(`Failed to add category`)}}async function he(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${I}/client/categories/${e}`,{method:`DELETE`}),await q(),B()}catch{alert(`Failed to delete category`)}}async function ge(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${I}/client/questions/${L.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await q(),B())}catch{alert(`Failed to add question`)}}async function _e(e){if(confirm(`Delete this question?`))try{await fetch(`${I}/client/questions/${e}`,{method:`DELETE`}),await q(),B()}catch{alert(`Failed to delete question`)}}async function ve(){if(!L.customerSession)try{let e=await fetch(`${I}/customer/session/${z}`);e.ok?(L.customerSession=await e.json(),B()):(L.error=`Business not found or invalid QR link`,B())}catch{L.error=`Unable to connect`,B()}}function ye(){if(!L.customerSession&&!L.error)return ve(),`
+      <div class="customer-clean-page" style="background: #edf4fc;">
         <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
           <div style="width:48px; height:48px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; margin:0 auto 20px; animation:spin 0.8s linear infinite;"></div>
           <div style="font-size:16px; font-weight:700; color:#0f172a;">Connecting to review station...</div>
           <p style="font-size:13px; color:#64748b; margin-top:6px;">Please wait a moment</p>
         </div>
       </div>
-    `;if(R.error)return`
-      <div class="customer-clean-page">
+    `;if(L.error)return`
+      <div class="customer-clean-page" style="background: #edf4fc;">
         <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
           <div style="font-size:36px; margin-bottom:16px;">⚠️</div>
           <h2 style="font-size:20px; font-weight:800; color:#ef4444; margin-bottom:8px;">Notice</h2>
-          <p style="color:#64748b; font-size:14px; line-height:1.5;">${R.error}</p>
+          <p style="color:#64748b; font-size:14px; line-height:1.5;">${L.error}</p>
         </div>
       </div>
-    `;let e=R.customerSession,t=``;if(R.customerStep===1)t=`
-      <div style="text-align:center; margin-top:8px;">
-        <div style="width:72px; height:72px; border-radius:20px; background:#4f46e5; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; margin:0 auto 20px; box-shadow:0 8px 20px rgba(79, 70, 229, 0.25);">
-          ${e.businessName.slice(0,2).toUpperCase()}
-        </div>
+    `;let e=L.customerSession,t=``;if(L.customerStep===1)t=`
+      <div style="text-align:center;">
+        <!-- 1. Top Logo -->
+        ${e.logoUrl?`<img src="${e.logoUrl}" alt="${e.businessName}" class="customer-logo-img">`:`<div class="customer-logo-img" style="background:${e.qrColor||`#4f46e5`}; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin:0 auto 14px;">${e.businessName.slice(0,2).toUpperCase()}</div>`}
+
+        <!-- 2. Rectangular Image Banner -->
+        ${e.bannerUrl?`<img src="${e.bannerUrl}" alt="${e.businessName} cover" class="customer-banner-img">`:`<img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="${e.businessName} banner" class="customer-banner-img">`}
+
+        <!-- 3. Rest of Content -->
         <h1 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px; line-height:1.3;">${e.businessName}</h1>
-        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:28px;">
+        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:24px;">
           Share your experience in 3 quick questions. Our AI will help prepare your review draft.
         </p>
 
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; font-size:13px; color:#475569; margin-bottom:32px; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; color:#475569; margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:8px;">
           <span>⏱️</span>
           <span>Takes less than 45 seconds &bull; 100% genuine</span>
         </div>
       </div>
 
-      <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px;">
+      <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px; background:${e.qrColor||`#4f46e5`};">
         Start Feedback &rarr;
       </button>
-    `;else if(R.customerStep===2)t=`
+    `;else if(L.customerStep===2)t=`
       <div>
         <div style="font-size:12px; font-weight:700; color:#4f46e5; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Step 1 of 2</div>
         <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:6px;">Your Information</h2>
@@ -718,12 +888,12 @@ Minimum version required to store current data is: `+c+`.
         <form onsubmit="handleCustomerInfoSubmit(event)">
           <div style="margin-bottom:18px;">
             <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Your Name (Optional)</label>
-            <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${R.customerInfo.name}" style="padding:12px 14px; font-size:14px;">
+            <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${L.customerInfo.name}" style="padding:12px 14px; font-size:14px;">
           </div>
 
           <div style="margin-bottom:24px;">
             <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Mobile Number (Optional)</label>
-            <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${R.customerInfo.mobile}" style="padding:12px 14px; font-size:14px;">
+            <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${L.customerInfo.mobile}" style="padding:12px 14px; font-size:14px;">
           </div>
 
           <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px;">
@@ -737,19 +907,19 @@ Minimum version required to store current data is: `+c+`.
           Skip & Continue Anonymously
         </button>
       </div>
-    `;else if(R.customerStep===3){let n=e.questions;if(!n||n.length===0)t=`
+    `;else if(L.customerStep===3){let n=e.questions;if(!n||n.length===0)t=`
         <div style="text-align:center; padding:40px 10px;">
           <p style="color:#64748b; font-size:14px;">No questions configured by the business yet.</p>
         </div>
-      `;else{let e=n[R.currentQuestionIdx],r=n.length;t=`
+      `;else{let e=n[L.currentQuestionIdx],r=n.length;t=`
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <span class="badge-pro badge-indigo" style="font-weight:700;">Question ${R.currentQuestionIdx+1} of ${r}</span>
+            <span class="badge-pro badge-indigo" style="font-weight:700;">Question ${L.currentQuestionIdx+1} of ${r}</span>
             <span style="font-size:13px; font-weight:700; color:#475569;">${e.category_name}</span>
           </div>
 
           <div style="height:6px; background:#e2e8f0; border-radius:99px; margin-bottom:32px; overflow:hidden;">
-            <div style="height:100%; background:#4f46e5; border-radius:99px; width:${(R.currentQuestionIdx+1)/r*100}%; transition:width 0.3s ease;"></div>
+            <div style="height:100%; background:#4f46e5; border-radius:99px; width:${(L.currentQuestionIdx+1)/r*100}%; transition:width 0.3s ease;"></div>
           </div>
 
           <div style="text-align:center; padding:10px 0;">
@@ -774,7 +944,7 @@ Minimum version required to store current data is: `+c+`.
         <div style="text-align:center; font-size:12px; color:#94a3b8; margin-top:24px;">
           Automatically moves to next question
         </div>
-      `}}else R.customerStep===4?t=R.loading?`
+      `}}else L.customerStep===4?t=L.loading?`
         <div style="text-align:center; padding:50px 10px;">
           <div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #4f46e5, #06b6d4); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px; margin:0 auto 20px; box-shadow:0 10px 25px rgba(79, 70, 229, 0.3);">
             ✨
@@ -793,7 +963,7 @@ Minimum version required to store current data is: `+c+`.
             Feel free to edit your text below before continuing to Google.
           </p>
 
-          <textarea id="editableDraft" class="review-arial-box" rows="7" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${R.generatedReview}</textarea>
+          <textarea id="editableDraft" class="review-arial-box" rows="7" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${L.generatedReview}</textarea>
 
           <div style="background:#ecfdf5; border:1px solid #bbf7d0; border-radius:10px; padding:12px 14px; font-size:12px; color:#047857; line-height:1.5; margin-bottom:24px; display:flex; align-items:flex-start; gap:8px;">
             <span style="font-size:16px;">💡</span>
@@ -805,7 +975,7 @@ Minimum version required to store current data is: `+c+`.
             Copy & Continue to Google &rarr;
           </button>
         </div>
-      `:R.customerStep===5&&(t=`
+      `:L.customerStep===5&&(t=`
       <div style="text-align:center; padding:40px 10px;">
         <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; border:2px solid #bbf7d0;">
           ✓
@@ -819,20 +989,22 @@ Minimum version required to store current data is: `+c+`.
           Start New Review
         </button>
       </div>
-    `);return`
-    <div class="customer-clean-page">
+    `);let n=L.customerStep>1?`
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:18px;">⭐</span>
+        <span style="font-weight:700; font-size:15px; color:#0f172a;">${e.businessName}</span>
+      </div>
+      <span style="font-size:12px; font-weight:600; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:4px 10px; border-radius:99px;">Verified Review</span>
+    </div>
+  `:``;return`
+    <div class="customer-clean-page" style="background: ${e.bgColor||`#edf4fc`};">
       <div class="customer-clean-card">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:18px;">⭐</span>
-            <span style="font-weight:700; font-size:15px; color:#0f172a;">${e.businessName}</span>
-          </div>
-          <span style="font-size:12px; font-weight:600; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:4px 10px; border-radius:99px;">Verified Review</span>
-        </div>
+        ${n}
         ${t}
       </div>
     </div>
-  `}function ge(e){R.customerStep=e,V()}function _e(){R.customerInfo.name=`Guest`,R.customerInfo.mobile=``,R.customerStep=3,R.currentQuestionIdx=0,R.customerAnswers=[],V()}function ve(e){e.preventDefault(),R.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),R.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),R.customerInfo.mobile&&R.customerSession&&fetch(`${L}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:R.customerSession.clientId,name:R.customerInfo.name,mobile:R.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),R.customerStep=3,R.currentQuestionIdx=0,R.customerAnswers=[],V()}function ye(e,t,n,r){R.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r});let i=R.customerSession.questions.length;R.currentQuestionIdx<i-1?(R.currentQuestionIdx+=1,V()):be()}async function be(){R.customerStep=4,R.loading=!0,V();try{let e=await(await fetch(`${L}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:R.customerSession.clientId,customerName:R.customerInfo.name||`Anonymous`,customerMobile:R.customerInfo.mobile||``,answers:R.customerAnswers})})).json();R.generatedReview=e.reviewDraft,R.feedbackId=e.feedbackId,R.googleReviewUrl=e.googleReviewUrl}catch{R.generatedReview=`I had a great experience at ${R.customerSession.businessName}. The service was excellent!`}finally{R.loading=!1,V()}}async function xe(){let e=R.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}R.feedbackId&&fetch(`${L}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:R.feedbackId})});let t=R.googleReviewUrl||R.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),R.customerStep=5,V()}function Se(e,t=null){R.modal={type:e,data:t},V()}function Q(){R.modal=null,V()}function $(){if(!R.modal)return``;let{type:e,data:t}=R.modal;return e===`create-client`?`
+  `}function be(e){L.customerStep=e,B()}function xe(){L.customerInfo.name=`Guest`,L.customerInfo.mobile=``,L.customerStep=3,L.currentQuestionIdx=0,L.customerAnswers=[],B()}function Se(e){e.preventDefault(),L.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),L.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),L.customerInfo.mobile&&L.customerSession&&fetch(`${I}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:L.customerSession.clientId,name:L.customerInfo.name,mobile:L.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),L.customerStep=3,L.currentQuestionIdx=0,L.customerAnswers=[],B()}function Z(e,t,n,r){L.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r});let i=L.customerSession.questions.length;L.currentQuestionIdx<i-1?(L.currentQuestionIdx+=1,B()):Ce()}async function Ce(){L.customerStep=4,L.loading=!0,B();try{let e=await(await fetch(`${I}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:L.customerSession.clientId,customerName:L.customerInfo.name||`Anonymous`,customerMobile:L.customerInfo.mobile||``,answers:L.customerAnswers})})).json();L.generatedReview=e.reviewDraft,L.feedbackId=e.feedbackId,L.googleReviewUrl=e.googleReviewUrl}catch{L.generatedReview=`I had a great experience at ${L.customerSession.businessName}. The service was excellent!`}finally{L.loading=!1,B()}}async function we(){let e=L.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}L.feedbackId&&fetch(`${I}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:L.feedbackId})});let t=L.googleReviewUrl||L.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),L.customerStep=5,B()}function Te(e,t=null){L.modal={type:e,data:t},B()}function Q(){L.modal=null,B()}function $(){if(!L.modal)return``;let{type:e,data:t}=L.modal;return e===`create-client`?`
       <div class="pro-modal-backdrop" onclick="closeModal()">
         <div class="pro-modal-box" onclick="event.stopPropagation()">
           <div class="pro-modal-header">
@@ -922,7 +1094,7 @@ Minimum version required to store current data is: `+c+`.
               <div style="margin-bottom:16px;">
                 <label class="input-label">Category</label>
                 <select id="qCatSelect" class="pro-select" required>
-                  ${R.clientCategories.map(e=>`
+                  ${L.clientCategories.map(e=>`
                     <option value="${e.id}">${e.name}</option>
                   `).join(``)}
                 </select>
@@ -939,4 +1111,4 @@ Minimum version required to store current data is: `+c+`.
           </form>
         </div>
       </div>
-    `:``}window.handleLogin=ne,window.handleLogout=H,window.quickFill=te,window.openModal=Se,window.closeModal=Q,window.handleCreateClient=G,window.handleResetPassword=K,window.deleteClient=q,window.switchTab=X,window.selectColor=re,window.handleSaveProfile=ie,window.downloadQrCode=ae,window.handleAddCategory=ue,window.deleteCategory=de,window.handleAddQuestion=fe,window.deleteQuestion=pe,window.customerNextStep=ge,window.skipCustomerInfo=_e,window.handleCustomerInfoSubmit=ve,window.rateStar=ye,window.copyAndRedirectToGoogle=xe,window.deleteCustomer=le,R.currentUser?R.currentUser.role===`admin`?U().then(V):J().then(V):V();
+    `:``}window.handleLogin=re,window.handleLogout=V,window.quickFill=ne,window.openModal=Te,window.closeModal=Q,window.handleCreateClient=W,window.handleResetPassword=G,window.deleteClient=K,window.switchTab=Y,window.selectColor=ie,window.handleSaveProfile=ae,window.downloadQrCode=oe,window.updateCustomization=ce,window.handleSaveCustomization=le,window.handleAddCategory=me,window.deleteCategory=he,window.handleAddQuestion=ge,window.deleteQuestion=_e,window.customerNextStep=be,window.skipCustomerInfo=xe,window.handleCustomerInfoSubmit=Se,window.rateStar=Z,window.copyAndRedirectToGoogle=we,window.deleteCustomer=pe,L.currentUser?L.currentUser.role===`admin`?H().then(B):q().then(B):B();

@@ -436,7 +436,7 @@ app.delete('/api/admin/clients/:id', async (req, res) => {
 app.get('/api/client/profile/:clientId', async (req, res) => {
   const { clientId } = req.params;
   try {
-    const [rows] = await pool.query('SELECT id, name, username, phone, google_review_url, qr_color FROM users WHERE id = ?', [clientId]);
+    const [rows] = await pool.query('SELECT id, name, username, phone, google_review_url, qr_color, bg_color, logo_url, banner_url FROM users WHERE id = ?', [clientId]);
     if (rows.length === 0) return res.status(404).json({ error: 'Client not found' });
     res.json(rows[0]);
   } catch (err) {
@@ -447,11 +447,18 @@ app.get('/api/client/profile/:clientId', async (req, res) => {
 
 app.put('/api/client/profile/:clientId', async (req, res) => {
   const { clientId } = req.params;
-  const { name, google_review_url, qr_color } = req.body;
+  const { name, google_review_url, qr_color, bg_color, logo_url, banner_url } = req.body;
   try {
     await pool.query(
-      'UPDATE users SET name = COALESCE(?, name), google_review_url = ?, qr_color = COALESCE(?, qr_color) WHERE id = ?',
-      [name, google_review_url || '', qr_color, clientId]
+      `UPDATE users SET 
+        name = COALESCE(?, name), 
+        google_review_url = ?, 
+        qr_color = COALESCE(?, qr_color),
+        bg_color = COALESCE(?, bg_color),
+        logo_url = ?,
+        banner_url = ?
+       WHERE id = ?`,
+      [name, google_review_url || '', qr_color || '#0f172a', bg_color || '#edf4fc', logo_url || null, banner_url || null, clientId]
     );
     res.json({ success: true });
   } catch (err) {
@@ -667,7 +674,7 @@ app.post('/api/customer/record-info', async (req, res) => {
 app.get('/api/customer/session/:username', async (req, res) => {
   const { username } = req.params;
   try {
-    const [users] = await pool.query('SELECT id, name, username, google_review_url FROM users WHERE username = ? AND role = "client"', [username]);
+    const [users] = await pool.query('SELECT id, name, username, google_review_url, qr_color, bg_color, logo_url, banner_url FROM users WHERE username = ? AND role = "client"', [username]);
     if (users.length === 0) {
       return res.status(404).json({ error: 'Business not found or invalid QR link' });
     }
@@ -691,6 +698,10 @@ app.get('/api/customer/session/:username', async (req, res) => {
       clientId: business.id,
       businessName: business.name,
       googleReviewUrl: business.google_review_url || '',
+      qrColor: business.qr_color || '#0f172a',
+      bgColor: business.bg_color || '#edf4fc',
+      logoUrl: business.logo_url || '',
+      bannerUrl: business.banner_url || '',
       questions: questions
     });
   } catch (err) {
