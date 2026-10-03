@@ -904,17 +904,22 @@ function renderClientProfileTab(p) {
               style="resize:vertical; font-family:inherit; font-size:13px; line-height:1.6;" 
               placeholder="e.g. best cafe in madhyagram, cozy cafe to relax, great hospitality cafe, peaceful hangout spot, top rated local cafe">${p.seo_keywords !== undefined && p.seo_keywords !== null ? p.seo_keywords : 'best cafe in madhyagram, cozy cafe to relax, great hospitality cafe, peaceful hangout spot, top rated local cafe'}</textarea>
 
-            <!-- Suggested Preset Chips -->
-            <div style="margin-top:10px;">
-              <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">
-                Click to add suggested keywords:
+            <!-- Suggested Preset Chips by Industry -->
+            <div style="margin-top:12px; padding-top:12px; border-top:1px dashed #e2e8f0;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+                <span style="font-size:11px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.04em;">
+                  Click to add industry-specific keywords:
+                </span>
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                  <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="switchKeywordCategory('cafe')" style="padding:2px 7px; font-size:10px; font-weight:700;">☕ Cafe</button>
+                  <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="switchKeywordCategory('salon')" style="padding:2px 7px; font-size:10px; font-weight:700;">✂ Salon</button>
+                  <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="switchKeywordCategory('clinic')" style="padding:2px 7px; font-size:10px; font-weight:700;">🩺 Clinic</button>
+                  <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="switchKeywordCategory('gym')" style="padding:2px 7px; font-size:10px; font-weight:700;">💪 Gym</button>
+                  <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="switchKeywordCategory('service')" style="padding:2px 7px; font-size:10px; font-weight:700;">⭐ Services</button>
+                </div>
               </div>
-              <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('best cafe in madhyagram')" style="padding:4px 10px; font-size:11px;">+ best cafe in madhyagram</button>
-                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('cozy cafe to relax')" style="padding:4px 10px; font-size:11px;">+ cozy cafe to relax</button>
-                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('great hospitality cafe')" style="padding:4px 10px; font-size:11px;">+ great hospitality cafe</button>
-                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('peaceful hangout spot')" style="padding:4px 10px; font-size:11px;">+ peaceful hangout spot</button>
-                <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('top rated local cafe')" style="padding:4px 10px; font-size:11px;">+ top rated local cafe</button>
+              <div id="industryChipsContainer" style="display:flex; flex-wrap:wrap; gap:6px;">
+                ${renderIndustryChips(state.selectedIndustryPreset || 'cafe')}
               </div>
             </div>
           </div>
@@ -996,6 +1001,61 @@ function selectColor(color) {
       margin: 2,
       color: { dark: color, light: '#ffffff' }
     });
+  }
+}
+
+const INDUSTRY_KEYWORD_PRESETS = {
+  cafe: [
+    'best cafe in town',
+    'cozy cafe to relax',
+    'great hospitality cafe',
+    'peaceful hangout spot',
+    'top rated local cafe'
+  ],
+  salon: [
+    'best salon in the area',
+    'expert hair stylist',
+    'hygienic beauty salon',
+    'relaxing luxury spa',
+    'top rated hair studio'
+  ],
+  clinic: [
+    'best clinic in the city',
+    'caring doctor consultation',
+    'clean and hygienic clinic',
+    'gentle and professional care',
+    'trusted dental care'
+  ],
+  gym: [
+    'best fitness gym near me',
+    'great gym equipment',
+    'supportive fitness trainers',
+    'motivating workout environment',
+    'clean and spacious gym'
+  ],
+  service: [
+    'highly recommended local service',
+    'prompt and professional team',
+    'exceptional customer care',
+    'reliable business in town',
+    'top rated experience'
+  ]
+};
+
+function renderIndustryChips(category) {
+  const chips = INDUSTRY_KEYWORD_PRESETS[category] || INDUSTRY_KEYWORD_PRESETS.cafe;
+  return chips.map(kw => `
+    <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('${kw.replace(/'/g, "\\'")}')" style="padding:4px 9px; font-size:11px;">
+      + ${kw}
+    </button>
+  `).join('');
+}
+
+function switchKeywordCategory(category) {
+  state.selectedIndustryPreset = category;
+  const container = document.getElementById('industryChipsContainer');
+  if (container) {
+    container.innerHTML = renderIndustryChips(category);
   }
 }
 
@@ -2581,6 +2641,7 @@ window.deleteClient = deleteClient;
 window.switchTab = switchTab;
 window.selectColor = selectColor;
 window.addKeywordChip = addKeywordChip;
+window.switchKeywordCategory = switchKeywordCategory;
 window.handleSaveProfile = handleSaveProfile;
 window.downloadQrCode = downloadQrCode;
 window.updateCustomization = updateCustomization;

@@ -92,13 +92,19 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 /**
  * Intelligently pick 1 SEO keyword from client's list based on customer feedback
  */
-function pickIntelligentSeoKeyword(answers = [], rawKeywords = '') {
+/**
+ * Universal Intelligent SEO Keyword Selector
+ * Dynamically adapts to ANY business type (Salon, Clinic, Gym, Cafe, Retail, Garage, etc.)
+ */
+function pickIntelligentSeoKeyword(businessName, answers = [], rawKeywords = '') {
+  // Safe general defaults if client hasn't added custom keywords yet
+  const cleanBiz = (businessName || 'this place').trim();
   const defaultList = [
-    'best cafe in madhyagram',
-    'cozy cafe to relax',
-    'great hospitality cafe',
-    'peaceful hangout spot',
-    'top rated local cafe'
+    `top rated ${cleanBiz.toLowerCase()} experience`,
+    'great customer service',
+    'friendly and professional staff',
+    'reliable local business',
+    'highly recommended'
   ];
 
   let list = (rawKeywords && typeof rawKeywords === 'string' && rawKeywords.trim())
@@ -109,63 +115,86 @@ function pickIntelligentSeoKeyword(answers = [], rawKeywords = '') {
     list = defaultList;
   }
 
-  // Calculate sentiment metrics
+  // 1. Analyze sentiment per category
   let totalRating = 0;
   let count = 0;
-  let foodRating = null;
-  let serviceRating = null;
-  let ambienceRating = null;
+  const negativeCategoryWords = new Set();
+  const positiveCategoryWords = new Set();
 
   for (const a of answers) {
     const r = Number(a.rating) || 5;
     totalRating += r;
     count++;
-    const cat = ((a.category_name || '') + ' ' + (a.question_text || '')).toLowerCase();
-    if (/food|dish|taste|eat|beverage|drink|coffee|menu|snack|flavor/i.test(cat)) {
-      foodRating = r;
-    } else if (/staff|service|hospitality|behavior|team|wait|order/i.test(cat)) {
-      serviceRating = r;
-    } else if (/ambien|vibe|atmosphere|decor|place|music|cozy|interior/i.test(cat)) {
-      ambienceRating = r;
+    
+    // Extract meaningful words (> 2 chars) from category name and question text
+    const text = ((a.category_name || '') + ' ' + (a.question_text || '')).toLowerCase();
+    const words = text.match(/[a-z]{3,}/g) || [];
+    const stopWords = ['how', 'was', 'our', 'the', 'you', 'your', 'and', 'for', 'with', 'rate', 'give', 'what', 'did'];
+
+    if (r <= 3) {
+      // Customer gave average or poor rating (<= 3) for this aspect
+      words.forEach(w => {
+        if (!stopWords.includes(w)) negativeCategoryWords.add(w);
+      });
+    } else if (r >= 4) {
+      // Customer was satisfied (>= 4) with this aspect
+      words.forEach(w => {
+        if (!stopWords.includes(w)) positiveCategoryWords.add(w);
+      });
     }
   }
 
   const avgRating = count > 0 ? (totalRating / count) : 4.5;
 
-  // STRICT RULE: If overall experience is poor (<= 3.0), do NOT force superlative ranking keywords
+  // STRICT RULE: If overall experience is poor (<= 3.0), do NOT inject glowing ranking keywords
   if (avgRating <= 3.0) {
-    return ''; // Skip SEO keyword injection for negative/average reviews to maintain authenticity
+    return ''; // Skip SEO keyword injection to maintain authentic review
   }
 
-  // Filter candidates intelligently
-  let candidates = [...list];
-
-  // If food rating was average or low (<= 3), STRICTLY remove any keywords mentioning food/dishes/drink/coffee
-  if (foodRating !== null && foodRating <= 3) {
-    candidates = candidates.filter(k => !/food|pizza|dish|burger|coffee|taste|eat|menu|drink|beverage|snack|tea/i.test(k));
-  }
-
-  // If service was rated high (>= 4), keywords focusing on service/hospitality get a priority
-  if (serviceRating !== null && serviceRating >= 4) {
-    const serviceMatches = candidates.filter(k => /service|hospitality|staff|friendly|polite/i.test(k));
-    if (serviceMatches.length > 0 && Math.random() < 0.6) {
-      candidates = serviceMatches;
+  // 2. Filter candidates: strictly disqualify keywords that contain words from negative/average categories
+  let candidates = list.filter(k => {
+    const kLower = k.toLowerCase();
+    for (const negWord of negativeCategoryWords) {
+      if (kLower.includes(negWord)) {
+        return false;
+      }
     }
+    return true;
+  });
+
+  // Industry-specific fallback disqualifications when negative words are flagged
+  // Food & Cafe
+  if (negativeCategoryWords.has('food') || negativeCategoryWords.has('drinks') || negativeCategoryWords.has('taste') || negativeCategoryWords.has('beverage')) {
+    candidates = candidates.filter(k => !/food|pizza|dish|burger|coffee|taste|eat|menu|drink|beverage|snack|tea|cafe/i.test(k));
+  }
+  // Salon & Spa
+  if (negativeCategoryWords.has('hair') || negativeCategoryWords.has('haircut') || negativeCategoryWords.has('styling') || negativeCategoryWords.has('facial') || negativeCategoryWords.has('treatment') || negativeCategoryWords.has('spa')) {
+    candidates = candidates.filter(k => !/hair|facial|styling|treatment|spa|cut|color|salon/i.test(k));
+  }
+  // Clinic, Dental & Medical
+  if (negativeCategoryWords.has('doctor') || negativeCategoryWords.has('treatment') || negativeCategoryWords.has('consultation') || negativeCategoryWords.has('teeth') || negativeCategoryWords.has('dental')) {
+    candidates = candidates.filter(k => !/treatment|doctor|dentist|dental|surgery|clinic|consultation/i.test(k));
+  }
+  // Gym & Fitness
+  if (negativeCategoryWords.has('trainer') || negativeCategoryWords.has('workout') || negativeCategoryWords.has('equipment') || negativeCategoryWords.has('fitness')) {
+    candidates = candidates.filter(k => !/trainer|workout|gym|fitness|equipment/i.test(k));
   }
 
-  // If ambience was rated high (>= 4), keywords focusing on vibe/cozy/atmosphere get a priority
-  if (ambienceRating !== null && ambienceRating >= 4) {
-    const vibeMatches = candidates.filter(k => /cozy|hangout|vibe|ambien|peaceful|atmosphere|spot/i.test(k));
-    if (vibeMatches.length > 0 && Math.random() < 0.6) {
-      candidates = vibeMatches;
+  // 3. Priority boost: Prioritize keywords that match positive category aspects
+  const positiveMatches = candidates.filter(k => {
+    const kLower = k.toLowerCase();
+    for (const posWord of positiveCategoryWords) {
+      if (kLower.includes(posWord)) return true;
     }
+    return false;
+  });
+
+  if (positiveMatches.length > 0 && Math.random() < 0.7) {
+    candidates = positiveMatches;
   }
 
   if (candidates.length === 0) {
-    candidates = list.filter(k => !/food|pizza|dish|burger/i.test(k));
-  }
-  if (candidates.length === 0) {
-    candidates = defaultList;
+    candidates = list.length > 0 ? list : defaultList;
   }
 
   // Pick exactly 1 keyword
@@ -178,7 +207,7 @@ function pickIntelligentSeoKeyword(answers = [], rawKeywords = '') {
  */
 async function callGpt4oMini(businessName, answers, customerName, customerComments = 'None provided', seoKeywords = '') {
   return new Promise((resolve, reject) => {
-    const targetKeyword = pickIntelligentSeoKeyword(answers, seoKeywords);
+    const targetKeyword = pickIntelligentSeoKeyword(businessName, answers, seoKeywords);
     const ratingsSummary = answers.map(a => `- ${a.category_name}: ${a.rating}/5 stars (Question: "${a.question_text}")`).join('\n');
 
     let keywordInstruction = '';
@@ -190,16 +219,21 @@ INTELLIGENT LOCAL SEO KEYWORD INTEGRATION
 
 Target Ranking Focus: "${targetKeyword}"
 
-CRITICAL RULES FOR KEYWORD & FOOD ITEMS:
-1. NEVER INVENT OR NAME SPECIFIC FOOD DISHES:
-   - NEVER invent, mention, or fabricate any specific food or beverage items (such as "pizza", "burger", "pasta", "cold brew", "shake", "latte", "cake", etc.) unless the customer explicitly wrote that dish name in Customer Comments!
-   - If the customer gave a 3-star (average) or lower rating for food, NEVER write praise like "best pizza I had", "amazing food", or fabricate dish compliments. Keep any food remark honest and casual ("the food was decent...", "food was okay").
+CRITICAL RULES FOR KEYWORD & SERVICES ACROSS ALL BUSINESSES:
+1. NEVER INVENT SPECIFIC SERVICES, PROCEDURES, OR PRODUCTS:
+   - RESTAURANTS / CAFES: NEVER invent specific food dishes, beverages, or menu items (e.g. no "best pizza", "loved the pasta", "great cappuccino") unless explicitly named in Customer Comments.
+   - SALONS / SPAS: NEVER invent specific hair treatments, styling techniques, facials, or product brands (e.g. no "keratin treatment", "hydrafacial") unless explicitly stated by the customer.
+   - CLINICS / HEALTHCARE / DENTAL: NEVER invent specific medical procedures, surgeries, medicines, or diagnoses (e.g. no "painless root canal", "quick surgery") unless explicitly stated by the customer.
+   - OTHER BUSINESSES (Gyms, Retail, Garages, etc.): NEVER fabricate specific services, trainers, or purchased goods unless explicitly provided in the feedback.
+   - If the customer rated any specific category 3 stars or lower, NEVER write praise for that aspect. Reflect their honest sentiment neutrally or casually.
+
 2. NATURAL 1-KEYWORD INTEGRATION:
    - Weave the target phrase "${targetKeyword}" naturally into 1 sentence only if it fits the customer's positive sentiment.
    - Example natural customer phrasing:
-     * "Really one of the ${targetKeyword} to chill with friends."
+     * "Really one of the ${targetKeyword} in the area."
      * "Found it to be a ${targetKeyword} with great service."
    - If using the exact keyword feels awkward or unnatural in the customer's casual sentence, smoothly adapt the wording or omit it. Authenticity and genuine human tone ALWAYS take priority over SEO.
+
 3. NO KEYWORD STUFFING:
    - Use at most ONE keyword. Never repeat keywords.
    - Keep the review short, casual, and human (2 to 3 sentences max).
