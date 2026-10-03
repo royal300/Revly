@@ -53,9 +53,29 @@ const Icons = {
   google: `<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.9 7.5 23.5 12 23.5z"/></svg>`
 };
 
-// Check for direct QR scan route (?scan=username or ?biz=username)
-const urlParams = new URLSearchParams(window.location.search);
-const scanUsername = urlParams.get('scan') || urlParams.get('biz');
+// Check for direct QR scan route (?scan/username, ?scan=username, /scan/username, or ?biz=username)
+function detectScanUsername() {
+  const search = window.location.search || '';
+  const pathname = window.location.pathname || '';
+
+  // 1. Match ?scan/username or ?scan/gupta
+  const searchSlashMatch = search.match(/^\?scan\/([^&?#]+)/i);
+  if (searchSlashMatch && searchSlashMatch[1]) {
+    return decodeURIComponent(searchSlashMatch[1]);
+  }
+
+  // 2. Match pathname /scan/username or /?scan/username
+  const pathSlashMatch = pathname.match(/^\/scan\/([^&?#]+)/i);
+  if (pathSlashMatch && pathSlashMatch[1]) {
+    return decodeURIComponent(pathSlashMatch[1]);
+  }
+
+  // 3. Match standard query params (?scan=username or ?biz=username)
+  const urlParams = new URLSearchParams(search);
+  return urlParams.get('scan') || urlParams.get('biz') || null;
+}
+
+const scanUsername = detectScanUsername();
 
 // -------------------------------------------------------------
 // MAIN RENDER LOOP
@@ -100,7 +120,7 @@ function render() {
   setTimeout(() => {
     const qrCanvas = document.getElementById('clientQrCanvas');
     if (qrCanvas && state.currentUser) {
-      const scanUrl = `${window.location.origin}/?scan=${state.currentUser.username}`;
+      const scanUrl = `${window.location.origin}/?scan/${state.currentUser.username}`;
       QRCode.toCanvas(qrCanvas, scanUrl, {
         width: 220,
         margin: 2,
@@ -146,7 +166,7 @@ function renderLandingPage() {
           </div>
 
           <div class="landing-nav-right">
-            <a href="/?scan=royalcafe" target="_blank" class="landing-nav-link">
+            <a href="/?scan/royalcafe" target="_blank" class="landing-nav-link">
               Live QR Demo
             </a>
             <button type="button" class="landing-login-btn" onclick="switchAuthView('login')">
@@ -182,7 +202,7 @@ function renderLandingPage() {
             </p>
 
             <div class="landing-cta-row">
-              <a href="/?scan=royalcafe" target="_blank" class="landing-btn-primary">
+              <a href="/?scan/royalcafe" target="_blank" class="landing-btn-primary">
                 ${Icons.qr}
                 Test Live Customer QR &rarr;
               </a>
@@ -628,7 +648,7 @@ function renderSuperAdmin() {
                       </td>
                       <td style="text-align:right;">
                         <div style="display:inline-flex; gap:6px;">
-                          <a href="/?scan=${c.username}" target="_blank" class="btn-pro btn-pro-secondary btn-pro-sm" title="Preview Customer QR Flow">
+                          <a href="/?scan/${c.username}" target="_blank" class="btn-pro btn-pro-secondary btn-pro-sm" title="Preview Customer QR Flow">
                             ${Icons.externalLink}
                             View QR
                           </a>
@@ -834,7 +854,7 @@ function renderClientBusiness() {
             </h1>
           </div>
           <div class="topbar-right">
-            <a href="/?scan=${user.username}" target="_blank" class="btn-pro btn-pro-primary">
+            <a href="/?scan/${user.username}" target="_blank" class="btn-pro btn-pro-primary">
               ${Icons.externalLink}
               Test Customer QR &rarr;
             </a>
@@ -862,7 +882,7 @@ function switchTab(tab) {
 
 // Client Tab 1: Profile & QR Studio
 function renderClientProfileTab(p) {
-  const scanUrl = `${window.location.origin}/?scan=${state.currentUser.username}`;
+  const scanUrl = `${window.location.origin}/?scan/${state.currentUser.username}`;
 
   return `
     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:flex-start;">
@@ -995,7 +1015,7 @@ function selectColor(color) {
   document.getElementById('profQrColor').value = color;
   const qrCanvas = document.getElementById('clientQrCanvas');
   if (qrCanvas && state.currentUser) {
-    const scanUrl = `${window.location.origin}/?scan=${state.currentUser.username}`;
+    const scanUrl = `${window.location.origin}/?scan/${state.currentUser.username}`;
     QRCode.toCanvas(qrCanvas, scanUrl, {
       width: 220,
       margin: 2,
