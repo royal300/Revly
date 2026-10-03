@@ -11,6 +11,8 @@ let state = {
   clientAnalytics: null,
   clientCategories: [],
   clientQuestions: [],
+  clientCustomers: [],
+  customerSearchQuery: '',
   modal: null, // { type, data }
   // Customer Flow State
   customerSession: null,
@@ -441,16 +443,18 @@ async function loadClientData() {
   if (!state.currentUser) return;
   const id = state.currentUser.id;
   try {
-    const [pRes, aRes, cRes, qRes] = await Promise.all([
+    const [pRes, aRes, cRes, qRes, custRes] = await Promise.all([
       fetch(`${API_BASE}/client/profile/${id}`).then(r => r.json()),
       fetch(`${API_BASE}/client/analytics/${id}`).then(r => r.json()),
       fetch(`${API_BASE}/client/categories/${id}`).then(r => r.json()),
-      fetch(`${API_BASE}/client/questions/${id}`).then(r => r.json())
+      fetch(`${API_BASE}/client/questions/${id}`).then(r => r.json()),
+      fetch(`${API_BASE}/client/customers/${id}`).then(r => r.json()).catch(() => [])
     ]);
     state.clientProfile = pRes;
     state.clientAnalytics = aRes;
     state.clientCategories = cRes;
     state.clientQuestions = qRes;
+    state.clientCustomers = Array.isArray(custRes) ? custRes : [];
   } catch (e) {
     console.error('Error loading client data:', e);
   }
@@ -460,6 +464,7 @@ function renderClientBusiness() {
   const user = state.currentUser;
   const p = state.clientProfile || user;
   const a = state.clientAnalytics || { total_scans: 0, total_generated: 0, category_ratings: [], recent_feedback: [] };
+  const custCount = state.clientCustomers ? state.clientCustomers.length : 0;
 
   return `
     <div class="dashboard-shell">
@@ -489,6 +494,12 @@ function renderClientBusiness() {
             Analytics & Reviews
           </button>
 
+          <button class="nav-link ${state.currentTab === 'customers' ? 'active' : ''}" onclick="switchTab('customers')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Customers
+            <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:11px; padding:2px 8px;">${custCount}</span>
+          </button>
+
           <button class="nav-link ${state.currentTab === 'questions' ? 'active' : ''}" onclick="switchTab('questions')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             Questions & Category
@@ -516,6 +527,7 @@ function renderClientBusiness() {
             <h1 class="page-heading">
               ${state.currentTab === 'profile' ? 'Profile & QR Studio' : ''}
               ${state.currentTab === 'analytics' ? 'Analytics & Performance' : ''}
+              ${state.currentTab === 'customers' ? 'Customer Directory & Unique Visitors' : ''}
               ${state.currentTab === 'questions' ? 'Questions & Categories' : ''}
             </h1>
           </div>
@@ -534,6 +546,7 @@ function renderClientBusiness() {
         <div class="dash-content">
           ${state.currentTab === 'profile' ? renderClientProfileTab(p) : ''}
           ${state.currentTab === 'analytics' ? renderClientAnalyticsTab(a) : ''}
+          ${state.currentTab === 'customers' ? renderClientCustomersTab() : ''}
           ${state.currentTab === 'questions' ? renderClientQuestionsTab() : ''}
         </div>
       </main>
@@ -865,6 +878,159 @@ function renderClientQuestionsTab() {
   `;
 }
 
+// Client Tab: Customers Directory (Unique by Mobile Number)
+function renderClientCustomersTab() {
+  const customers = state.clientCustomers || [];
+  const query = (state.customerSearchQuery || '').toLowerCase().trim();
+
+  const filtered = customers.filter(c => {
+    if (!query) return true;
+    return (c.name || '').toLowerCase().includes(query) || (c.mobile || '').toLowerCase().includes(query);
+  });
+
+  const totalUnique = customers.length;
+  const totalVisits = customers.reduce((sum, c) => sum + (Number(c.visit_count) || 1), 0);
+  const repeatCount = customers.filter(c => (Number(c.visit_count) || 1) > 1).length;
+  const repeatRate = totalUnique > 0 ? Math.round((repeatCount / totalUnique) * 100) : 0;
+  const totalDrafts = customers.reduce((sum, c) => sum + (Number(c.reviews_count) || 0), 0);
+
+  return `
+    <!-- Top KPI Cards for Customers -->
+    <div class="customer-stats-grid">
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">👥</div>
+        <div>
+          <div class="customer-stat-val">${totalUnique}</div>
+          <div class="customer-stat-lbl">Unique Customers</div>
+        </div>
+      </div>
+
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">📱</div>
+        <div>
+          <div class="customer-stat-val">${totalVisits}</div>
+          <div class="customer-stat-lbl">Total Scans / Visits</div>
+        </div>
+      </div>
+
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#fffbeb; color:#d97706;">🔁</div>
+        <div>
+          <div class="customer-stat-val">${repeatCount}</div>
+          <div class="customer-stat-lbl">Repeat Visitors (${repeatRate}%)</div>
+        </div>
+      </div>
+
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">⭐</div>
+        <div>
+          <div class="customer-stat-val">${totalDrafts}</div>
+          <div class="customer-stat-lbl">Reviews Placed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Customer Table Card -->
+    <div class="dash-card">
+      <div class="search-filter-row">
+        <div>
+          <h2 class="dash-card-title" style="margin-bottom:4px;">Customer Directory</h2>
+          <div class="dash-card-desc">All customers who scanned your QR code, grouped uniquely by verified mobile number.</div>
+        </div>
+
+        <div class="search-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" class="pro-input" placeholder="Search by name or mobile number..." value="${state.customerSearchQuery || ''}" oninput="state.customerSearchQuery = this.value; render();">
+        </div>
+      </div>
+
+      ${filtered.length === 0 ? `
+        <div class="empty-state-pro" style="padding:48px 20px; text-align:center;">
+          <div style="font-size:36px; margin-bottom:12px;">👥</div>
+          <h3 style="font-size:16px; font-weight:700; color:#0f172a; margin-bottom:6px;">${query ? 'No matching customers found' : 'No customer records yet'}</h3>
+          <p style="font-size:13px; color:#64748b; max-width:400px; margin:0 auto;">${query ? 'Try searching with a different name or mobile number.' : 'When customers scan your QR code and provide their contact details, they will be tracked here with their unique visit counts.'}</p>
+        </div>
+      ` : `
+        <div class="table-container">
+          <table class="pro-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Mobile Number (Unique)</th>
+                <th>Total Scans / Visits</th>
+                <th>Reviews Drafted</th>
+                <th>Last Visited</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filtered.map(c => `
+                <tr>
+                  <td>
+                    <div class="customer-name-cell">
+                      <div class="customer-avatar-circle">
+                        ${(c.name || 'G').slice(0, 1).toUpperCase()}
+                      </div>
+                      <div>
+                        <div style="font-weight:700; color:#0f172a; font-size:14px;">${c.name || 'Guest'}</div>
+                        <div style="font-size:11px; color:#94a3b8;">ID #${c.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="customer-mobile-pill">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                      ${c.mobile}
+                    </span>
+                  </td>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <span class="visit-count-badge ${Number(c.visit_count) > 1 ? 'repeat-visitor-badge' : ''}">
+                        ${c.visit_count} ${Number(c.visit_count) === 1 ? 'Scan' : 'Scans'}
+                      </span>
+                      ${Number(c.visit_count) > 1 ? '<span style="font-size:11px; font-weight:700; color:#d97706; background:#fffbeb; padding:2px 6px; border-radius:4px; border:1px solid #fef3c7;">Repeat</span>' : ''}
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge-pro badge-indigo">${c.reviews_count || 0} Drafts</span>
+                  </td>
+                  <td>
+                    <div style="font-size:13px; color:#334155; font-weight:600;">
+                      ${new Date(c.last_visited).toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' })}
+                    </div>
+                    <div style="font-size:11px; color:#94a3b8;">
+                      ${new Date(c.last_visited).toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' })}
+                    </div>
+                  </td>
+                  <td style="text-align:right;">
+                    <button class="btn-pro btn-pro-danger btn-pro-sm" onclick="deleteCustomer(${c.id})" title="Delete customer record">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+async function deleteCustomer(id) {
+  if (!confirm('Are you sure you want to remove this customer record?')) return;
+  try {
+    const res = await fetch(`${API_BASE}/client/customers/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      state.clientCustomers = state.clientCustomers.filter(c => c.id !== id);
+      render();
+    }
+  } catch (err) {
+    console.error('Failed to delete customer:', err);
+  }
+}
+
+
 async function handleAddCategory(e) {
   e.preventDefault();
   const name = document.getElementById('catNameInput').value;
@@ -1180,6 +1346,20 @@ function handleCustomerInfoSubmit(e) {
   e.preventDefault();
   state.customerInfo.name = document.getElementById('custNameInput').value.trim();
   state.customerInfo.mobile = document.getElementById('custMobileInput').value.trim();
+
+  // Instantly record to customer directory if mobile is provided
+  if (state.customerInfo.mobile && state.customerSession) {
+    fetch(`${API_BASE}/customer/record-info`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId: state.customerSession.clientId,
+        name: state.customerInfo.name,
+        mobile: state.customerInfo.mobile
+      })
+    }).catch(err => console.warn('Could not record customer info immediately', err));
+  }
+
   state.customerStep = 3;
   state.currentQuestionIdx = 0;
   state.customerAnswers = [];
@@ -1426,6 +1606,7 @@ window.skipCustomerInfo = skipCustomerInfo;
 window.handleCustomerInfoSubmit = handleCustomerInfoSubmit;
 window.rateStar = rateStar;
 window.copyAndRedirectToGoogle = copyAndRedirectToGoogle;
+window.deleteCustomer = deleteCustomer;
 
 // Initial Boot
 if (state.currentUser) {

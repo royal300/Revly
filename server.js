@@ -411,6 +411,68 @@ app.get('/api/client/analytics/:clientId', async (req, res) => {
   }
 });
 
+// Customer Directory for Client Business (Unique by mobile number)
+app.get('/api/client/customers/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  try {
+    const [customers] = await pool.query(`
+      SELECT 
+        c.id,
+        c.name,
+        c.mobile,
+        c.visit_count,
+        c.last_visited,
+        c.created_at,
+        (SELECT COUNT(*) FROM feedbacks f WHERE f.client_id = c.client_id AND f.customer_mobile = c.mobile) as reviews_count,
+        (SELECT MAX(f.generated_review) FROM feedbacks f WHERE f.client_id = c.client_id AND f.customer_mobile = c.mobile) as latest_review
+      FROM customers c
+      WHERE c.client_id = ?
+      ORDER BY c.last_visited DESC
+    `, [clientId]);
+    res.json(customers);
+  } catch (err) {
+    console.error('Error fetching customers:', err);
+    res.status(500).json({ error: 'Failed to fetch customers' });
+  }
+});
+
+// Delete customer record
+app.delete('/api/client/customers/:customerId', async (req, res) => {
+  const { customerId } = req.params;
+  try {
+    await pool.query('DELETE FROM customers WHERE id = ?', [customerId]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting customer:', err);
+    res.status(500).json({ error: 'Failed to delete customer' });
+  }
+});
+
+// Record customer info on Step 2 (Ensures visit count and unique mobile are saved)
+app.post('/api/customer/record-info', async (req, res) => {
+  const { clientId, name, mobile } = req.body;
+  if (!clientId || !mobile || !mobile.trim()) {
+    return res.json({ success: true, recorded: false });
+  }
+  try {
+    const cleanMobile = mobile.trim();
+    const cleanName = (name && name.trim()) ? name.trim() : 'Guest';
+    await pool.query(`
+      INSERT INTO customers (client_id, name, mobile, visit_count, last_visited)
+      VALUES (?, ?, ?, 1, NOW())
+      ON DUPLICATE KEY UPDATE 
+        name = IF(VALUES(name) != '' AND VALUES(name) != 'Guest' AND VALUES(name) != 'Anonymous', VALUES(name), name),
+        visit_count = visit_count + 1,
+        last_visited = NOW()
+    `, [clientId, cleanName, cleanMobile]);
+    res.json({ success: true, recorded: true });
+  } catch (err) {
+    console.error('Error recording customer info:', err);
+    res.json({ success: false });
+  }
+});
+
+
 // -------------------------------------------------------------
 // CUSTOMER / USER FLOW ENDPOINTS
 // 1. Scan -> Record scan & return 3 random questions
@@ -472,6 +534,19 @@ app.post('/api/customer/generate-review', async (req, res) => {
     );
 
     const feedbackId = fbResult.insertId;
+
+    // Record or update unique customer directory
+    if (customerMobile && customerMobile.trim()) {
+      const cleanMobile = customerMobile.trim();
+      const cleanName = (customerName && customerName.trim() && customerName !== 'Anonymous') ? customerName.trim() : 'Guest';
+      await pool.query(`
+        INSERT INTO customers (client_id, name, mobile, visit_count, last_visited)
+        VALUES (?, ?, ?, 1, NOW())
+        ON DUPLICATE KEY UPDATE 
+          name = IF(VALUES(name) != '' AND VALUES(name) != 'Guest' AND VALUES(name) != 'Anonymous', VALUES(name), name),
+          last_visited = NOW()
+      `, [clientId, cleanName, cleanMobile]);
+    }
 
     // Save individual answers
     for (const ans of answers) {

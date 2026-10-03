@@ -98,6 +98,33 @@ async function initDatabase() {
     `);
     console.log('✔ feedback_answers table verified');
 
+    // 7. customers table (unique by client_id and mobile number)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS customers (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        client_id INT NOT NULL,
+        name VARCHAR(150) NOT NULL DEFAULT '',
+        mobile VARCHAR(50) NOT NULL,
+        visit_count INT NOT NULL DEFAULT 1,
+        last_visited TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY unique_client_mobile (client_id, mobile),
+        INDEX(client_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `);
+    console.log('✔ customers table verified');
+
+    // Populate existing feedbacks into customers table
+    await pool.query(`
+      INSERT INTO customers (client_id, name, mobile, visit_count, last_visited)
+      SELECT client_id, MAX(customer_name), customer_mobile, COUNT(*), MAX(created_at)
+      FROM feedbacks
+      WHERE customer_mobile IS NOT NULL AND customer_mobile != ''
+      GROUP BY client_id, customer_mobile
+      ON DUPLICATE KEY UPDATE visit_count = VALUES(visit_count);
+    `);
+    console.log('✔ existing customer data synced');
+
     // Ensure default super admin exists: admin / admin123
     const [admins] = await pool.query('SELECT id FROM users WHERE username = ?', ['admin']);
     if (admins.length === 0) {

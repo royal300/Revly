@@ -5,7 +5,7 @@ Make sure your charset is UTF-8`);n=(n>>>8&255)*192+(n&255),e.put(n,13)}},t.expo
 The chosen QR Code version cannot contain this amount of data.
 Minimum version required to store current data is: `+c+`.
 `);let l=N(n,r,o),u=new i(t.getSymbolSize(n));return E(u,n),D(u),O(u,n),A(u,r,0),n>=7&&k(u,n),M(u,l),isNaN(a)&&(a=s.getBestMask(u,A.bind(null,u,r))),s.applyMask(a,u),A(u,r,a),{modules:u,version:n,errorCorrectionLevel:r,maskPattern:a,segments:o}}e.create=function(e,r){if(e===void 0||e===``)throw Error(`No input text`);let i=n.M,a,o;return r!==void 0&&(i=n.from(r.errorCorrectionLevel,n.M),a=v.from(r.version),o=s.from(r.maskPattern),r.toSJISFunc&&t.setToSJISFunction(r.toSJISFunc)),F(e,a,i,o)}})),N=o((e=>{function t(e){if(typeof e==`number`&&(e=e.toString()),typeof e!=`string`)throw Error(`Color should be defined as hex string`);let t=e.slice().replace(`#`,``).split(``);if(t.length<3||t.length===5||t.length>8)throw Error(`Invalid hex color: `+e);(t.length===3||t.length===4)&&(t=Array.prototype.concat.apply([],t.map(function(e){return[e,e]}))),t.length===6&&t.push(`F`,`F`);let n=parseInt(t.join(``),16);return{r:n>>24&255,g:n>>16&255,b:n>>8&255,a:n&255,hex:`#`+t.slice(0,6).join(``)}}e.getOptions=function(e){e||={},e.color||(e.color={});let n=e.margin===void 0||e.margin===null||e.margin<0?4:e.margin,r=e.width&&e.width>=21?e.width:void 0,i=e.scale||4;return{width:r,scale:r?4:i,margin:n,color:{dark:t(e.color.dark||`#000000ff`),light:t(e.color.light||`#ffffffff`)},type:e.type,rendererOpts:e.rendererOpts||{}}},e.getScale=function(e,t){return t.width&&t.width>=e+t.margin*2?t.width/(e+t.margin*2):t.scale},e.getImageWidth=function(t,n){let r=e.getScale(t,n);return Math.floor((t+n.margin*2)*r)},e.qrToImageData=function(t,n,r){let i=n.modules.size,a=n.modules.data,o=e.getScale(i,r),s=Math.floor((i+r.margin*2)*o),c=r.margin*o,l=[r.color.light,r.color.dark];for(let e=0;e<s;e++)for(let n=0;n<s;n++){let u=(e*s+n)*4,d=r.color.light;if(e>=c&&n>=c&&e<s-c&&n<s-c){let t=Math.floor((e-c)/o),r=Math.floor((n-c)/o);d=l[+!!a[t*i+r]]}t[u++]=d.r,t[u++]=d.g,t[u++]=d.b,t[u]=d.a}}})),P=o((e=>{var t=N();function n(e,t,n){e.clearRect(0,0,t.width,t.height),t.style||={},t.height=n,t.width=n,t.style.height=n+`px`,t.style.width=n+`px`}function r(){try{return document.createElement(`canvas`)}catch{throw Error(`You need to specify a canvas element`)}}e.render=function(e,i,a){let o=a,s=i;o===void 0&&(!i||!i.getContext)&&(o=i,i=void 0),i||(s=r()),o=t.getOptions(o);let c=t.getImageWidth(e.modules.size,o),l=s.getContext(`2d`),u=l.createImageData(c,c);return t.qrToImageData(u.data,e,o),n(l,s,c),l.putImageData(u,0,0),s},e.renderToDataURL=function(t,n,r){let i=r;i===void 0&&(!n||!n.getContext)&&(i=n,n=void 0),i||={};let a=e.render(t,n,i),o=i.type||`image/png`,s=i.rendererOpts||{};return a.toDataURL(o,s.quality)}})),F=o((e=>{var t=N();function n(e,t){let n=e.a/255,r=t+`="`+e.hex+`"`;return n<1?r+` `+t+`-opacity="`+n.toFixed(2).slice(1)+`"`:r}function r(e,t,n){let r=e+t;return n!==void 0&&(r+=` `+n),r}function i(e,t,n){let i=``,a=0,o=!1,s=0;for(let c=0;c<e.length;c++){let l=Math.floor(c%t),u=Math.floor(c/t);!l&&!o&&(o=!0),e[c]?(s++,c>0&&l>0&&e[c-1]||(i+=o?r(`M`,l+n,.5+u+n):r(`m`,a,0),a=0,o=!1),l+1<t&&e[c+1]||(i+=r(`h`,s),s=0)):a++}return i}e.render=function(e,r,a){let o=t.getOptions(r),s=e.modules.size,c=e.modules.data,l=s+o.margin*2,u=o.color.light.a?`<path `+n(o.color.light,`fill`)+` d="M0 0h`+l+`v`+l+`H0z"/>`:``,d=`<path `+n(o.color.dark,`stroke`)+` d="`+i(c,s,o.margin)+`"/>`,f=`viewBox="0 0 `+l+` `+l+`"`,p=`<svg xmlns="http://www.w3.org/2000/svg" `+(o.width?`width="`+o.width+`" height="`+o.width+`" `:``)+f+` shape-rendering="crispEdges">`+u+d+`</svg>
-`;return typeof a==`function`&&a(null,p),p}})),I=c(o((e=>{var t=l(),n=M(),r=P(),i=F();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),L=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,R={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},z=new URLSearchParams(window.location.search),B=z.get(`scan`)||z.get(`biz`);function V(){let e=document.getElementById(`app`);if(e){if(B){e.innerHTML=pe(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!R.currentUser){e.innerHTML=ee();return}if(R.currentUser.role===`admin`){e.innerHTML=G();return}e.innerHTML=X(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&R.currentUser){let t=`${window.location.origin}/?scan=${R.currentUser.username}`;I.toCanvas(e,t,{width:220,margin:2,color:{dark:R.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function ee(){return`
+`;return typeof a==`function`&&a(null,p),p}})),I=c(o((e=>{var t=l(),n=M(),r=P(),i=F();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),L=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,R={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},z=new URLSearchParams(window.location.search),B=z.get(`scan`)||z.get(`biz`);function V(){let e=document.getElementById(`app`);if(e){if(B){e.innerHTML=he(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!R.currentUser){e.innerHTML=ee();return}if(R.currentUser.role===`admin`){e.innerHTML=W();return}e.innerHTML=Y(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&R.currentUser){let t=`${window.location.origin}/?scan=${R.currentUser.username}`;I.toCanvas(e,t,{width:220,margin:2,color:{dark:R.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function ee(){return`
     <div class="login-split-page">
       <div class="login-card-pro">
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
@@ -56,7 +56,7 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function te(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function H(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;R.loading=!0,R.error=``,V();try{let e=await fetch(`${L}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(R.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await W():await Y()):R.error=r.error||`Login failed`}catch{R.error=`Unable to connect to server`}finally{R.loading=!1,V()}}function U(){R.currentUser=null,localStorage.removeItem(`revly_user`),V()}async function W(){try{let e=await fetch(`${L}/admin/clients`);e.ok&&(R.clients=await e.json())}catch(e){console.error(e)}}function G(){let e=R.clients.length;return`
+  `}function te(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function ne(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;R.loading=!0,R.error=``,V();try{let e=await fetch(`${L}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(R.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await U():await J()):R.error=r.error||`Login failed`}catch{R.error=`Unable to connect to server`}finally{R.loading=!1,V()}}function H(){R.currentUser=null,localStorage.removeItem(`revly_user`),V()}async function U(){try{let e=await fetch(`${L}/admin/clients`);e.ok&&(R.clients=await e.json())}catch(e){console.error(e)}}function W(){let e=R.clients.length;return`
     <div class="dashboard-shell">
       <!-- Sidebar -->
       <aside class="dash-sidebar">
@@ -219,7 +219,7 @@ Minimum version required to store current data is: `+c+`.
 
       ${$()}
     </div>
-  `}async function K(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${L}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await W(),V()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function q(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${L}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function J(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${L}/admin/clients/${e}`,{method:`DELETE`}),await W(),V()}catch{alert(`Failed to delete client`)}}async function Y(){if(!R.currentUser)return;let e=R.currentUser.id;try{let[t,n,r,i]=await Promise.all([fetch(`${L}/client/profile/${e}`).then(e=>e.json()),fetch(`${L}/client/analytics/${e}`).then(e=>e.json()),fetch(`${L}/client/categories/${e}`).then(e=>e.json()),fetch(`${L}/client/questions/${e}`).then(e=>e.json())]);R.clientProfile=t,R.clientAnalytics=n,R.clientCategories=r,R.clientQuestions=i}catch(e){console.error(`Error loading client data:`,e)}}function X(){let e=R.currentUser,t=R.clientProfile||e,n=R.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]};return`
+  `}async function G(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${L}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await U(),V()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function K(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${L}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function q(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${L}/admin/clients/${e}`,{method:`DELETE`}),await U(),V()}catch{alert(`Failed to delete client`)}}async function J(){if(!R.currentUser)return;let e=R.currentUser.id;try{let[t,n,r,i,a]=await Promise.all([fetch(`${L}/client/profile/${e}`).then(e=>e.json()),fetch(`${L}/client/analytics/${e}`).then(e=>e.json()),fetch(`${L}/client/categories/${e}`).then(e=>e.json()),fetch(`${L}/client/questions/${e}`).then(e=>e.json()),fetch(`${L}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);R.clientProfile=t,R.clientAnalytics=n,R.clientCategories=r,R.clientQuestions=i,R.clientCustomers=Array.isArray(a)?a:[]}catch(e){console.error(`Error loading client data:`,e)}}function Y(){let e=R.currentUser,t=R.clientProfile||e,n=R.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=R.clientCustomers?R.clientCustomers.length:0;return`
     <div class="dashboard-shell">
       <!-- Modern Sidebar -->
       <aside class="dash-sidebar">
@@ -245,6 +245,12 @@ Minimum version required to store current data is: `+c+`.
           <button class="nav-link ${R.currentTab===`analytics`?`active`:``}" onclick="switchTab('analytics')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
             Analytics & Reviews
+          </button>
+
+          <button class="nav-link ${R.currentTab===`customers`?`active`:``}" onclick="switchTab('customers')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Customers
+            <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:11px; padding:2px 8px;">${r}</span>
           </button>
 
           <button class="nav-link ${R.currentTab===`questions`?`active`:``}" onclick="switchTab('questions')">
@@ -274,6 +280,7 @@ Minimum version required to store current data is: `+c+`.
             <h1 class="page-heading">
               ${R.currentTab===`profile`?`Profile & QR Studio`:``}
               ${R.currentTab===`analytics`?`Analytics & Performance`:``}
+              ${R.currentTab===`customers`?`Customer Directory & Unique Visitors`:``}
               ${R.currentTab===`questions`?`Questions & Categories`:``}
             </h1>
           </div>
@@ -290,15 +297,16 @@ Minimum version required to store current data is: `+c+`.
         </header>
 
         <div class="dash-content">
-          ${R.currentTab===`profile`?ne(t):``}
+          ${R.currentTab===`profile`?Z(t):``}
           ${R.currentTab===`analytics`?oe(n):``}
+          ${R.currentTab===`customers`?ce():``}
           ${R.currentTab===`questions`?se():``}
         </div>
       </main>
 
       ${$()}
     </div>
-  `}function Z(e){R.currentTab=e,V()}function ne(e){let t=`${window.location.origin}/?scan=${R.currentUser.username}`;return`
+  `}function X(e){R.currentTab=e,V()}function Z(e){let t=`${window.location.origin}/?scan=${R.currentUser.username}`;return`
     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:flex-start;">
       <!-- Profile Form -->
       <div class="dash-card">
@@ -375,7 +383,7 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function re(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&R.currentUser){let n=`${window.location.origin}/?scan=${R.currentUser.username}`;I.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}async function ie(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value;try{(await fetch(`${L}/client/profile/${R.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r})})).ok&&(alert(`Profile updated successfully`),await Y(),V())}catch{alert(`Failed to save profile`)}}function ae(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${R.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function oe(e){return`
+  `}function re(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&R.currentUser){let n=`${window.location.origin}/?scan=${R.currentUser.username}`;I.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}async function ie(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value;try{(await fetch(`${L}/client/profile/${R.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r})})).ok&&(alert(`Profile updated successfully`),await J(),V())}catch{alert(`Failed to save profile`)}}function ae(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${R.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function oe(e){return`
     <!-- Key Metrics Grid -->
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -546,7 +554,127 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}async function ce(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${L}/client/categories/${R.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await Y(),V())}catch{alert(`Failed to add category`)}}async function le(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${L}/client/categories/${e}`,{method:`DELETE`}),await Y(),V()}catch{alert(`Failed to delete category`)}}async function ue(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${L}/client/questions/${R.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await Y(),V())}catch{alert(`Failed to add question`)}}async function de(e){if(confirm(`Delete this question?`))try{await fetch(`${L}/client/questions/${e}`,{method:`DELETE`}),await Y(),V()}catch{alert(`Failed to delete question`)}}async function fe(){if(!R.customerSession)try{let e=await fetch(`${L}/customer/session/${B}`);e.ok?(R.customerSession=await e.json(),V()):(R.error=`Business not found or invalid QR link`,V())}catch{R.error=`Unable to connect`,V()}}function pe(){if(!R.customerSession&&!R.error)return fe(),`
+  `}function ce(){let e=R.clientCustomers||[],t=(R.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length;return`
+    <!-- Top KPI Cards for Customers -->
+    <div class="customer-stats-grid">
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">👥</div>
+        <div>
+          <div class="customer-stat-val">${r}</div>
+          <div class="customer-stat-lbl">Unique Customers</div>
+        </div>
+      </div>
+
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">📱</div>
+        <div>
+          <div class="customer-stat-val">${i}</div>
+          <div class="customer-stat-lbl">Total Scans / Visits</div>
+        </div>
+      </div>
+
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#fffbeb; color:#d97706;">🔁</div>
+        <div>
+          <div class="customer-stat-val">${a}</div>
+          <div class="customer-stat-lbl">Repeat Visitors (${r>0?Math.round(a/r*100):0}%)</div>
+        </div>
+      </div>
+
+      <div class="customer-stat-box">
+        <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">⭐</div>
+        <div>
+          <div class="customer-stat-val">${e.reduce((e,t)=>e+(Number(t.reviews_count)||0),0)}</div>
+          <div class="customer-stat-lbl">Reviews Placed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Customer Table Card -->
+    <div class="dash-card">
+      <div class="search-filter-row">
+        <div>
+          <h2 class="dash-card-title" style="margin-bottom:4px;">Customer Directory</h2>
+          <div class="dash-card-desc">All customers who scanned your QR code, grouped uniquely by verified mobile number.</div>
+        </div>
+
+        <div class="search-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" class="pro-input" placeholder="Search by name or mobile number..." value="${R.customerSearchQuery||``}" oninput="state.customerSearchQuery = this.value; render();">
+        </div>
+      </div>
+
+      ${n.length===0?`
+        <div class="empty-state-pro" style="padding:48px 20px; text-align:center;">
+          <div style="font-size:36px; margin-bottom:12px;">👥</div>
+          <h3 style="font-size:16px; font-weight:700; color:#0f172a; margin-bottom:6px;">${t?`No matching customers found`:`No customer records yet`}</h3>
+          <p style="font-size:13px; color:#64748b; max-width:400px; margin:0 auto;">${t?`Try searching with a different name or mobile number.`:`When customers scan your QR code and provide their contact details, they will be tracked here with their unique visit counts.`}</p>
+        </div>
+      `:`
+        <div class="table-container">
+          <table class="pro-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Mobile Number (Unique)</th>
+                <th>Total Scans / Visits</th>
+                <th>Reviews Drafted</th>
+                <th>Last Visited</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${n.map(e=>`
+                <tr>
+                  <td>
+                    <div class="customer-name-cell">
+                      <div class="customer-avatar-circle">
+                        ${(e.name||`G`).slice(0,1).toUpperCase()}
+                      </div>
+                      <div>
+                        <div style="font-weight:700; color:#0f172a; font-size:14px;">${e.name||`Guest`}</div>
+                        <div style="font-size:11px; color:#94a3b8;">ID #${e.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="customer-mobile-pill">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                      ${e.mobile}
+                    </span>
+                  </td>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <span class="visit-count-badge ${Number(e.visit_count)>1?`repeat-visitor-badge`:``}">
+                        ${e.visit_count} ${Number(e.visit_count)===1?`Scan`:`Scans`}
+                      </span>
+                      ${Number(e.visit_count)>1?`<span style="font-size:11px; font-weight:700; color:#d97706; background:#fffbeb; padding:2px 6px; border-radius:4px; border:1px solid #fef3c7;">Repeat</span>`:``}
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge-pro badge-indigo">${e.reviews_count||0} Drafts</span>
+                  </td>
+                  <td>
+                    <div style="font-size:13px; color:#334155; font-weight:600;">
+                      ${new Date(e.last_visited).toLocaleDateString(void 0,{month:`short`,day:`numeric`,year:`numeric`})}
+                    </div>
+                    <div style="font-size:11px; color:#94a3b8;">
+                      ${new Date(e.last_visited).toLocaleTimeString(void 0,{hour:`2-digit`,minute:`2-digit`})}
+                    </div>
+                  </td>
+                  <td style="text-align:right;">
+                    <button class="btn-pro btn-pro-danger btn-pro-sm" onclick="deleteCustomer(${e.id})" title="Delete customer record">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </td>
+                </tr>
+              `).join(``)}
+            </tbody>
+          </table>
+        </div>
+      `}
+    </div>
+  `}async function le(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${L}/client/customers/${e}`,{method:`DELETE`})).ok&&(R.clientCustomers=R.clientCustomers.filter(t=>t.id!==e),V())}catch(e){console.error(`Failed to delete customer:`,e)}}async function ue(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${L}/client/categories/${R.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await J(),V())}catch{alert(`Failed to add category`)}}async function de(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${L}/client/categories/${e}`,{method:`DELETE`}),await J(),V()}catch{alert(`Failed to delete category`)}}async function fe(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${L}/client/questions/${R.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await J(),V())}catch{alert(`Failed to add question`)}}async function pe(e){if(confirm(`Delete this question?`))try{await fetch(`${L}/client/questions/${e}`,{method:`DELETE`}),await J(),V()}catch{alert(`Failed to delete question`)}}async function me(){if(!R.customerSession)try{let e=await fetch(`${L}/customer/session/${B}`);e.ok?(R.customerSession=await e.json(),V()):(R.error=`Business not found or invalid QR link`,V())}catch{R.error=`Unable to connect`,V()}}function he(){if(!R.customerSession&&!R.error)return me(),`
       <div class="customer-clean-page">
         <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
           <div style="width:48px; height:48px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; margin:0 auto 20px; animation:spin 0.8s linear infinite;"></div>
@@ -704,7 +832,7 @@ Minimum version required to store current data is: `+c+`.
         ${t}
       </div>
     </div>
-  `}function me(e){R.customerStep=e,V()}function he(){R.customerInfo.name=`Guest`,R.customerInfo.mobile=``,R.customerStep=3,R.currentQuestionIdx=0,R.customerAnswers=[],V()}function ge(e){e.preventDefault(),R.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),R.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),R.customerStep=3,R.currentQuestionIdx=0,R.customerAnswers=[],V()}function _e(e,t,n,r){R.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r});let i=R.customerSession.questions.length;R.currentQuestionIdx<i-1?(R.currentQuestionIdx+=1,V()):ve()}async function ve(){R.customerStep=4,R.loading=!0,V();try{let e=await(await fetch(`${L}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:R.customerSession.clientId,customerName:R.customerInfo.name||`Anonymous`,customerMobile:R.customerInfo.mobile||``,answers:R.customerAnswers})})).json();R.generatedReview=e.reviewDraft,R.feedbackId=e.feedbackId,R.googleReviewUrl=e.googleReviewUrl}catch{R.generatedReview=`I had a great experience at ${R.customerSession.businessName}. The service was excellent!`}finally{R.loading=!1,V()}}async function ye(){let e=R.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}R.feedbackId&&fetch(`${L}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:R.feedbackId})});let t=R.googleReviewUrl||R.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),R.customerStep=5,V()}function be(e,t=null){R.modal={type:e,data:t},V()}function Q(){R.modal=null,V()}function $(){if(!R.modal)return``;let{type:e,data:t}=R.modal;return e===`create-client`?`
+  `}function ge(e){R.customerStep=e,V()}function _e(){R.customerInfo.name=`Guest`,R.customerInfo.mobile=``,R.customerStep=3,R.currentQuestionIdx=0,R.customerAnswers=[],V()}function ve(e){e.preventDefault(),R.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),R.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),R.customerInfo.mobile&&R.customerSession&&fetch(`${L}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:R.customerSession.clientId,name:R.customerInfo.name,mobile:R.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),R.customerStep=3,R.currentQuestionIdx=0,R.customerAnswers=[],V()}function ye(e,t,n,r){R.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r});let i=R.customerSession.questions.length;R.currentQuestionIdx<i-1?(R.currentQuestionIdx+=1,V()):be()}async function be(){R.customerStep=4,R.loading=!0,V();try{let e=await(await fetch(`${L}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:R.customerSession.clientId,customerName:R.customerInfo.name||`Anonymous`,customerMobile:R.customerInfo.mobile||``,answers:R.customerAnswers})})).json();R.generatedReview=e.reviewDraft,R.feedbackId=e.feedbackId,R.googleReviewUrl=e.googleReviewUrl}catch{R.generatedReview=`I had a great experience at ${R.customerSession.businessName}. The service was excellent!`}finally{R.loading=!1,V()}}async function xe(){let e=R.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}R.feedbackId&&fetch(`${L}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:R.feedbackId})});let t=R.googleReviewUrl||R.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),R.customerStep=5,V()}function Se(e,t=null){R.modal={type:e,data:t},V()}function Q(){R.modal=null,V()}function $(){if(!R.modal)return``;let{type:e,data:t}=R.modal;return e===`create-client`?`
       <div class="pro-modal-backdrop" onclick="closeModal()">
         <div class="pro-modal-box" onclick="event.stopPropagation()">
           <div class="pro-modal-header">
@@ -811,4 +939,4 @@ Minimum version required to store current data is: `+c+`.
           </form>
         </div>
       </div>
-    `:``}window.handleLogin=H,window.handleLogout=U,window.quickFill=te,window.openModal=be,window.closeModal=Q,window.handleCreateClient=K,window.handleResetPassword=q,window.deleteClient=J,window.switchTab=Z,window.selectColor=re,window.handleSaveProfile=ie,window.downloadQrCode=ae,window.handleAddCategory=ce,window.deleteCategory=le,window.handleAddQuestion=ue,window.deleteQuestion=de,window.customerNextStep=me,window.skipCustomerInfo=he,window.handleCustomerInfoSubmit=ge,window.rateStar=_e,window.copyAndRedirectToGoogle=ye,R.currentUser?R.currentUser.role===`admin`?W().then(V):Y().then(V):V();
+    `:``}window.handleLogin=ne,window.handleLogout=H,window.quickFill=te,window.openModal=Se,window.closeModal=Q,window.handleCreateClient=G,window.handleResetPassword=K,window.deleteClient=q,window.switchTab=X,window.selectColor=re,window.handleSaveProfile=ie,window.downloadQrCode=ae,window.handleAddCategory=ue,window.deleteCategory=de,window.handleAddQuestion=fe,window.deleteQuestion=pe,window.customerNextStep=ge,window.skipCustomerInfo=_e,window.handleCustomerInfoSubmit=ve,window.rateStar=ye,window.copyAndRedirectToGoogle=xe,window.deleteCustomer=le,R.currentUser?R.currentUser.role===`admin`?U().then(V):J().then(V):V();
