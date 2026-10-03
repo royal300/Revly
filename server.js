@@ -597,12 +597,38 @@ app.delete('/api/client/questions/:questionId', async (req, res) => {
   }
 });
 
-// Clean Analytics
+// Clean Analytics with Date Period Filtering (Today, Week, Month, All-Time)
 app.get('/api/client/analytics/:clientId', async (req, res) => {
   const { clientId } = req.params;
+  const { period = 'today' } = req.query; // 'today' | 'week' | 'month' | 'all'
+
+  let dateFilterScans = '';
+  let dateFilterFeedbacks = '';
+  let dateFilterFA = '';
+
+  if (period === 'today') {
+    dateFilterScans = 'AND DATE(created_at) = CURDATE()';
+    dateFilterFeedbacks = 'AND DATE(created_at) = CURDATE()';
+    dateFilterFA = 'AND DATE(f.created_at) = CURDATE()';
+  } else if (period === 'week') {
+    dateFilterScans = 'AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)';
+    dateFilterFeedbacks = 'AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)';
+    dateFilterFA = 'AND f.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)';
+  } else if (period === 'month') {
+    dateFilterScans = 'AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)';
+    dateFilterFeedbacks = 'AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)';
+    dateFilterFA = 'AND f.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)';
+  }
+
   try {
-    const [[scanRes]] = await pool.query('SELECT COUNT(*) as total_scans FROM scans WHERE client_id = ?', [clientId]);
-    const [[genRes]] = await pool.query('SELECT COUNT(*) as total_generated FROM feedbacks WHERE client_id = ?', [clientId]);
+    const [[scanRes]] = await pool.query(
+      `SELECT COUNT(*) as total_scans FROM scans WHERE client_id = ? ${dateFilterScans}`,
+      [clientId]
+    );
+    const [[genRes]] = await pool.query(
+      `SELECT COUNT(*) as total_generated FROM feedbacks WHERE client_id = ? ${dateFilterFeedbacks}`,
+      [clientId]
+    );
 
     const [categoryRatings] = await pool.query(`
       SELECT 
@@ -611,7 +637,7 @@ app.get('/api/client/analytics/:clientId', async (req, res) => {
         COUNT(fa.id) as response_count
       FROM feedback_answers fa
       JOIN feedbacks f ON f.id = fa.feedback_id
-      WHERE f.client_id = ?
+      WHERE f.client_id = ? ${dateFilterFA}
       GROUP BY fa.category_name
       ORDER BY avg_rating DESC
     `, [clientId]);
@@ -625,14 +651,24 @@ app.get('/api/client/analytics/:clientId', async (req, res) => {
         f.redirected_to_google,
         f.created_at
       FROM feedbacks f
-      WHERE f.client_id = ?
+      WHERE f.client_id = ? ${dateFilterFeedbacks}
       ORDER BY f.id DESC
-      LIMIT 10
+      LIMIT 15
+    `, [clientId]);
+
+    // Average rating across all feedback in this period
+    const [[avgRatingRes]] = await pool.query(`
+      SELECT ROUND(AVG(fa.rating), 1) as overall_avg
+      FROM feedback_answers fa
+      JOIN feedbacks f ON f.id = fa.feedback_id
+      WHERE f.client_id = ? ${dateFilterFA}
     `, [clientId]);
 
     res.json({
+      period,
       total_scans: scanRes.total_scans || 0,
       total_generated: genRes.total_generated || 0,
+      overall_avg: avgRatingRes && avgRatingRes.overall_avg ? Number(avgRatingRes.overall_avg) : 5.0,
       category_ratings: categoryRatings,
       recent_feedback: recentFeedback
     });

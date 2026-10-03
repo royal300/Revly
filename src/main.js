@@ -15,6 +15,9 @@ let state = {
   customerSearchQuery: '',
   adminSearchQuery: '',
   customizationDraft: null,
+  analyticsPeriod: 'today', // 'today' | 'week' | 'month' | 'all'
+  selectedRatingForQ: null,
+  isRatingTransitioning: false,
   modal: null, // { type, data }
   // Customer Flow State
   customerSession: null,
@@ -350,7 +353,7 @@ function renderSuperAdmin() {
               </div>
               <div class="kpi-number">${totalGenerated}</div>
               <div class="kpi-footer">
-                Powered by gpt-4o-mini
+                AI-assisted review drafts
               </div>
             </div>
           </div>
@@ -510,10 +513,11 @@ async function deleteClient(id) {
 async function loadClientData() {
   if (!state.currentUser) return;
   const id = state.currentUser.id;
+  const period = state.analyticsPeriod || 'today';
   try {
     const [pRes, aRes, cRes, qRes, custRes] = await Promise.all([
       fetch(`${API_BASE}/client/profile/${id}`).then(r => r.json()),
-      fetch(`${API_BASE}/client/analytics/${id}`).then(r => r.json()),
+      fetch(`${API_BASE}/client/analytics/${id}?period=${period}`).then(r => r.json()),
       fetch(`${API_BASE}/client/categories/${id}`).then(r => r.json()),
       fetch(`${API_BASE}/client/questions/${id}`).then(r => r.json()),
       fetch(`${API_BASE}/client/customers/${id}`).then(r => r.json()).catch(() => [])
@@ -525,6 +529,20 @@ async function loadClientData() {
     state.clientCustomers = Array.isArray(custRes) ? custRes : [];
   } catch (e) {
     console.error('Error loading client data:', e);
+  }
+}
+
+async function changeAnalyticsPeriod(period) {
+  state.analyticsPeriod = period;
+  if (!state.currentUser) return;
+  try {
+    const res = await fetch(`${API_BASE}/client/analytics/${state.currentUser.id}?period=${period}`);
+    if (res.ok) {
+      state.clientAnalytics = await res.json();
+      render();
+    }
+  } catch (err) {
+    console.error('Error changing analytics period:', err);
   }
 }
 
@@ -607,10 +625,6 @@ function renderClientBusiness() {
             </h1>
           </div>
           <div class="topbar-right">
-            <span class="live-pill">
-              <span class="live-pill-dot"></span>
-              AI Active (gpt-4o-mini)
-            </span>
             <a href="/?scan=${user.username}" target="_blank" class="btn-pro btn-pro-primary">
               ${Icons.externalLink}
               Test Customer QR &rarr;
@@ -1233,7 +1247,43 @@ async function handleSaveCustomization(e) {
 
 // Client Tab 2: Analytics
 function renderClientAnalyticsTab(a) {
+  const currentPeriod = state.analyticsPeriod || 'today';
+  const periodLabel = {
+    today: 'Today',
+    week: 'This Week (7 Days)',
+    month: 'This Month (30 Days)',
+    all: 'All Time'
+  }[currentPeriod] || 'Today';
+
   return `
+    <!-- Timeline Filter Section -->
+    <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:16px 20px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:38px; height:38px; border-radius:10px; background:#eef2ff; color:#4f46e5; display:flex; align-items:center; justify-content:center;">
+          ${Icons.chart}
+        </div>
+        <div>
+          <div style="font-size:14px; font-weight:800; color:#0f172a;">Analytics Time Range</div>
+          <div style="font-size:12px; color:#64748b;">Filter metrics: <strong style="color:#4f46e5;">${periodLabel}</strong></div>
+        </div>
+      </div>
+
+      <div class="filter-pill-group">
+        <button type="button" class="filter-pill-btn ${currentPeriod === 'today' ? 'active' : ''}" onclick="changeAnalyticsPeriod('today')">
+          Today
+        </button>
+        <button type="button" class="filter-pill-btn ${currentPeriod === 'week' ? 'active' : ''}" onclick="changeAnalyticsPeriod('week')">
+          Week
+        </button>
+        <button type="button" class="filter-pill-btn ${currentPeriod === 'month' ? 'active' : ''}" onclick="changeAnalyticsPeriod('month')">
+          Month
+        </button>
+        <button type="button" class="filter-pill-btn ${currentPeriod === 'all' ? 'active' : ''}" onclick="changeAnalyticsPeriod('all')">
+          All Time
+        </button>
+      </div>
+    </div>
+
     <!-- Key Metrics Grid -->
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -1245,7 +1295,7 @@ function renderClientAnalyticsTab(a) {
         </div>
         <div class="kpi-number">${a.total_scans}</div>
         <div class="kpi-footer">
-          Customers who visited review page via QR
+          Customers who visited review page via QR (${currentPeriod})
         </div>
       </div>
 
@@ -1258,7 +1308,7 @@ function renderClientAnalyticsTab(a) {
         </div>
         <div class="kpi-number">${a.total_generated}</div>
         <div class="kpi-footer">
-          AI-assisted review drafts completed
+          AI-assisted review drafts completed (${currentPeriod})
         </div>
       </div>
 
@@ -1272,6 +1322,19 @@ function renderClientAnalyticsTab(a) {
         <div class="kpi-number">${a.total_scans > 0 ? Math.round((a.total_generated / a.total_scans) * 100) : 0}%</div>
         <div class="kpi-footer">
           Scan to completed review conversion
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Average Rating</span>
+          <div class="kpi-icon-bubble" style="background:#fef3c7; color:#d97706;">
+            ${Icons.star}
+          </div>
+        </div>
+        <div class="kpi-number" style="color:#d97706;">★ ${a.overall_avg !== undefined ? a.overall_avg : '5.0'}</div>
+        <div class="kpi-footer">
+          Average rating for ${currentPeriod}
         </div>
       </div>
     </div>
@@ -1814,22 +1877,28 @@ function renderCustomerFlow() {
               ${currentQ.question_text}
             </h2>
 
-            <div class="star-interactive-row">
+            <div class="star-interactive-row" id="starInteractiveRow" onmouseleave="resetStarsHover()">
               ${[1, 2, 3, 4, 5].map(star => `
-                <button type="button" class="star-btn-lg" title="${star} Star" onclick="rateStar(${currentQ.id}, '${currentQ.category_name.replace(/'/g, "\\'")}', '${currentQ.question_text.replace(/'/g, "\\'")}', ${star})">
+                <button type="button" 
+                  class="star-btn-lg ${state.selectedRatingForQ && state.selectedRatingForQ >= star ? 'star-filled' : ''}" 
+                  id="starBtn_${star}"
+                  data-star="${star}"
+                  title="${star} Star${star > 1 ? 's' : ''}" 
+                  onmouseenter="highlightStars(${star})"
+                  onclick="rateStar(${currentQ.id}, '${currentQ.category_name.replace(/'/g, "\\'")}', '${currentQ.question_text.replace(/'/g, "\\'")}', ${star})">
                   ★
                 </button>
               `).join('')}
             </div>
 
-            <div style="font-size:14px; font-weight:700; color:#d97706; margin-top:16px;">
+            <div id="starFeedbackText" style="font-size:15px; font-weight:700; color:#d97706; min-height:24px;">
               Tap a star (1 to 5) to rate
             </div>
           </div>
         </div>
 
-        <div style="text-align:center; font-size:12px; color:#94a3b8; margin-top:24px;">
-          Automatically moves to next question
+        <div style="text-align:center; font-size:12px; color:#94a3b8; margin-top:20px;">
+          Automatically moves to next question after rating
         </div>
       `;
     }
@@ -1952,7 +2021,74 @@ function handleCustomerInfoSubmit(e) {
   render();
 }
 
+function highlightStars(rating) {
+  if (state.isRatingTransitioning && state.selectedRatingForQ) {
+    rating = state.selectedRatingForQ;
+  }
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById(`starBtn_${i}`);
+    if (el) {
+      if (i <= rating) {
+        el.classList.add('star-filled');
+      } else {
+        el.classList.remove('star-filled');
+      }
+    }
+  }
+  const label = document.getElementById('starFeedbackText');
+  if (label) {
+    const texts = ['', 'Disappointing (1/5)', 'Needs Improvement (2/5)', 'Average (3/5)', 'Very Good! (4/5)', 'Outstanding! (5/5)'];
+    label.textContent = texts[rating] || `${rating} Stars Selected`;
+    label.style.color = '#d97706';
+  }
+}
+
+function resetStarsHover() {
+  if (state.isRatingTransitioning && state.selectedRatingForQ) {
+    highlightStars(state.selectedRatingForQ);
+    return;
+  }
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById(`starBtn_${i}`);
+    if (el) el.classList.remove('star-filled');
+  }
+  const label = document.getElementById('starFeedbackText');
+  if (label) {
+    label.textContent = 'Tap a star (1 to 5) to rate';
+    label.style.color = '#64748b';
+  }
+}
+
 function rateStar(qId, catName, qText, rating) {
+  if (state.isRatingTransitioning) return;
+  state.isRatingTransitioning = true;
+  state.selectedRatingForQ = rating;
+
+  // 1. Immediately light up all stars up to the clicked rating
+  highlightStars(rating);
+
+  // 2. Trigger pop animation on clicked star
+  const clickedBtn = document.getElementById(`starBtn_${rating}`);
+  if (clickedBtn) {
+    clickedBtn.classList.add('star-pop');
+  }
+
+  // 3. Set clear confirmation label
+  const label = document.getElementById('starFeedbackText');
+  if (label) {
+    const texts = [
+      '',
+      '★☆☆☆☆ Disappointing (1/5)',
+      '★★☆☆☆ Needs Improvement (2/5)',
+      '★★★☆☆ Average Experience (3/5)',
+      '★★★★☆ Very Good! (4/5)',
+      '★★★★★ Outstanding! (5/5)'
+    ];
+    label.textContent = texts[rating] || `${rating} Stars Selected`;
+    label.style.color = '#d97706';
+  }
+
+  // 4. Record answer
   state.customerAnswers.push({
     category_id: qId,
     category_name: catName,
@@ -1960,14 +2096,18 @@ function rateStar(qId, catName, qText, rating) {
     rating: rating
   });
 
-  const totalQ = state.customerSession.questions.length;
-  if (state.currentQuestionIdx < totalQ - 1) {
-    state.currentQuestionIdx += 1;
-    render();
-  } else {
-    // Generate AI review
-    generateCustomerReview();
-  }
+  // 5. Short delightful pause (~450ms) so customer clearly sees stars filled gold
+  setTimeout(() => {
+    state.isRatingTransitioning = false;
+    state.selectedRatingForQ = null;
+    const totalQ = state.customerSession.questions.length;
+    if (state.currentQuestionIdx < totalQ - 1) {
+      state.currentQuestionIdx += 1;
+      render();
+    } else {
+      generateCustomerReview();
+    }
+  }, 450);
 }
 
 async function generateCustomerReview() {
@@ -2199,6 +2339,9 @@ window.deleteQuestion = deleteQuestion;
 window.customerNextStep = customerNextStep;
 window.skipCustomerInfo = skipCustomerInfo;
 window.handleCustomerInfoSubmit = handleCustomerInfoSubmit;
+window.changeAnalyticsPeriod = changeAnalyticsPeriod;
+window.highlightStars = highlightStars;
+window.resetStarsHover = resetStarsHover;
 window.rateStar = rateStar;
 window.copyAndRedirectToGoogle = copyAndRedirectToGoogle;
 window.deleteCustomer = deleteCustomer;
