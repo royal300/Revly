@@ -1253,13 +1253,10 @@ Minimum version required to store current data is: `+c+`.
             <span>Your feedback matters!</span>
           </div>
 
-          <!-- 4. Hero Title & Subtitle -->
-          <h1 class="cflow-hero-title">
+          <!-- 4. Hero Title -->
+          <h1 class="cflow-hero-title" style="margin-bottom:24px;">
             Share your <span>experience</span>
           </h1>
-          <p class="cflow-hero-sub">
-            Answer 3 quick questions about your visit at <strong>${e.businessName}</strong>. Our AI will craft an authentic Google review draft for you!
-          </p>
 
           <!-- 5. 3 Feature Highlights -->
           <div class="cflow-feature-row">
