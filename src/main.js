@@ -1,4 +1,6 @@
 import QRCode from 'qrcode';
+import confetti from 'canvas-confetti';
+import './styles/customer.css';
 
 const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
 
@@ -2076,15 +2078,58 @@ async function initCustomerSession() {
   }
 }
 
+function getRatingText(rating) {
+  const texts = [
+    '',
+    '😡 Disappointing (1/5)',
+    '🙁 Could be better (2/5)',
+    '😐 Average experience (3/5)',
+    '😊 Very Good! (4/5)',
+    '🤩 Outstanding! (5/5)'
+  ];
+  return texts[rating] || '';
+}
+
+function triggerConfetti() {
+  try {
+    if (typeof confetti === 'function') {
+      confetti({
+        particleCount: 85,
+        spread: 75,
+        origin: { y: 0.6 },
+        colors: ['#6d5af6', '#8b77ff', '#10b981', '#f59e0b', '#ec4899', '#3b82f6']
+      });
+      setTimeout(() => {
+        confetti({
+          particleCount: 45,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 45,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+      }, 250);
+    }
+  } catch (e) {
+    console.warn('Confetti trigger error', e);
+  }
+}
+
 function renderCustomerFlow() {
   if (!state.customerSession && !state.error) {
     initCustomerSession();
     return `
-      <div class="customer-clean-page" style="background: #edf4fc;">
-        <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
-          <div style="width:48px; height:48px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; margin:0 auto 20px; animation:spin 0.8s linear infinite;"></div>
-          <div style="font-size:16px; font-weight:700; color:#0f172a;">Connecting to review station...</div>
-          <p style="font-size:13px; color:#64748b; margin-top:6px;">Please wait a moment</p>
+      <div class="cflow-page">
+        <div class="cflow-card" style="justify-content:center; align-items:center;">
+          <div class="cflow-spinner-wrap">
+            <div class="cflow-spinner"></div>
+            <div style="font-size:16px; font-weight:700; color:#0f172a; margin-top:12px;">Connecting to review station...</div>
+            <p style="font-size:13px; color:#64748b;">Please wait a moment</p>
+          </div>
         </div>
       </div>
     `;
@@ -2092,230 +2137,403 @@ function renderCustomerFlow() {
 
   if (state.error) {
     return `
-      <div class="customer-clean-page" style="background: #edf4fc;">
-        <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
-          <div style="font-size:36px; margin-bottom:16px;">⚠️</div>
-          <h2 style="font-size:20px; font-weight:800; color:#ef4444; margin-bottom:8px;">Notice</h2>
-          <p style="color:#64748b; font-size:14px; line-height:1.5;">${state.error}</p>
+      <div class="cflow-page">
+        <div class="cflow-card" style="justify-content:center; align-items:center;">
+          <div class="cflow-error-wrap">
+            <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
+            <h2 style="font-size:22px; font-weight:800; color:#ef4444; margin-bottom:8px;">Notice</h2>
+            <p style="color:#64748b; font-size:14px; line-height:1.6; max-width:280px;">${state.error}</p>
+          </div>
         </div>
       </div>
     `;
   }
 
   const s = state.customerSession;
+  const logoInner = s.logoUrl
+    ? `<img src="${s.logoUrl}" alt="${s.businessName}">`
+    : `<div class="cflow-logo-initials">${(s.businessName || 'BZ').slice(0, 2).toUpperCase()}</div>`;
+  const bannerUrl = s.bannerUrl || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80';
 
   let bodyHtml = '';
+  let topBarHtml = '';
+  let progressHtml = '';
 
-  // Step 1: Welcome
+  // -------------------------------------------------------------
+  // STEP 1: WELCOME SCREEN
+  // -------------------------------------------------------------
   if (state.customerStep === 1) {
-    const logoHtml = s.logoUrl
-      ? `<img src="${s.logoUrl}" alt="${s.businessName}" class="customer-logo-img">`
-      : `<div class="customer-logo-img" style="background:${s.qrColor || '#4f46e5'}; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin:0 auto 14px;">${s.businessName.slice(0, 2).toUpperCase()}</div>`;
-
-    const bannerHtml = s.bannerUrl
-      ? `<img src="${s.bannerUrl}" alt="${s.businessName} cover" class="customer-banner-img">`
-      : `<img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="${s.businessName} banner" class="customer-banner-img">`;
-
     bodyHtml = `
-      <div style="text-align:center;">
-        <!-- 1. Top Logo -->
-        ${logoHtml}
+      <div class="cflow-animate">
+        <!-- 1. Cover Banner -->
+        <img src="${bannerUrl}" alt="${s.businessName} cover" class="cflow-banner">
 
-        <!-- 2. Rectangular Image Banner -->
-        ${bannerHtml}
+        <!-- 2. Floating Business Logo Card -->
+        <div class="cflow-logo-card">
+          ${logoInner}
+        </div>
 
-        <!-- 3. Rest of Content -->
-        <h1 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px; line-height:1.3;">${s.businessName}</h1>
-        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:24px;">
-          Share your experience in 3 quick questions. Our AI will help prepare your review draft.
-        </p>
+        <div style="text-align:center;">
+          <!-- 3. Purpose Badge -->
+          <div class="cflow-feedback-badge">
+            ${Icons.sparkles}
+            <span>Your feedback matters!</span>
+          </div>
 
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; color:#475569; margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:8px;">
-          ${Icons.bolt}
-          <span>Takes less than 45 seconds &bull; 100% genuine</span>
+          <!-- 4. Hero Title & Subtitle -->
+          <h1 class="cflow-hero-title">
+            Share your <span>experience</span>
+          </h1>
+          <p class="cflow-hero-sub">
+            Answer 3 quick questions about your visit at <strong>${s.businessName}</strong>. Our AI will craft an authentic Google review draft for you!
+          </p>
+
+          <!-- 5. 3 Feature Highlights -->
+          <div class="cflow-feature-row">
+            <div class="cflow-feature-item">
+              <div class="cflow-feature-icon blue">⚡</div>
+              <span class="cflow-feature-label">Quick &amp; Easy<br>&lt; 45 sec</span>
+            </div>
+            <div class="cflow-feature-item">
+              <div class="cflow-feature-icon green">🛡️</div>
+              <span class="cflow-feature-label">100% Genuine<br>Your Voice</span>
+            </div>
+            <div class="cflow-feature-item">
+              <div class="cflow-feature-icon red">💖</div>
+              <span class="cflow-feature-label">Helps Us<br>Grow</span>
+            </div>
+          </div>
+
+          <!-- 6. Main Action Button -->
+          <button class="cflow-btn-primary" onclick="customerNextStep(2)">
+            Start Review &rarr;
+          </button>
+
+          <div class="cflow-time-note">
+            <span>⏱ Takes ~30 seconds &bull; No app or login needed</span>
+          </div>
         </div>
       </div>
-
-      <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px; background:${s.qrColor || '#4f46e5'};">
-        ${Icons.sparkles}
-        Start Feedback &rarr;
-      </button>
     `;
   }
 
-  // Step 2: Name & Mobile (Optional)
+  // -------------------------------------------------------------
+  // STEP 2: CUSTOMER INFO (OPTIONAL)
+  // -------------------------------------------------------------
   else if (state.customerStep === 2) {
+    topBarHtml = `
+      <div class="cflow-topbar">
+        <button type="button" class="cflow-back-btn" onclick="customerPrevStep()" title="Go back">
+          &larr;
+        </button>
+        <div style="font-size:13px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <span>⭐</span> <span>${s.businessName}</span>
+        </div>
+        <div style="width:34px;"></div>
+      </div>
+    `;
+
+    progressHtml = `
+      <div class="cflow-step-label">Step 1 of 3 &bull; Your Details</div>
+      <div class="cflow-progress-track">
+        <div class="cflow-progress-fill" style="width: 25%;"></div>
+      </div>
+    `;
+
     bodyHtml = `
-      <div>
-        <div style="font-size:12px; font-weight:700; color:#4f46e5; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Step 1 of 2</div>
-        <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:6px;">Your Information</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:24px; line-height:1.5;">Optional: tell us your name so ${s.businessName} knows who visited.</p>
+      <div class="cflow-animate">
+        <h2 class="cflow-step-heading">Tell us about yourself</h2>
+        <p class="cflow-step-sub">Optional: Let <strong>${s.businessName}</strong> know who visited, or continue anonymously.</p>
 
         <form onsubmit="handleCustomerInfoSubmit(event)">
           <div style="margin-bottom:18px;">
-            <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Your Name (Optional)</label>
-            <div style="position:relative;">
-              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+            <label class="cflow-field-label">Your Name (Optional)</label>
+            <div class="cflow-input-wrap">
+              <span class="cflow-input-icon">
                 ${Icons.user}
               </span>
-              <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${state.customerInfo.name}" style="padding-left:42px; font-size:14px;">
+              <input type="text" id="custNameInput" class="cflow-input" placeholder="e.g. Rahul Sharma" value="${state.customerInfo.name || ''}">
             </div>
           </div>
 
           <div style="margin-bottom:24px;">
-            <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Mobile Number (Optional)</label>
-            <div style="position:relative;">
-              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
+            <label class="cflow-field-label">Mobile Number (Optional)</label>
+            <div class="cflow-input-wrap">
+              <span class="cflow-input-icon">
                 ${Icons.phone}
               </span>
-              <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${state.customerInfo.mobile}" style="padding-left:42px; font-size:14px;">
+              <input type="tel" id="custMobileInput" class="cflow-input" placeholder="+91 98765 43210" value="${state.customerInfo.mobile || ''}">
             </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px; background:${s.qrColor || '#4f46e5'};">
-            Continue to Questions &rarr;
+          <button type="submit" class="cflow-btn-primary">
+            Continue to Rating &rarr;
           </button>
         </form>
-      </div>
 
-      <div style="text-align:center; margin-top:16px;">
-        <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="skipCustomerInfo()" style="color:#64748b; border:none; background:transparent; font-size:13px; cursor:pointer;">
-          Skip & Continue Anonymously
+        <button type="button" class="cflow-skip-link" onclick="skipCustomerInfo()">
+          Skip &amp; Continue Anonymously
         </button>
       </div>
     `;
   }
 
-  // Step 3: Random 3 Questions (One by One)
+  // -------------------------------------------------------------
+  // STEP 3: QUESTIONS & EMOJI FACE RATINGS
+  // -------------------------------------------------------------
   else if (state.customerStep === 3) {
-    const questions = s.questions;
-    if (!questions || questions.length === 0) {
+    const questions = s.questions || [];
+    const totalQ = questions.length;
+
+    topBarHtml = `
+      <div class="cflow-topbar">
+        <button type="button" class="cflow-back-btn" onclick="customerPrevStep()" title="Go back">
+          &larr;
+        </button>
+        <div style="font-size:13px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <span>⭐</span> <span>${s.businessName}</span>
+        </div>
+        <div style="width:34px;"></div>
+      </div>
+    `;
+
+    if (totalQ === 0) {
       bodyHtml = `
-        <div style="text-align:center; padding:40px 10px;">
-          <p style="color:#64748b; font-size:14px;">No questions configured by the business yet.</p>
+        <div class="cflow-animate" style="text-align:center; padding:50px 10px;">
+          <p style="color:#64748b; font-size:14px; margin-bottom:20px;">No questions configured yet by the business.</p>
+          <button class="cflow-btn-primary" onclick="generateCustomerReview()">
+            Generate Review Draft &rarr;
+          </button>
         </div>
       `;
     } else {
       const currentQ = questions[state.currentQuestionIdx];
-      const totalQ = questions.length;
+      const progressPercent = Math.round(((state.currentQuestionIdx + 1) / totalQ) * 75 + 15);
+
+      progressHtml = `
+        <div class="cflow-step-label">Question ${state.currentQuestionIdx + 1} of ${totalQ} &bull; Rating</div>
+        <div class="cflow-progress-track">
+          <div class="cflow-progress-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+      `;
+
+      const safeCatName = (currentQ.category_name || 'Experience').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeQText = (currentQ.question_text || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
       bodyHtml = `
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <span class="badge-pro badge-indigo" style="font-weight:700;">Question ${state.currentQuestionIdx + 1} of ${totalQ}</span>
-            <span style="font-size:13px; font-weight:700; color:#475569;">${currentQ.category_name}</span>
-          </div>
+        <div class="cflow-animate" key="q_${state.currentQuestionIdx}">
+          <div style="text-align:center;">
+            <div class="cflow-category-badge">
+              ${Icons.sparkles}
+              <span>${currentQ.category_name || 'General Feedback'}</span>
+            </div>
 
-          <div style="height:6px; background:#e2e8f0; border-radius:99px; margin-bottom:32px; overflow:hidden;">
-            <div style="height:100%; background:#4f46e5; border-radius:99px; width:${((state.currentQuestionIdx + 1) / totalQ) * 100}%; transition:width 0.3s ease;"></div>
-          </div>
-
-          <div style="text-align:center; padding:10px 0;">
-            <h2 style="font-size:22px; font-weight:800; color:#0f172a; line-height:1.4; margin-bottom:28px;">
+            <h2 class="cflow-question-text">
               ${currentQ.question_text}
             </h2>
 
-            <div class="star-interactive-row" id="starInteractiveRow" onmouseleave="resetStarsHover()">
-              ${[1, 2, 3, 4, 5].map(star => `
-                <button type="button" 
-                  class="star-btn-lg ${state.selectedRatingForQ && state.selectedRatingForQ >= star ? 'star-filled' : ''}" 
-                  id="starBtn_${star}"
-                  data-star="${star}"
-                  title="${star} Star${star > 1 ? 's' : ''}" 
-                  onmouseenter="highlightStars(${star})"
-                  onclick="rateStar(${currentQ.id}, '${currentQ.category_name.replace(/'/g, "\\'")}', '${currentQ.question_text.replace(/'/g, "\\'")}', ${star})">
-                  ★
-                </button>
-              `).join('')}
+            <div class="cflow-tap-hint">
+              Tap an emoji to rate your experience:
             </div>
 
-            <div id="starFeedbackText" style="font-size:15px; font-weight:700; color:#d97706; min-height:24px;">
-              Tap a star (1 to 5) to rate
+            <div class="cflow-emoji-row">
+              <button type="button"
+                class="cflow-emoji-btn emoji-1 ${state.selectedRatingForQ === 1 ? 'selected' : ''}"
+                title="1 Star - Disappointing"
+                onclick="rateStar(${currentQ.id}, '${safeCatName}', '${safeQText}', 1)">
+                <div class="cflow-emoji-face">😡</div>
+                <span class="cflow-emoji-label">Terrible</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-2 ${state.selectedRatingForQ === 2 ? 'selected' : ''}"
+                title="2 Stars - Could be better"
+                onclick="rateStar(${currentQ.id}, '${safeCatName}', '${safeQText}', 2)">
+                <div class="cflow-emoji-face">🙁</div>
+                <span class="cflow-emoji-label">Bad</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-3 ${state.selectedRatingForQ === 3 ? 'selected' : ''}"
+                title="3 Stars - Average"
+                onclick="rateStar(${currentQ.id}, '${safeCatName}', '${safeQText}', 3)">
+                <div class="cflow-emoji-face">😐</div>
+                <span class="cflow-emoji-label">Okay</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-4 ${state.selectedRatingForQ === 4 ? 'selected' : ''}"
+                title="4 Stars - Very Good"
+                onclick="rateStar(${currentQ.id}, '${safeCatName}', '${safeQText}', 4)">
+                <div class="cflow-emoji-face">😊</div>
+                <span class="cflow-emoji-label">Good</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-5 ${state.selectedRatingForQ === 5 ? 'selected' : ''}"
+                title="5 Stars - Outstanding"
+                onclick="rateStar(${currentQ.id}, '${safeCatName}', '${safeQText}', 5)">
+                <div class="cflow-emoji-face">🤩</div>
+                <span class="cflow-emoji-label">Amazing</span>
+              </button>
+            </div>
+
+            <div id="starFeedbackText" style="font-size:14px; font-weight:700; color:#6d5af6; min-height:24px; margin-top:14px;">
+              ${state.selectedRatingForQ ? getRatingText(state.selectedRatingForQ) : ''}
             </div>
           </div>
-        </div>
 
-        <div style="text-align:center; font-size:12px; color:#94a3b8; margin-top:20px;">
-          Automatically moves to next question after rating
+          <div class="cflow-auto-note">
+            ⚡ Automatically advances to next question after rating
+          </div>
         </div>
       `;
     }
   }
 
-  // Step 4: Generating or Generated Review Screen
+  // -------------------------------------------------------------
+  // STEP 4: AI REVIEW DRAFT SCREEN
+  // -------------------------------------------------------------
   else if (state.customerStep === 4) {
+    topBarHtml = `
+      <div class="cflow-topbar">
+        <button type="button" class="cflow-back-btn" onclick="customerPrevStep()" title="Go back">
+          &larr;
+        </button>
+        <div style="font-size:13px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <span>⭐</span> <span>${s.businessName}</span>
+        </div>
+        <div style="width:34px;"></div>
+      </div>
+    `;
+
+    progressHtml = `
+      <div class="cflow-step-label">Step 3 of 3 &bull; AI Review Draft</div>
+      <div class="cflow-progress-track">
+        <div class="cflow-progress-fill" style="width: 100%;"></div>
+      </div>
+    `;
+
     if (state.loading) {
       bodyHtml = `
-        <div style="text-align:center; padding:50px 10px;">
-          <div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #4f46e5, #06b6d4); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px; margin:0 auto 20px; box-shadow:0 10px 25px rgba(79, 70, 229, 0.3);">
+        <div class="cflow-ai-loading cflow-animate">
+          <div class="cflow-ai-orb">
             ${Icons.sparkles}
           </div>
-          <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:8px;">Crafting your review...</h2>
-          <p style="font-size:14px; color:#64748b; line-height:1.5;">Our AI is synthesizing your answers into an authentic review draft.</p>
+          <h2 class="cflow-ai-title">Crafting your review...</h2>
+          <p class="cflow-ai-sub">Our AI is synthesizing your answers into an authentic, humanized review draft.</p>
+          <div class="cflow-ai-dots">
+            <div class="cflow-ai-dot"></div>
+            <div class="cflow-ai-dot"></div>
+            <div class="cflow-ai-dot"></div>
+          </div>
         </div>
       `;
     } else {
       bodyHtml = `
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h2 style="font-size:20px; font-weight:800; color:#0f172a;">Your Review Draft</h2>
-            <span class="badge-pro badge-indigo">${Icons.sparkles} AI Generated</span>
+        <div class="cflow-animate">
+          <div class="cflow-draft-header">
+            <h2 class="cflow-draft-title">Your Review Draft</h2>
+            <span class="cflow-ai-badge">${Icons.sparkles} AI Draft</span>
           </div>
 
-          <p style="font-size:13px; color:#64748b; margin-bottom:16px; line-height:1.4;">
-            Feel free to edit your text below before continuing to Google.
+          <p class="cflow-draft-sub">
+            Feel free to customize your review text below before posting to Google.
           </p>
 
-          <textarea id="editableDraft" class="review-arial-box" rows="7" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${state.generatedReview}</textarea>
+          <textarea id="editableDraft" class="cflow-draft-textarea" rows="6" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${state.generatedReview || ''}</textarea>
 
-          <div style="background:#ecfdf5; border:1px solid #bbf7d0; border-radius:10px; padding:12px 14px; font-size:12px; color:#047857; line-height:1.5; margin-bottom:24px; display:flex; align-items:flex-start; gap:8px;">
-            <span style="display:flex; margin-top:1px;">${Icons.check}</span>
-            <span>Clicking below copies this review and opens ${s.businessName}'s Google review page. Simply paste and post!</span>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+            <button type="button" class="cflow-btn-ghost" onclick="generateCustomerReview()">
+              ${Icons.sparkles} Regenerate Variation
+            </button>
           </div>
 
-          <button class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:16px; padding:14px 20px; display:flex; align-items:center; justify-content:center; gap:10px; background:#0f172a;" onclick="copyAndRedirectToGoogle()">
+          <div class="cflow-hint-box">
+            <span style="display:flex; margin-top:2px;">${Icons.check}</span>
+            <span>Clicking below copies this review and opens <strong>${s.businessName}</strong>'s Google review page. Simply paste and post!</span>
+          </div>
+
+          <button type="button" class="cflow-btn-google" onclick="copyAndRedirectToGoogle()">
             ${Icons.google}
-            Copy & Continue to Google &rarr;
+            Copy &amp; Post on Google &rarr;
           </button>
         </div>
       `;
     }
   }
 
-  // Step 5: Completed
+  // -------------------------------------------------------------
+  // STEP 5: CELEBRATION & THANK YOU SCREEN
+  // -------------------------------------------------------------
   else if (state.customerStep === 5) {
+    const googleUrl = state.googleReviewUrl || s.googleReviewUrl || '';
+
     bodyHtml = `
-      <div style="text-align:center; padding:40px 10px;">
-        <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:32px; margin:0 auto 20px; border:2px solid #bbf7d0;">
-          ${Icons.check}
+      <div class="cflow-thanks-wrap cflow-animate">
+        <!-- Celebration Ring -->
+        <div class="cflow-confetti-ring">
+          🎉
         </div>
-        <h2 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px;">Thank You!</h2>
-        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:28px;">
-          Your review draft was copied to your clipboard. Simply paste and submit it on the Google review window.
+
+        <!-- 5 Animated Pop-in Golden Stars -->
+        <div class="cflow-thanks-stars">
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+        </div>
+
+        <h2 class="cflow-thanks-title">Thank You so much!</h2>
+        <p class="cflow-thanks-sub">
+          Your review means the world to <strong>${s.businessName}</strong>. Thank you for supporting our team!
         </p>
 
-        <button class="btn-pro btn-pro-secondary btn-pro-lg" onclick="customerNextStep(1)" style="width:100%;">
+        <!-- Copied to clipboard card -->
+        <div class="cflow-thanks-card">
+          <div class="cflow-thanks-card-icon">📋</div>
+          <div class="cflow-thanks-card-text">
+            <strong>Draft Copied to Clipboard!</strong>
+            <span>Simply paste and submit on the Google review window.</span>
+          </div>
+        </div>
+
+        ${googleUrl ? `
+          <button type="button" class="cflow-btn-direct-google" onclick="window.open('${googleUrl}', '_blank', 'noopener,noreferrer')">
+            ${Icons.google}
+            Open Google Review Page &rarr;
+          </button>
+        ` : ''}
+
+        <button type="button" class="cflow-btn-secondary" onclick="customerNextStep(1)">
           Start New Review
         </button>
       </div>
     `;
   }
 
-  const topHeader = state.customerStep > 1 ? `
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:18px;">⭐</span>
-        <span style="font-weight:700; font-size:15px; color:#0f172a;">${s.businessName}</span>
-      </div>
-      <span style="font-size:12px; font-weight:600; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:4px 10px; border-radius:99px;">Verified Review</span>
-    </div>
-  ` : '';
-
   return `
-    <div class="customer-clean-page" style="background: ${s.bgColor || '#edf4fc'};">
-      <div class="customer-clean-card">
-        ${topHeader}
-        ${bodyHtml}
+    <div class="cflow-page">
+      <div class="cflow-card">
+        <!-- Decorative corner dashes -->
+        <div class="cflow-deco-tl">
+          <div class="cflow-dash" style="background:#6d5af6;"></div>
+          <div class="cflow-dash" style="background:#06b6d4;"></div>
+          <div class="cflow-dash" style="background:#f59e0b;"></div>
+        </div>
+        <div class="cflow-deco-tr">
+          <div class="cflow-dash" style="background:#10b981;"></div>
+          <div class="cflow-dash" style="background:#ec4899;"></div>
+        </div>
+        <div class="cflow-deco-br"></div>
+
+        ${topBarHtml}
+        ${progressHtml}
+
+        <div class="cflow-body">
+          ${bodyHtml}
+        </div>
       </div>
     </div>
   `;
@@ -2324,6 +2542,29 @@ function renderCustomerFlow() {
 function customerNextStep(step) {
   state.customerStep = step;
   render();
+}
+
+function customerPrevStep() {
+  if (state.isRatingTransitioning) return;
+  if (state.customerStep === 2) {
+    state.customerStep = 1;
+    render();
+  } else if (state.customerStep === 3) {
+    if (state.currentQuestionIdx > 0) {
+      state.currentQuestionIdx -= 1;
+      state.customerAnswers.pop();
+      state.selectedRatingForQ = null;
+      render();
+    } else {
+      state.customerStep = 2;
+      render();
+    }
+  } else if (state.customerStep === 4) {
+    state.customerStep = 3;
+    state.currentQuestionIdx = Math.max(0, (state.customerSession?.questions?.length || 1) - 1);
+    state.selectedRatingForQ = null;
+    render();
+  }
 }
 
 function skipCustomerInfo() {
@@ -2337,8 +2578,8 @@ function skipCustomerInfo() {
 
 function handleCustomerInfoSubmit(e) {
   e.preventDefault();
-  state.customerInfo.name = document.getElementById('custNameInput').value.trim();
-  state.customerInfo.mobile = document.getElementById('custMobileInput').value.trim();
+  state.customerInfo.name = document.getElementById('custNameInput')?.value?.trim() || '';
+  state.customerInfo.mobile = document.getElementById('custMobileInput')?.value?.trim() || '';
 
   // Instantly record to customer directory if mobile is provided
   if (state.customerInfo.mobile && state.customerSession) {
@@ -2360,40 +2601,17 @@ function handleCustomerInfoSubmit(e) {
 }
 
 function highlightStars(rating) {
-  if (state.isRatingTransitioning && state.selectedRatingForQ) {
-    rating = state.selectedRatingForQ;
-  }
-  for (let i = 1; i <= 5; i++) {
-    const el = document.getElementById(`starBtn_${i}`);
-    if (el) {
-      if (i <= rating) {
-        el.classList.add('star-filled');
-      } else {
-        el.classList.remove('star-filled');
-      }
-    }
-  }
+  // Kept for backward compatibility
   const label = document.getElementById('starFeedbackText');
   if (label) {
-    const texts = ['', 'Disappointing (1/5)', 'Needs Improvement (2/5)', 'Average (3/5)', 'Very Good! (4/5)', 'Outstanding! (5/5)'];
-    label.textContent = texts[rating] || `${rating} Stars Selected`;
-    label.style.color = '#d97706';
+    label.textContent = getRatingText(rating);
   }
 }
 
 function resetStarsHover() {
-  if (state.isRatingTransitioning && state.selectedRatingForQ) {
-    highlightStars(state.selectedRatingForQ);
-    return;
-  }
-  for (let i = 1; i <= 5; i++) {
-    const el = document.getElementById(`starBtn_${i}`);
-    if (el) el.classList.remove('star-filled');
-  }
   const label = document.getElementById('starFeedbackText');
-  if (label) {
-    label.textContent = 'Tap a star (1 to 5) to rate';
-    label.style.color = '#64748b';
+  if (label && !state.selectedRatingForQ) {
+    label.textContent = '';
   }
 }
 
@@ -2402,31 +2620,19 @@ function rateStar(qId, catName, qText, rating) {
   state.isRatingTransitioning = true;
   state.selectedRatingForQ = rating;
 
-  // 1. Immediately light up all stars up to the clicked rating
-  highlightStars(rating);
-
-  // 2. Trigger pop animation on clicked star
-  const clickedBtn = document.getElementById(`starBtn_${rating}`);
-  if (clickedBtn) {
-    clickedBtn.classList.add('star-pop');
-  }
-
-  // 3. Set clear confirmation label
+  // 1. Update text label
   const label = document.getElementById('starFeedbackText');
   if (label) {
-    const texts = [
-      '',
-      '★☆☆☆☆ Disappointing (1/5)',
-      '★★☆☆☆ Needs Improvement (2/5)',
-      '★★★☆☆ Average Experience (3/5)',
-      '★★★★☆ Very Good! (4/5)',
-      '★★★★★ Outstanding! (5/5)'
-    ];
-    label.textContent = texts[rating] || `${rating} Stars Selected`;
-    label.style.color = '#d97706';
+    label.textContent = getRatingText(rating);
   }
 
-  // 4. Record answer
+  // 2. Add visual selection class to clicked emoji
+  const btns = document.querySelectorAll('.cflow-emoji-btn');
+  btns.forEach(btn => btn.classList.remove('selected'));
+  const activeBtn = document.querySelector(`.cflow-emoji-btn.emoji-${rating}`);
+  if (activeBtn) activeBtn.classList.add('selected');
+
+  // 3. Record answer
   state.customerAnswers.push({
     category_id: qId,
     category_name: catName,
@@ -2434,18 +2640,18 @@ function rateStar(qId, catName, qText, rating) {
     rating: rating
   });
 
-  // 5. Short delightful pause (~450ms) so customer clearly sees stars filled gold
+  // 4. Smooth 420ms delay before advancing
   setTimeout(() => {
     state.isRatingTransitioning = false;
     state.selectedRatingForQ = null;
-    const totalQ = state.customerSession.questions.length;
+    const totalQ = state.customerSession?.questions?.length || 0;
     if (state.currentQuestionIdx < totalQ - 1) {
       state.currentQuestionIdx += 1;
       render();
     } else {
       generateCustomerReview();
     }
-  }, 450);
+  }, 420);
 }
 
 async function generateCustomerReview() {
@@ -2465,11 +2671,11 @@ async function generateCustomerReview() {
       })
     });
     const data = await res.json();
-    state.generatedReview = data.reviewDraft;
+    state.generatedReview = data.reviewDraft || `I had a wonderful experience at ${state.customerSession.businessName}. Highly recommended!`;
     state.feedbackId = data.feedbackId;
     state.googleReviewUrl = data.googleReviewUrl;
   } catch (err) {
-    state.generatedReview = `I had a great experience at ${state.customerSession.businessName}. The service was excellent!`;
+    state.generatedReview = `I had a wonderful experience at ${state.customerSession?.businessName || 'this place'}. Excellent service and quality!`;
   } finally {
     state.loading = false;
     render();
@@ -2477,7 +2683,7 @@ async function generateCustomerReview() {
 }
 
 async function copyAndRedirectToGoogle() {
-  const text = state.generatedReview || document.getElementById('editableDraft')?.value;
+  const text = state.generatedReview || document.getElementById('editableDraft')?.value || '';
   try {
     await navigator.clipboard.writeText(text);
   } catch (e) {
@@ -2490,19 +2696,20 @@ async function copyAndRedirectToGoogle() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ feedbackId: state.feedbackId })
-    });
+    }).catch(err => console.warn('Redirect record error', err));
   }
 
   // Open Google link
-  const url = state.googleReviewUrl || state.customerSession.googleReviewUrl;
+  const url = state.googleReviewUrl || state.customerSession?.googleReviewUrl;
   if (url) {
     window.open(url, '_blank', 'noopener,noreferrer');
   } else {
-    alert('Review text copied! Note: Google Review URL is not configured yet by the business.');
+    alert('Review text copied to clipboard! Note: Google Review URL is not configured yet by the business.');
   }
 
   state.customerStep = 5;
   render();
+  setTimeout(triggerConfetti, 100);
 }
 
 // -------------------------------------------------------------
@@ -2678,13 +2885,16 @@ window.deleteCategory = deleteCategory;
 window.handleAddQuestion = handleAddQuestion;
 window.deleteQuestion = deleteQuestion;
 window.customerNextStep = customerNextStep;
+window.customerPrevStep = customerPrevStep;
 window.skipCustomerInfo = skipCustomerInfo;
 window.handleCustomerInfoSubmit = handleCustomerInfoSubmit;
 window.changeAnalyticsPeriod = changeAnalyticsPeriod;
 window.highlightStars = highlightStars;
 window.resetStarsHover = resetStarsHover;
 window.rateStar = rateStar;
+window.generateCustomerReview = generateCustomerReview;
 window.copyAndRedirectToGoogle = copyAndRedirectToGoogle;
+window.triggerConfetti = triggerConfetti;
 window.deleteCustomer = deleteCustomer;
 
 // Initial Boot

@@ -209,27 +209,47 @@ async function callGpt4oMini(businessName, answers, customerName, customerCommen
   return new Promise((resolve, reject) => {
     const targetKeyword = pickIntelligentSeoKeyword(businessName, answers, seoKeywords);
 
-    // Build compact feedback summary (sentiment only, no star numbers)
-    const sentimentMap = r => r >= 5 ? 'excellent' : r >= 4 ? 'good' : r === 3 ? 'average' : r === 2 ? 'below average' : 'poor';
-    const ratingsSummary = answers.map(a => `${a.category_name}: ${sentimentMap(Number(a.rating) || 3)}`).join(', ');
+    // Build richer feedback summary — include question context so AI understands what each aspect means
+    const sentimentMap = r => r >= 5 ? 'excellent' : r >= 4 ? 'good' : r === 3 ? 'okay' : r === 2 ? 'disappointing' : 'bad';
+    const ratingsSummary = answers.map(a => {
+      const aspect = a.question_text ? `${a.category_name} (${a.question_text})` : a.category_name;
+      return `- ${aspect}: ${sentimentMap(Number(a.rating) || 3)}`;
+    }).join('\n');
 
-    // SEO keyword sentence — only if applicable
+    // SEO keyword — weave in naturally
     const kwLine = targetKeyword
-      ? `If it feels natural, weave this phrase into ONE sentence only: "${targetKeyword}". Never force it.`
+      ? `If it fits naturally, use this phrase once: "${targetKeyword}". Do NOT force it.`
       : '';
 
-    // Customer comment line
+    // Customer's own comment — highest priority signal
     const commentLine = (customerComments && customerComments.trim() && customerComments.trim().toLowerCase() !== 'none provided')
-      ? `Customer's own words (highest priority, use if relevant): "${customerComments.trim()}"`
+      ? `What the customer said in their own words: "${customerComments.trim()}" — incorporate this naturally.`
       : '';
 
-    const systemPrompt = `You are an ordinary Indian customer who just visited a local business. Write your own Google review in plain, conversational Indian-English — the way a real person types, not an AI or marketer. Each review you write must have a different opening, different sentence length, different vocabulary, different tone. Never start with "Had a" or "I had a". Never mention stars, ratings, numbers, or that you answered questions. Only write what the feedback supports — never invent food names, procedures, or services. Keep it 2–4 sentences, 30–70 words. Return ONLY the review text.`;
+    // Random opening seed — forces different starts every time
+    const openingSeeds = [
+      'Start with what you noticed first when you walked in or started using the service.',
+      'Start with how you felt overall after the experience.',
+      'Start with a specific thing that stood out to you — good or bad.',
+      'Start with why you went there and whether it was worth it.',
+      'Start with a recommendation or casual observation about the place.',
+      'Start with something small but memorable about the experience.',
+    ];
+    const openingSeed = openingSeeds[Math.floor(Math.random() * openingSeeds.length)];
 
-    const userPrompt = `Business: ${businessName}
-Feedback: ${ratingsSummary}
+    const systemPrompt = `You are a real Indian customer writing your own Google review after visiting a local business. Write in first person ("I", "we", "my"). If you give advice to others, use second person ("you should", "worth visiting"). Your review must feel personal — like you are telling a friend what actually happened, not a generic summary. Every review must have a completely different opening, different tone, and different length. Never start with "Had a" or "I had a". Never mention stars, numbers, ratings, or surveys. Never invent specific food names, procedures, or services unless the customer mentioned them. Keep it honest — if something was okay or bad, say so naturally. 2–4 sentences, 30–80 words. Return ONLY the review.`;
+
+    const userPrompt = `Business visited: ${businessName}
+
+Customer experience:
+${ratingsSummary}
+
 ${commentLine}
 ${kwLine}
+
+Instruction: ${openingSeed}
 Write the review now.`;
+
 
     const payload = JSON.stringify({
       model: 'gpt-4o-mini',

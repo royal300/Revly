@@ -1,11 +1,12 @@
 var e=Object.create,t=Object.defineProperty,n=Object.getOwnPropertyDescriptor,r=Object.getOwnPropertyNames,i=Object.getPrototypeOf,a=Object.prototype.hasOwnProperty,o=(e,t)=>()=>(t||(e((t={exports:{}}).exports,t),e=null),t.exports),s=(e,i,o,s)=>{if(i&&typeof i==`object`||typeof i==`function`)for(var c=r(i),l=0,u=c.length,d;l<u;l++)d=c[l],!a.call(e,d)&&d!==o&&t(e,d,{get:(e=>i[e]).bind(null,d),enumerable:!(s=n(i,d))||s.enumerable});return e},c=(n,r,o)=>(o=n==null?{}:e(i(n)),s(r||!n||!n.__esModule||!a.call(n,`default`)?t(o,`default`,{value:n,enumerable:!0}):o,n));(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),t.credentials=e.crossOrigin===`use-credentials`?`include`:e.crossOrigin===`anonymous`?`omit`:`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var l=o(((e,t)=>{t.exports=function(){return typeof Promise==`function`&&Promise.prototype&&Promise.prototype.then}})),u=o((e=>{var t,n=[0,26,44,70,100,134,172,196,242,292,346,404,466,532,581,655,733,815,901,991,1085,1156,1258,1364,1474,1588,1706,1828,1921,2051,2185,2323,2465,2611,2761,2876,3034,3196,3362,3532,3706];e.getSymbolSize=function(e){if(!e)throw Error(`"version" cannot be null or undefined`);if(e<1||e>40)throw Error(`"version" should be in range from 1 to 40`);return e*4+17},e.getSymbolTotalCodewords=function(e){return n[e]},e.getBCHDigit=function(e){let t=0;for(;e!==0;)t++,e>>>=1;return t},e.setToSJISFunction=function(e){if(typeof e!=`function`)throw Error(`"toSJISFunc" is not a valid function.`);t=e},e.isKanjiModeEnabled=function(){return t!==void 0},e.toSJIS=function(e){return t(e)}})),d=o((e=>{e.L={bit:1},e.M={bit:0},e.Q={bit:3},e.H={bit:2};function t(t){if(typeof t!=`string`)throw Error(`Param is not a string`);switch(t.toLowerCase()){case`l`:case`low`:return e.L;case`m`:case`medium`:return e.M;case`q`:case`quartile`:return e.Q;case`h`:case`high`:return e.H;default:throw Error(`Unknown EC Level: `+t)}}e.isValid=function(e){return e&&e.bit!==void 0&&e.bit>=0&&e.bit<4},e.from=function(n,r){if(e.isValid(n))return n;try{return t(n)}catch{return r}}})),f=o(((e,t)=>{function n(){this.buffer=[],this.length=0}n.prototype={get:function(e){let t=Math.floor(e/8);return(this.buffer[t]>>>7-e%8&1)==1},put:function(e,t){for(let n=0;n<t;n++)this.putBit((e>>>t-n-1&1)==1)},getLengthInBits:function(){return this.length},putBit:function(e){let t=Math.floor(this.length/8);this.buffer.length<=t&&this.buffer.push(0),e&&(this.buffer[t]|=128>>>this.length%8),this.length++}},t.exports=n})),p=o(((e,t)=>{function n(e){if(!e||e<1)throw Error(`BitMatrix size must be defined and greater than 0`);this.size=e,this.data=new Uint8Array(e*e),this.reservedBit=new Uint8Array(e*e)}n.prototype.set=function(e,t,n,r){let i=e*this.size+t;this.data[i]=n,r&&(this.reservedBit[i]=!0)},n.prototype.get=function(e,t){return this.data[e*this.size+t]},n.prototype.xor=function(e,t,n){this.data[e*this.size+t]^=n},n.prototype.isReserved=function(e,t){return this.reservedBit[e*this.size+t]},t.exports=n})),m=o((e=>{var t=u().getSymbolSize;e.getRowColCoords=function(e){if(e===1)return[];let n=Math.floor(e/7)+2,r=t(e),i=r===145?26:Math.ceil((r-13)/(2*n-2))*2,a=[r-7];for(let e=1;e<n-1;e++)a[e]=a[e-1]-i;return a.push(6),a.reverse()},e.getPositions=function(t){let n=[],r=e.getRowColCoords(t),i=r.length;for(let e=0;e<i;e++)for(let t=0;t<i;t++)e===0&&t===0||e===0&&t===i-1||e===i-1&&t===0||n.push([r[e],r[t]]);return n}})),h=o((e=>{var t=u().getSymbolSize,n=7;e.getPositions=function(e){let r=t(e);return[[0,0],[r-n,0],[0,r-n]]}})),g=o((e=>{e.Patterns={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7};var t={N1:3,N2:3,N3:40,N4:10};e.isValid=function(e){return e!=null&&e!==``&&!isNaN(e)&&e>=0&&e<=7},e.from=function(t){return e.isValid(t)?parseInt(t,10):void 0},e.getPenaltyN1=function(e){let n=e.size,r=0,i=0,a=0,o=null,s=null;for(let c=0;c<n;c++){i=a=0,o=s=null;for(let l=0;l<n;l++){let n=e.get(c,l);n===o?i++:(i>=5&&(r+=t.N1+(i-5)),o=n,i=1),n=e.get(l,c),n===s?a++:(a>=5&&(r+=t.N1+(a-5)),s=n,a=1)}i>=5&&(r+=t.N1+(i-5)),a>=5&&(r+=t.N1+(a-5))}return r},e.getPenaltyN2=function(e){let n=e.size,r=0;for(let t=0;t<n-1;t++)for(let i=0;i<n-1;i++){let n=e.get(t,i)+e.get(t,i+1)+e.get(t+1,i)+e.get(t+1,i+1);(n===4||n===0)&&r++}return r*t.N2},e.getPenaltyN3=function(e){let n=e.size,r=0,i=0,a=0;for(let t=0;t<n;t++){i=a=0;for(let o=0;o<n;o++)i=i<<1&2047|e.get(t,o),o>=10&&(i===1488||i===93)&&r++,a=a<<1&2047|e.get(o,t),o>=10&&(a===1488||a===93)&&r++}return r*t.N3},e.getPenaltyN4=function(e){let n=0,r=e.data.length;for(let t=0;t<r;t++)n+=e.data[t];return Math.abs(Math.ceil(n*100/r/5)-10)*t.N4};function n(t,n,r){switch(t){case e.Patterns.PATTERN000:return(n+r)%2==0;case e.Patterns.PATTERN001:return n%2==0;case e.Patterns.PATTERN010:return r%3==0;case e.Patterns.PATTERN011:return(n+r)%3==0;case e.Patterns.PATTERN100:return(Math.floor(n/2)+Math.floor(r/3))%2==0;case e.Patterns.PATTERN101:return n*r%2+n*r%3==0;case e.Patterns.PATTERN110:return(n*r%2+n*r%3)%2==0;case e.Patterns.PATTERN111:return(n*r%3+(n+r)%2)%2==0;default:throw Error(`bad maskPattern:`+t)}}e.applyMask=function(e,t){let r=t.size;for(let i=0;i<r;i++)for(let a=0;a<r;a++)t.isReserved(a,i)||t.xor(a,i,n(e,a,i))},e.getBestMask=function(t,n){let r=Object.keys(e.Patterns).length,i=0,a=1/0;for(let o=0;o<r;o++){n(o),e.applyMask(o,t);let r=e.getPenaltyN1(t)+e.getPenaltyN2(t)+e.getPenaltyN3(t)+e.getPenaltyN4(t);e.applyMask(o,t),r<a&&(a=r,i=o)}return i}})),_=o((e=>{var t=d(),n=[1,1,1,1,1,1,1,1,1,1,2,2,1,2,2,4,1,2,4,4,2,4,4,4,2,4,6,5,2,4,6,6,2,5,8,8,4,5,8,8,4,5,8,11,4,8,10,11,4,9,12,16,4,9,16,16,6,10,12,18,6,10,17,16,6,11,16,19,6,13,18,21,7,14,21,25,8,16,20,25,8,17,23,25,9,17,23,34,9,18,25,30,10,20,27,32,12,21,29,35,12,23,34,37,12,25,34,40,13,26,35,42,14,28,38,45,15,29,40,48,16,31,43,51,17,33,45,54,18,35,48,57,19,37,51,60,19,38,53,63,20,40,56,66,21,43,59,70,22,45,62,74,24,47,65,77,25,49,68,81],r=[7,10,13,17,10,16,22,28,15,26,36,44,20,36,52,64,26,48,72,88,36,64,96,112,40,72,108,130,48,88,132,156,60,110,160,192,72,130,192,224,80,150,224,264,96,176,260,308,104,198,288,352,120,216,320,384,132,240,360,432,144,280,408,480,168,308,448,532,180,338,504,588,196,364,546,650,224,416,600,700,224,442,644,750,252,476,690,816,270,504,750,900,300,560,810,960,312,588,870,1050,336,644,952,1110,360,700,1020,1200,390,728,1050,1260,420,784,1140,1350,450,812,1200,1440,480,868,1290,1530,510,924,1350,1620,540,980,1440,1710,570,1036,1530,1800,570,1064,1590,1890,600,1120,1680,1980,630,1204,1770,2100,660,1260,1860,2220,720,1316,1950,2310,750,1372,2040,2430];e.getBlocksCount=function(e,r){switch(r){case t.L:return n[(e-1)*4+0];case t.M:return n[(e-1)*4+1];case t.Q:return n[(e-1)*4+2];case t.H:return n[(e-1)*4+3];default:return}},e.getTotalCodewordsCount=function(e,n){switch(n){case t.L:return r[(e-1)*4+0];case t.M:return r[(e-1)*4+1];case t.Q:return r[(e-1)*4+2];case t.H:return r[(e-1)*4+3];default:return}}})),v=o((e=>{var t=new Uint8Array(512),n=new Uint8Array(256);(function(){let e=1;for(let r=0;r<255;r++)t[r]=e,n[e]=r,e<<=1,e&256&&(e^=285);for(let e=255;e<512;e++)t[e]=t[e-255]})(),e.log=function(e){if(e<1)throw Error(`log(`+e+`)`);return n[e]},e.exp=function(e){return t[e]},e.mul=function(e,r){return e===0||r===0?0:t[n[e]+n[r]]}})),y=o((e=>{var t=v();e.mul=function(e,n){let r=new Uint8Array(e.length+n.length-1);for(let i=0;i<e.length;i++)for(let a=0;a<n.length;a++)r[i+a]^=t.mul(e[i],n[a]);return r},e.mod=function(e,n){let r=new Uint8Array(e);for(;r.length-n.length>=0;){let e=r[0];for(let i=0;i<n.length;i++)r[i]^=t.mul(n[i],e);let i=0;for(;i<r.length&&r[i]===0;)i++;r=r.slice(i)}return r},e.generateECPolynomial=function(n){let r=new Uint8Array([1]);for(let i=0;i<n;i++)r=e.mul(r,new Uint8Array([1,t.exp(i)]));return r}})),b=o(((e,t)=>{var n=y();function r(e){this.genPoly=void 0,this.degree=e,this.degree&&this.initialize(this.degree)}r.prototype.initialize=function(e){this.degree=e,this.genPoly=n.generateECPolynomial(this.degree)},r.prototype.encode=function(e){if(!this.genPoly)throw Error(`Encoder not initialized`);let t=new Uint8Array(e.length+this.degree);t.set(e);let r=n.mod(t,this.genPoly),i=this.degree-r.length;if(i>0){let e=new Uint8Array(this.degree);return e.set(r,i),e}return r},t.exports=r})),x=o((e=>{e.isValid=function(e){return!isNaN(e)&&e>=1&&e<=40}})),S=o((e=>{var t=`[0-9]+`,n=`[A-Z $%*+\\-./:]+`,r=`(?:[u3000-u303F]|[u3040-u309F]|[u30A0-u30FF]|[uFF00-uFFEF]|[u4E00-u9FAF]|[u2605-u2606]|[u2190-u2195]|u203B|[u2010u2015u2018u2019u2025u2026u201Cu201Du2225u2260]|[u0391-u0451]|[u00A7u00A8u00B1u00B4u00D7u00F7])+`;r=r.replace(/u/g,`\\u`);var i=`(?:(?![A-Z0-9 $%*+\\-./:]|`+r+`)(?:.|[\r
-]))+`;e.KANJI=new RegExp(r,`g`),e.BYTE_KANJI=RegExp(`[^A-Z0-9 $%*+\\-./:]+`,`g`),e.BYTE=new RegExp(i,`g`),e.NUMERIC=new RegExp(t,`g`),e.ALPHANUMERIC=new RegExp(n,`g`);var a=RegExp(`^`+r+`$`),o=RegExp(`^[0-9]+$`),s=RegExp(`^[A-Z0-9 $%*+\\-./:]+$`);e.testKanji=function(e){return a.test(e)},e.testNumeric=function(e){return o.test(e)},e.testAlphanumeric=function(e){return s.test(e)}})),C=o((e=>{var t=x(),n=S();e.NUMERIC={id:`Numeric`,bit:1,ccBits:[10,12,14]},e.ALPHANUMERIC={id:`Alphanumeric`,bit:2,ccBits:[9,11,13]},e.BYTE={id:`Byte`,bit:4,ccBits:[8,16,16]},e.KANJI={id:`Kanji`,bit:8,ccBits:[8,10,12]},e.MIXED={bit:-1},e.getCharCountIndicator=function(e,n){if(!e.ccBits)throw Error(`Invalid mode: `+e);if(!t.isValid(n))throw Error(`Invalid version: `+n);return n>=1&&n<10?e.ccBits[0]:n<27?e.ccBits[1]:e.ccBits[2]},e.getBestModeForData=function(t){return n.testNumeric(t)?e.NUMERIC:n.testAlphanumeric(t)?e.ALPHANUMERIC:n.testKanji(t)?e.KANJI:e.BYTE},e.toString=function(e){if(e&&e.id)return e.id;throw Error(`Invalid mode`)},e.isValid=function(e){return e&&e.bit&&e.ccBits};function r(t){if(typeof t!=`string`)throw Error(`Param is not a string`);switch(t.toLowerCase()){case`numeric`:return e.NUMERIC;case`alphanumeric`:return e.ALPHANUMERIC;case`kanji`:return e.KANJI;case`byte`:return e.BYTE;default:throw Error(`Unknown mode: `+t)}}e.from=function(t,n){if(e.isValid(t))return t;try{return r(t)}catch{return n}}})),w=o((e=>{var t=u(),n=_(),r=d(),i=C(),a=x(),o=7973,s=t.getBCHDigit(o);function c(t,n,r){for(let i=1;i<=40;i++)if(n<=e.getCapacity(i,r,t))return i}function l(e,t){return i.getCharCountIndicator(e,t)+4}function f(e,t){let n=0;return e.forEach(function(e){let r=l(e.mode,t);n+=r+e.getBitsLength()}),n}function p(t,n){for(let r=1;r<=40;r++)if(f(t,r)<=e.getCapacity(r,n,i.MIXED))return r}e.from=function(e,t){return a.isValid(e)?parseInt(e,10):t},e.getCapacity=function(e,r,o){if(!a.isValid(e))throw Error(`Invalid QR Code version`);o===void 0&&(o=i.BYTE);let s=(t.getSymbolTotalCodewords(e)-n.getTotalCodewordsCount(e,r))*8;if(o===i.MIXED)return s;let c=s-l(o,e);switch(o){case i.NUMERIC:return Math.floor(c/10*3);case i.ALPHANUMERIC:return Math.floor(c/11*2);case i.KANJI:return Math.floor(c/13);case i.BYTE:default:return Math.floor(c/8)}},e.getBestVersionForData=function(e,t){let n,i=r.from(t,r.M);if(Array.isArray(e)){if(e.length>1)return p(e,i);if(e.length===0)return 1;n=e[0]}else n=e;return c(n.mode,n.getLength(),i)},e.getEncodedBits=function(e){if(!a.isValid(e)||e<7)throw Error(`Invalid QR Code version`);let n=e<<12;for(;t.getBCHDigit(n)-s>=0;)n^=o<<t.getBCHDigit(n)-s;return e<<12|n}})),ee=o((e=>{var t=u(),n=1335,r=21522,i=t.getBCHDigit(n);e.getEncodedBits=function(e,a){let o=e.bit<<3|a,s=o<<10;for(;t.getBCHDigit(s)-i>=0;)s^=n<<t.getBCHDigit(s)-i;return(o<<10|s)^r}})),T=o(((e,t)=>{var n=C();function r(e){this.mode=n.NUMERIC,this.data=e.toString()}r.getBitsLength=function(e){return 10*Math.floor(e/3)+(e%3?e%3*3+1:0)},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){let t,n,r;for(t=0;t+3<=this.data.length;t+=3)n=this.data.substr(t,3),r=parseInt(n,10),e.put(r,10);let i=this.data.length-t;i>0&&(n=this.data.substr(t),r=parseInt(n,10),e.put(r,i*3+1))},t.exports=r})),E=o(((e,t)=>{var n=C(),r=`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:`.split(``);function i(e){this.mode=n.ALPHANUMERIC,this.data=e}i.getBitsLength=function(e){return 11*Math.floor(e/2)+e%2*6},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t+2<=this.data.length;t+=2){let n=r.indexOf(this.data[t])*45;n+=r.indexOf(this.data[t+1]),e.put(n,11)}this.data.length%2&&e.put(r.indexOf(this.data[t]),6)},t.exports=i})),D=o(((e,t)=>{var n=C();function r(e){this.mode=n.BYTE,this.data=typeof e==`string`?new TextEncoder().encode(e):new Uint8Array(e)}r.getBitsLength=function(e){return e*8},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){for(let t=0,n=this.data.length;t<n;t++)e.put(this.data[t],8)},t.exports=r})),O=o(((e,t)=>{var n=C(),r=u();function i(e){this.mode=n.KANJI,this.data=e}i.getBitsLength=function(e){return e*13},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t<this.data.length;t++){let n=r.toSJIS(this.data[t]);if(n>=33088&&n<=40956)n-=33088;else if(n>=57408&&n<=60351)n-=49472;else throw Error(`Invalid SJIS character: `+this.data[t]+`
-Make sure your charset is UTF-8`);n=(n>>>8&255)*192+(n&255),e.put(n,13)}},t.exports=i})),k=o(((e,t)=>{var n={single_source_shortest_paths:function(e,t,r){var i={},a={};a[t]=0;var o=n.PriorityQueue.make();o.push(t,0);for(var s,c,l,u,d,f,p,m,h;!o.empty();)for(l in s=o.pop(),c=s.value,u=s.cost,d=e[c]||{},d)d.hasOwnProperty(l)&&(f=d[l],p=u+f,m=a[l],h=a[l]===void 0,(h||m>p)&&(a[l]=p,o.push(l,p),i[l]=c));if(r!==void 0&&a[r]===void 0){var g=[`Could not find a path from `,t,` to `,r,`.`].join(``);throw Error(g)}return i},extract_shortest_path_from_predecessor_list:function(e,t){for(var n=[],r=t;r;)n.push(r),e[r],r=e[r];return n.reverse(),n},find_path:function(e,t,r){var i=n.single_source_shortest_paths(e,t,r);return n.extract_shortest_path_from_predecessor_list(i,r)},PriorityQueue:{make:function(e){var t=n.PriorityQueue,r={},i;for(i in e||={},t)t.hasOwnProperty(i)&&(r[i]=t[i]);return r.queue=[],r.sorter=e.sorter||t.default_sorter,r},default_sorter:function(e,t){return e.cost-t.cost},push:function(e,t){var n={value:e,cost:t};this.queue.push(n),this.queue.sort(this.sorter)},pop:function(){return this.queue.shift()},empty:function(){return this.queue.length===0}}};t!==void 0&&(t.exports=n)})),te=o((e=>{var t=C(),n=T(),r=E(),i=D(),a=O(),o=S(),s=u(),c=k();function l(e){return unescape(encodeURIComponent(e)).length}function d(e,t,n){let r=[],i;for(;(i=e.exec(n))!==null;)r.push({data:i[0],index:i.index,mode:t,length:i[0].length});return r}function f(e){let n=d(o.NUMERIC,t.NUMERIC,e),r=d(o.ALPHANUMERIC,t.ALPHANUMERIC,e),i,a;return s.isKanjiModeEnabled()?(i=d(o.BYTE,t.BYTE,e),a=d(o.KANJI,t.KANJI,e)):(i=d(o.BYTE_KANJI,t.BYTE,e),a=[]),n.concat(r,i,a).sort(function(e,t){return e.index-t.index}).map(function(e){return{data:e.data,mode:e.mode,length:e.length}})}function p(e,o){switch(o){case t.NUMERIC:return n.getBitsLength(e);case t.ALPHANUMERIC:return r.getBitsLength(e);case t.KANJI:return a.getBitsLength(e);case t.BYTE:return i.getBitsLength(e)}}function m(e){return e.reduce(function(e,t){let n=e.length-1>=0?e[e.length-1]:null;return n&&n.mode===t.mode?(e[e.length-1].data+=t.data,e):(e.push(t),e)},[])}function h(e){let n=[];for(let r=0;r<e.length;r++){let i=e[r];switch(i.mode){case t.NUMERIC:n.push([i,{data:i.data,mode:t.ALPHANUMERIC,length:i.length},{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.ALPHANUMERIC:n.push([i,{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.KANJI:n.push([i,{data:i.data,mode:t.BYTE,length:l(i.data)}]);break;case t.BYTE:n.push([{data:i.data,mode:t.BYTE,length:l(i.data)}])}}return n}function g(e,n){let r={},i={start:{}},a=[`start`];for(let o=0;o<e.length;o++){let s=e[o],c=[];for(let e=0;e<s.length;e++){let l=s[e],u=``+o+e;c.push(u),r[u]={node:l,lastCount:0},i[u]={};for(let e=0;e<a.length;e++){let o=a[e];r[o]&&r[o].node.mode===l.mode?(i[o][u]=p(r[o].lastCount+l.length,l.mode)-p(r[o].lastCount,l.mode),r[o].lastCount+=l.length):(r[o]&&(r[o].lastCount=l.length),i[o][u]=p(l.length,l.mode)+4+t.getCharCountIndicator(l.mode,n))}}a=c}for(let e=0;e<a.length;e++)i[a[e]].end=0;return{map:i,table:r}}function _(e,o){let c,l=t.getBestModeForData(e);if(c=t.from(o,l),c!==t.BYTE&&c.bit<l.bit)throw Error(`"`+e+`" cannot be encoded with mode `+t.toString(c)+`.
- Suggested mode is: `+t.toString(l));switch(c===t.KANJI&&!s.isKanjiModeEnabled()&&(c=t.BYTE),c){case t.NUMERIC:return new n(e);case t.ALPHANUMERIC:return new r(e);case t.KANJI:return new a(e);case t.BYTE:return new i(e)}}e.fromArray=function(e){return e.reduce(function(e,t){return typeof t==`string`?e.push(_(t,null)):t.data&&e.push(_(t.data,t.mode)),e},[])},e.fromString=function(t,n){let r=g(h(f(t,s.isKanjiModeEnabled())),n),i=c.find_path(r.map,`start`,`end`),a=[];for(let e=1;e<i.length-1;e++)a.push(r.table[i[e]].node);return e.fromArray(m(a))},e.rawSplit=function(t){return e.fromArray(f(t,s.isKanjiModeEnabled()))}})),A=o((e=>{var t=u(),n=d(),r=f(),i=p(),a=m(),o=h(),s=g(),c=_(),l=b(),v=w(),y=ee(),x=C(),S=te();function T(e,t){let n=e.size,r=o.getPositions(t);for(let t=0;t<r.length;t++){let i=r[t][0],a=r[t][1];for(let t=-1;t<=7;t++)if(!(i+t<=-1||n<=i+t))for(let r=-1;r<=7;r++)a+r<=-1||n<=a+r||(t>=0&&t<=6&&(r===0||r===6)||r>=0&&r<=6&&(t===0||t===6)||t>=2&&t<=4&&r>=2&&r<=4?e.set(i+t,a+r,!0,!0):e.set(i+t,a+r,!1,!0))}}function E(e){let t=e.size;for(let n=8;n<t-8;n++){let t=n%2==0;e.set(n,6,t,!0),e.set(6,n,t,!0)}}function D(e,t){let n=a.getPositions(t);for(let t=0;t<n.length;t++){let r=n[t][0],i=n[t][1];for(let t=-2;t<=2;t++)for(let n=-2;n<=2;n++)t===-2||t===2||n===-2||n===2||t===0&&n===0?e.set(r+t,i+n,!0,!0):e.set(r+t,i+n,!1,!0)}}function O(e,t){let n=e.size,r=v.getEncodedBits(t),i,a,o;for(let t=0;t<18;t++)i=Math.floor(t/3),a=t%3+n-8-3,o=(r>>t&1)==1,e.set(i,a,o,!0),e.set(a,i,o,!0)}function k(e,t,n){let r=e.size,i=y.getEncodedBits(t,n),a,o;for(a=0;a<15;a++)o=(i>>a&1)==1,a<6?e.set(a,8,o,!0):a<8?e.set(a+1,8,o,!0):e.set(r-15+a,8,o,!0),a<8?e.set(8,r-a-1,o,!0):a<9?e.set(8,15-a-1+1,o,!0):e.set(8,15-a-1,o,!0);e.set(r-8,8,1,!0)}function A(e,t){let n=e.size,r=-1,i=n-1,a=7,o=0;for(let s=n-1;s>0;s-=2)for(s===6&&s--;;){for(let n=0;n<2;n++)if(!e.isReserved(i,s-n)){let r=!1;o<t.length&&(r=(t[o]>>>a&1)==1),e.set(i,s-n,r),a--,a===-1&&(o++,a=7)}if(i+=r,i<0||n<=i){i-=r,r=-r;break}}}function j(e,n,i){let a=new r;i.forEach(function(t){a.put(t.mode.bit,4),a.put(t.getLength(),x.getCharCountIndicator(t.mode,e)),t.write(a)});let o=(t.getSymbolTotalCodewords(e)-c.getTotalCodewordsCount(e,n))*8;for(a.getLengthInBits()+4<=o&&a.put(0,4);a.getLengthInBits()%8!=0;)a.putBit(0);let s=(o-a.getLengthInBits())/8;for(let e=0;e<s;e++)a.put(e%2?17:236,8);return M(a,e,n)}function M(e,n,r){let i=t.getSymbolTotalCodewords(n),a=i-c.getTotalCodewordsCount(n,r),o=c.getBlocksCount(n,r),s=o-i%o,u=Math.floor(i/o),d=Math.floor(a/o),f=d+1,p=u-d,m=new l(p),h=0,g=Array(o),_=Array(o),v=0,y=new Uint8Array(e.buffer);for(let e=0;e<o;e++){let t=e<s?d:f;g[e]=y.slice(h,h+t),_[e]=m.encode(g[e]),h+=t,v=Math.max(v,t)}let b=new Uint8Array(i),x=0,S,C;for(S=0;S<v;S++)for(C=0;C<o;C++)S<g[C].length&&(b[x++]=g[C][S]);for(S=0;S<p;S++)for(C=0;C<o;C++)b[x++]=_[C][S];return b}function N(e,n,r,a){let o;if(Array.isArray(e))o=S.fromArray(e);else if(typeof e==`string`){let t=n;if(!t){let n=S.rawSplit(e);t=v.getBestVersionForData(n,r)}o=S.fromString(e,t||40)}else throw Error(`Invalid data`);let c=v.getBestVersionForData(o,r);if(!c)throw Error(`The amount of data is too big to be stored in a QR Code`);if(!n)n=c;else if(n<c)throw Error(`
+]))+`;e.KANJI=new RegExp(r,`g`),e.BYTE_KANJI=RegExp(`[^A-Z0-9 $%*+\\-./:]+`,`g`),e.BYTE=new RegExp(i,`g`),e.NUMERIC=new RegExp(t,`g`),e.ALPHANUMERIC=new RegExp(n,`g`);var a=RegExp(`^`+r+`$`),o=RegExp(`^[0-9]+$`),s=RegExp(`^[A-Z0-9 $%*+\\-./:]+$`);e.testKanji=function(e){return a.test(e)},e.testNumeric=function(e){return o.test(e)},e.testAlphanumeric=function(e){return s.test(e)}})),C=o((e=>{var t=x(),n=S();e.NUMERIC={id:`Numeric`,bit:1,ccBits:[10,12,14]},e.ALPHANUMERIC={id:`Alphanumeric`,bit:2,ccBits:[9,11,13]},e.BYTE={id:`Byte`,bit:4,ccBits:[8,16,16]},e.KANJI={id:`Kanji`,bit:8,ccBits:[8,10,12]},e.MIXED={bit:-1},e.getCharCountIndicator=function(e,n){if(!e.ccBits)throw Error(`Invalid mode: `+e);if(!t.isValid(n))throw Error(`Invalid version: `+n);return n>=1&&n<10?e.ccBits[0]:n<27?e.ccBits[1]:e.ccBits[2]},e.getBestModeForData=function(t){return n.testNumeric(t)?e.NUMERIC:n.testAlphanumeric(t)?e.ALPHANUMERIC:n.testKanji(t)?e.KANJI:e.BYTE},e.toString=function(e){if(e&&e.id)return e.id;throw Error(`Invalid mode`)},e.isValid=function(e){return e&&e.bit&&e.ccBits};function r(t){if(typeof t!=`string`)throw Error(`Param is not a string`);switch(t.toLowerCase()){case`numeric`:return e.NUMERIC;case`alphanumeric`:return e.ALPHANUMERIC;case`kanji`:return e.KANJI;case`byte`:return e.BYTE;default:throw Error(`Unknown mode: `+t)}}e.from=function(t,n){if(e.isValid(t))return t;try{return r(t)}catch{return n}}})),w=o((e=>{var t=u(),n=_(),r=d(),i=C(),a=x(),o=7973,s=t.getBCHDigit(o);function c(t,n,r){for(let i=1;i<=40;i++)if(n<=e.getCapacity(i,r,t))return i}function l(e,t){return i.getCharCountIndicator(e,t)+4}function f(e,t){let n=0;return e.forEach(function(e){let r=l(e.mode,t);n+=r+e.getBitsLength()}),n}function p(t,n){for(let r=1;r<=40;r++)if(f(t,r)<=e.getCapacity(r,n,i.MIXED))return r}e.from=function(e,t){return a.isValid(e)?parseInt(e,10):t},e.getCapacity=function(e,r,o){if(!a.isValid(e))throw Error(`Invalid QR Code version`);o===void 0&&(o=i.BYTE);let s=(t.getSymbolTotalCodewords(e)-n.getTotalCodewordsCount(e,r))*8;if(o===i.MIXED)return s;let c=s-l(o,e);switch(o){case i.NUMERIC:return Math.floor(c/10*3);case i.ALPHANUMERIC:return Math.floor(c/11*2);case i.KANJI:return Math.floor(c/13);case i.BYTE:default:return Math.floor(c/8)}},e.getBestVersionForData=function(e,t){let n,i=r.from(t,r.M);if(Array.isArray(e)){if(e.length>1)return p(e,i);if(e.length===0)return 1;n=e[0]}else n=e;return c(n.mode,n.getLength(),i)},e.getEncodedBits=function(e){if(!a.isValid(e)||e<7)throw Error(`Invalid QR Code version`);let n=e<<12;for(;t.getBCHDigit(n)-s>=0;)n^=o<<t.getBCHDigit(n)-s;return e<<12|n}})),T=o((e=>{var t=u(),n=1335,r=21522,i=t.getBCHDigit(n);e.getEncodedBits=function(e,a){let o=e.bit<<3|a,s=o<<10;for(;t.getBCHDigit(s)-i>=0;)s^=n<<t.getBCHDigit(s)-i;return(o<<10|s)^r}})),E=o(((e,t)=>{var n=C();function r(e){this.mode=n.NUMERIC,this.data=e.toString()}r.getBitsLength=function(e){return 10*Math.floor(e/3)+(e%3?e%3*3+1:0)},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){let t,n,r;for(t=0;t+3<=this.data.length;t+=3)n=this.data.substr(t,3),r=parseInt(n,10),e.put(r,10);let i=this.data.length-t;i>0&&(n=this.data.substr(t),r=parseInt(n,10),e.put(r,i*3+1))},t.exports=r})),D=o(((e,t)=>{var n=C(),r=`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:`.split(``);function i(e){this.mode=n.ALPHANUMERIC,this.data=e}i.getBitsLength=function(e){return 11*Math.floor(e/2)+e%2*6},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t+2<=this.data.length;t+=2){let n=r.indexOf(this.data[t])*45;n+=r.indexOf(this.data[t+1]),e.put(n,11)}this.data.length%2&&e.put(r.indexOf(this.data[t]),6)},t.exports=i})),O=o(((e,t)=>{var n=C();function r(e){this.mode=n.BYTE,this.data=typeof e==`string`?new TextEncoder().encode(e):new Uint8Array(e)}r.getBitsLength=function(e){return e*8},r.prototype.getLength=function(){return this.data.length},r.prototype.getBitsLength=function(){return r.getBitsLength(this.data.length)},r.prototype.write=function(e){for(let t=0,n=this.data.length;t<n;t++)e.put(this.data[t],8)},t.exports=r})),k=o(((e,t)=>{var n=C(),r=u();function i(e){this.mode=n.KANJI,this.data=e}i.getBitsLength=function(e){return e*13},i.prototype.getLength=function(){return this.data.length},i.prototype.getBitsLength=function(){return i.getBitsLength(this.data.length)},i.prototype.write=function(e){let t=0;for(;t<this.data.length;t++){let n=r.toSJIS(this.data[t]);if(n>=33088&&n<=40956)n-=33088;else if(n>=57408&&n<=60351)n-=49472;else throw Error(`Invalid SJIS character: `+this.data[t]+`
+Make sure your charset is UTF-8`);n=(n>>>8&255)*192+(n&255),e.put(n,13)}},t.exports=i})),A=o(((e,t)=>{var n={single_source_shortest_paths:function(e,t,r){var i={},a={};a[t]=0;var o=n.PriorityQueue.make();o.push(t,0);for(var s,c,l,u,d,f,p,m,h;!o.empty();)for(l in s=o.pop(),c=s.value,u=s.cost,d=e[c]||{},d)d.hasOwnProperty(l)&&(f=d[l],p=u+f,m=a[l],h=a[l]===void 0,(h||m>p)&&(a[l]=p,o.push(l,p),i[l]=c));if(r!==void 0&&a[r]===void 0){var g=[`Could not find a path from `,t,` to `,r,`.`].join(``);throw Error(g)}return i},extract_shortest_path_from_predecessor_list:function(e,t){for(var n=[],r=t;r;)n.push(r),e[r],r=e[r];return n.reverse(),n},find_path:function(e,t,r){var i=n.single_source_shortest_paths(e,t,r);return n.extract_shortest_path_from_predecessor_list(i,r)},PriorityQueue:{make:function(e){var t=n.PriorityQueue,r={},i;for(i in e||={},t)t.hasOwnProperty(i)&&(r[i]=t[i]);return r.queue=[],r.sorter=e.sorter||t.default_sorter,r},default_sorter:function(e,t){return e.cost-t.cost},push:function(e,t){var n={value:e,cost:t};this.queue.push(n),this.queue.sort(this.sorter)},pop:function(){return this.queue.shift()},empty:function(){return this.queue.length===0}}};t!==void 0&&(t.exports=n)})),j=o((e=>{var t=C(),n=E(),r=D(),i=O(),a=k(),o=S(),s=u(),c=A();function l(e){return unescape(encodeURIComponent(e)).length}function d(e,t,n){let r=[],i;for(;(i=e.exec(n))!==null;)r.push({data:i[0],index:i.index,mode:t,length:i[0].length});return r}function f(e){let n=d(o.NUMERIC,t.NUMERIC,e),r=d(o.ALPHANUMERIC,t.ALPHANUMERIC,e),i,a;return s.isKanjiModeEnabled()?(i=d(o.BYTE,t.BYTE,e),a=d(o.KANJI,t.KANJI,e)):(i=d(o.BYTE_KANJI,t.BYTE,e),a=[]),n.concat(r,i,a).sort(function(e,t){return e.index-t.index}).map(function(e){return{data:e.data,mode:e.mode,length:e.length}})}function p(e,o){switch(o){case t.NUMERIC:return n.getBitsLength(e);case t.ALPHANUMERIC:return r.getBitsLength(e);case t.KANJI:return a.getBitsLength(e);case t.BYTE:return i.getBitsLength(e)}}function m(e){return e.reduce(function(e,t){let n=e.length-1>=0?e[e.length-1]:null;return n&&n.mode===t.mode?(e[e.length-1].data+=t.data,e):(e.push(t),e)},[])}function h(e){let n=[];for(let r=0;r<e.length;r++){let i=e[r];switch(i.mode){case t.NUMERIC:n.push([i,{data:i.data,mode:t.ALPHANUMERIC,length:i.length},{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.ALPHANUMERIC:n.push([i,{data:i.data,mode:t.BYTE,length:i.length}]);break;case t.KANJI:n.push([i,{data:i.data,mode:t.BYTE,length:l(i.data)}]);break;case t.BYTE:n.push([{data:i.data,mode:t.BYTE,length:l(i.data)}])}}return n}function g(e,n){let r={},i={start:{}},a=[`start`];for(let o=0;o<e.length;o++){let s=e[o],c=[];for(let e=0;e<s.length;e++){let l=s[e],u=``+o+e;c.push(u),r[u]={node:l,lastCount:0},i[u]={};for(let e=0;e<a.length;e++){let o=a[e];r[o]&&r[o].node.mode===l.mode?(i[o][u]=p(r[o].lastCount+l.length,l.mode)-p(r[o].lastCount,l.mode),r[o].lastCount+=l.length):(r[o]&&(r[o].lastCount=l.length),i[o][u]=p(l.length,l.mode)+4+t.getCharCountIndicator(l.mode,n))}}a=c}for(let e=0;e<a.length;e++)i[a[e]].end=0;return{map:i,table:r}}function _(e,o){let c,l=t.getBestModeForData(e);if(c=t.from(o,l),c!==t.BYTE&&c.bit<l.bit)throw Error(`"`+e+`" cannot be encoded with mode `+t.toString(c)+`.
+ Suggested mode is: `+t.toString(l));switch(c===t.KANJI&&!s.isKanjiModeEnabled()&&(c=t.BYTE),c){case t.NUMERIC:return new n(e);case t.ALPHANUMERIC:return new r(e);case t.KANJI:return new a(e);case t.BYTE:return new i(e)}}e.fromArray=function(e){return e.reduce(function(e,t){return typeof t==`string`?e.push(_(t,null)):t.data&&e.push(_(t.data,t.mode)),e},[])},e.fromString=function(t,n){let r=g(h(f(t,s.isKanjiModeEnabled())),n),i=c.find_path(r.map,`start`,`end`),a=[];for(let e=1;e<i.length-1;e++)a.push(r.table[i[e]].node);return e.fromArray(m(a))},e.rawSplit=function(t){return e.fromArray(f(t,s.isKanjiModeEnabled()))}})),M=o((e=>{var t=u(),n=d(),r=f(),i=p(),a=m(),o=h(),s=g(),c=_(),l=b(),v=w(),y=T(),x=C(),S=j();function E(e,t){let n=e.size,r=o.getPositions(t);for(let t=0;t<r.length;t++){let i=r[t][0],a=r[t][1];for(let t=-1;t<=7;t++)if(!(i+t<=-1||n<=i+t))for(let r=-1;r<=7;r++)a+r<=-1||n<=a+r||(t>=0&&t<=6&&(r===0||r===6)||r>=0&&r<=6&&(t===0||t===6)||t>=2&&t<=4&&r>=2&&r<=4?e.set(i+t,a+r,!0,!0):e.set(i+t,a+r,!1,!0))}}function D(e){let t=e.size;for(let n=8;n<t-8;n++){let t=n%2==0;e.set(n,6,t,!0),e.set(6,n,t,!0)}}function O(e,t){let n=a.getPositions(t);for(let t=0;t<n.length;t++){let r=n[t][0],i=n[t][1];for(let t=-2;t<=2;t++)for(let n=-2;n<=2;n++)t===-2||t===2||n===-2||n===2||t===0&&n===0?e.set(r+t,i+n,!0,!0):e.set(r+t,i+n,!1,!0)}}function k(e,t){let n=e.size,r=v.getEncodedBits(t),i,a,o;for(let t=0;t<18;t++)i=Math.floor(t/3),a=t%3+n-8-3,o=(r>>t&1)==1,e.set(i,a,o,!0),e.set(a,i,o,!0)}function A(e,t,n){let r=e.size,i=y.getEncodedBits(t,n),a,o;for(a=0;a<15;a++)o=(i>>a&1)==1,a<6?e.set(a,8,o,!0):a<8?e.set(a+1,8,o,!0):e.set(r-15+a,8,o,!0),a<8?e.set(8,r-a-1,o,!0):a<9?e.set(8,15-a-1+1,o,!0):e.set(8,15-a-1,o,!0);e.set(r-8,8,1,!0)}function M(e,t){let n=e.size,r=-1,i=n-1,a=7,o=0;for(let s=n-1;s>0;s-=2)for(s===6&&s--;;){for(let n=0;n<2;n++)if(!e.isReserved(i,s-n)){let r=!1;o<t.length&&(r=(t[o]>>>a&1)==1),e.set(i,s-n,r),a--,a===-1&&(o++,a=7)}if(i+=r,i<0||n<=i){i-=r,r=-r;break}}}function N(e,n,i){let a=new r;i.forEach(function(t){a.put(t.mode.bit,4),a.put(t.getLength(),x.getCharCountIndicator(t.mode,e)),t.write(a)});let o=(t.getSymbolTotalCodewords(e)-c.getTotalCodewordsCount(e,n))*8;for(a.getLengthInBits()+4<=o&&a.put(0,4);a.getLengthInBits()%8!=0;)a.putBit(0);let s=(o-a.getLengthInBits())/8;for(let e=0;e<s;e++)a.put(e%2?17:236,8);return P(a,e,n)}function P(e,n,r){let i=t.getSymbolTotalCodewords(n),a=i-c.getTotalCodewordsCount(n,r),o=c.getBlocksCount(n,r),s=o-i%o,u=Math.floor(i/o),d=Math.floor(a/o),f=d+1,p=u-d,m=new l(p),h=0,g=Array(o),_=Array(o),v=0,y=new Uint8Array(e.buffer);for(let e=0;e<o;e++){let t=e<s?d:f;g[e]=y.slice(h,h+t),_[e]=m.encode(g[e]),h+=t,v=Math.max(v,t)}let b=new Uint8Array(i),x=0,S,C;for(S=0;S<v;S++)for(C=0;C<o;C++)S<g[C].length&&(b[x++]=g[C][S]);for(S=0;S<p;S++)for(C=0;C<o;C++)b[x++]=_[C][S];return b}function F(e,n,r,a){let o;if(Array.isArray(e))o=S.fromArray(e);else if(typeof e==`string`){let t=n;if(!t){let n=S.rawSplit(e);t=v.getBestVersionForData(n,r)}o=S.fromString(e,t||40)}else throw Error(`Invalid data`);let c=v.getBestVersionForData(o,r);if(!c)throw Error(`The amount of data is too big to be stored in a QR Code`);if(!n)n=c;else if(n<c)throw Error(`
 The chosen QR Code version cannot contain this amount of data.
 Minimum version required to store current data is: `+c+`.
-`);let l=j(n,r,o),u=new i(t.getSymbolSize(n));return T(u,n),E(u),D(u,n),k(u,r,0),n>=7&&O(u,n),A(u,l),isNaN(a)&&(a=s.getBestMask(u,k.bind(null,u,r))),s.applyMask(a,u),k(u,r,a),{modules:u,version:n,errorCorrectionLevel:r,maskPattern:a,segments:o}}e.create=function(e,r){if(e===void 0||e===``)throw Error(`No input text`);let i=n.M,a,o;return r!==void 0&&(i=n.from(r.errorCorrectionLevel,n.M),a=v.from(r.version),o=s.from(r.maskPattern),r.toSJISFunc&&t.setToSJISFunction(r.toSJISFunc)),N(e,a,i,o)}})),j=o((e=>{function t(e){if(typeof e==`number`&&(e=e.toString()),typeof e!=`string`)throw Error(`Color should be defined as hex string`);let t=e.slice().replace(`#`,``).split(``);if(t.length<3||t.length===5||t.length>8)throw Error(`Invalid hex color: `+e);(t.length===3||t.length===4)&&(t=Array.prototype.concat.apply([],t.map(function(e){return[e,e]}))),t.length===6&&t.push(`F`,`F`);let n=parseInt(t.join(``),16);return{r:n>>24&255,g:n>>16&255,b:n>>8&255,a:n&255,hex:`#`+t.slice(0,6).join(``)}}e.getOptions=function(e){e||={},e.color||(e.color={});let n=e.margin===void 0||e.margin===null||e.margin<0?4:e.margin,r=e.width&&e.width>=21?e.width:void 0,i=e.scale||4;return{width:r,scale:r?4:i,margin:n,color:{dark:t(e.color.dark||`#000000ff`),light:t(e.color.light||`#ffffffff`)},type:e.type,rendererOpts:e.rendererOpts||{}}},e.getScale=function(e,t){return t.width&&t.width>=e+t.margin*2?t.width/(e+t.margin*2):t.scale},e.getImageWidth=function(t,n){let r=e.getScale(t,n);return Math.floor((t+n.margin*2)*r)},e.qrToImageData=function(t,n,r){let i=n.modules.size,a=n.modules.data,o=e.getScale(i,r),s=Math.floor((i+r.margin*2)*o),c=r.margin*o,l=[r.color.light,r.color.dark];for(let e=0;e<s;e++)for(let n=0;n<s;n++){let u=(e*s+n)*4,d=r.color.light;if(e>=c&&n>=c&&e<s-c&&n<s-c){let t=Math.floor((e-c)/o),r=Math.floor((n-c)/o);d=l[+!!a[t*i+r]]}t[u++]=d.r,t[u++]=d.g,t[u++]=d.b,t[u]=d.a}}})),M=o((e=>{var t=j();function n(e,t,n){e.clearRect(0,0,t.width,t.height),t.style||={},t.height=n,t.width=n,t.style.height=n+`px`,t.style.width=n+`px`}function r(){try{return document.createElement(`canvas`)}catch{throw Error(`You need to specify a canvas element`)}}e.render=function(e,i,a){let o=a,s=i;o===void 0&&(!i||!i.getContext)&&(o=i,i=void 0),i||(s=r()),o=t.getOptions(o);let c=t.getImageWidth(e.modules.size,o),l=s.getContext(`2d`),u=l.createImageData(c,c);return t.qrToImageData(u.data,e,o),n(l,s,c),l.putImageData(u,0,0),s},e.renderToDataURL=function(t,n,r){let i=r;i===void 0&&(!n||!n.getContext)&&(i=n,n=void 0),i||={};let a=e.render(t,n,i),o=i.type||`image/png`,s=i.rendererOpts||{};return a.toDataURL(o,s.quality)}})),N=o((e=>{var t=j();function n(e,t){let n=e.a/255,r=t+`="`+e.hex+`"`;return n<1?r+` `+t+`-opacity="`+n.toFixed(2).slice(1)+`"`:r}function r(e,t,n){let r=e+t;return n!==void 0&&(r+=` `+n),r}function i(e,t,n){let i=``,a=0,o=!1,s=0;for(let c=0;c<e.length;c++){let l=Math.floor(c%t),u=Math.floor(c/t);!l&&!o&&(o=!0),e[c]?(s++,c>0&&l>0&&e[c-1]||(i+=o?r(`M`,l+n,.5+u+n):r(`m`,a,0),a=0,o=!1),l+1<t&&e[c+1]||(i+=r(`h`,s),s=0)):a++}return i}e.render=function(e,r,a){let o=t.getOptions(r),s=e.modules.size,c=e.modules.data,l=s+o.margin*2,u=o.color.light.a?`<path `+n(o.color.light,`fill`)+` d="M0 0h`+l+`v`+l+`H0z"/>`:``,d=`<path `+n(o.color.dark,`stroke`)+` d="`+i(c,s,o.margin)+`"/>`,f=`viewBox="0 0 `+l+` `+l+`"`,p=`<svg xmlns="http://www.w3.org/2000/svg" `+(o.width?`width="`+o.width+`" height="`+o.width+`" `:``)+f+` shape-rendering="crispEdges">`+u+d+`</svg>
-`;return typeof a==`function`&&a(null,p),p}})),P=c(o((e=>{var t=l(),n=A(),r=M(),i=N();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),F=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,I={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),authView:new URLSearchParams(window.location.search).get(`view`)===`login`||window.location.hash===`#login`?`login`:`landing`,currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,adminSearchQuery:``,customizationDraft:null,analyticsPeriod:`today`,selectedRatingForQ:null,isRatingTransitioning:!1,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},L={bolt:`<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,sparkles:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>`,users:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,qr:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M14 20h6"/><path d="M20 14v6"/></svg>`,star:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,building:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><line x1="8" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg>`,chart:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,palette:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,phone:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,search:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,copy:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,lock:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,user:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,trash:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,externalLink:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,plus:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,check:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,google:`<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.9 7.5 23.5 12 23.5z"/></svg>`};function R(){let e=window.location.search||``,t=window.location.pathname||``,n=e.match(/^\?scan\/([^&?#]+)/i);if(n&&n[1])return decodeURIComponent(n[1]);let r=t.match(/^\/scan\/([^&?#]+)/i);if(r&&r[1])return decodeURIComponent(r[1]);let i=new URLSearchParams(e);return i.get(`scan`)||i.get(`biz`)||null}var z=R();function B(){let e=document.getElementById(`app`);if(e){if(z){e.innerHTML=Fe(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!I.currentUser){e.innerHTML=I.authView===`login`?ie():re();return}if(I.currentUser.role===`admin`){e.innerHTML=H();return}e.innerHTML=le(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&I.currentUser){let t=`${window.location.origin}/?scan/${I.currentUser.username}`;P.toCanvas(e,t,{width:220,margin:2,color:{dark:I.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function ne(e){I.authView=e,I.error=``,e===`login`?window.location.hash=`#login`:window.location.hash===`#login`&&history.replaceState(null,``,window.location.pathname),B()}function re(){return`
+`);let l=N(n,r,o),u=new i(t.getSymbolSize(n));return E(u,n),D(u),O(u,n),A(u,r,0),n>=7&&k(u,n),M(u,l),isNaN(a)&&(a=s.getBestMask(u,A.bind(null,u,r))),s.applyMask(a,u),A(u,r,a),{modules:u,version:n,errorCorrectionLevel:r,maskPattern:a,segments:o}}e.create=function(e,r){if(e===void 0||e===``)throw Error(`No input text`);let i=n.M,a,o;return r!==void 0&&(i=n.from(r.errorCorrectionLevel,n.M),a=v.from(r.version),o=s.from(r.maskPattern),r.toSJISFunc&&t.setToSJISFunction(r.toSJISFunc)),F(e,a,i,o)}})),N=o((e=>{function t(e){if(typeof e==`number`&&(e=e.toString()),typeof e!=`string`)throw Error(`Color should be defined as hex string`);let t=e.slice().replace(`#`,``).split(``);if(t.length<3||t.length===5||t.length>8)throw Error(`Invalid hex color: `+e);(t.length===3||t.length===4)&&(t=Array.prototype.concat.apply([],t.map(function(e){return[e,e]}))),t.length===6&&t.push(`F`,`F`);let n=parseInt(t.join(``),16);return{r:n>>24&255,g:n>>16&255,b:n>>8&255,a:n&255,hex:`#`+t.slice(0,6).join(``)}}e.getOptions=function(e){e||={},e.color||(e.color={});let n=e.margin===void 0||e.margin===null||e.margin<0?4:e.margin,r=e.width&&e.width>=21?e.width:void 0,i=e.scale||4;return{width:r,scale:r?4:i,margin:n,color:{dark:t(e.color.dark||`#000000ff`),light:t(e.color.light||`#ffffffff`)},type:e.type,rendererOpts:e.rendererOpts||{}}},e.getScale=function(e,t){return t.width&&t.width>=e+t.margin*2?t.width/(e+t.margin*2):t.scale},e.getImageWidth=function(t,n){let r=e.getScale(t,n);return Math.floor((t+n.margin*2)*r)},e.qrToImageData=function(t,n,r){let i=n.modules.size,a=n.modules.data,o=e.getScale(i,r),s=Math.floor((i+r.margin*2)*o),c=r.margin*o,l=[r.color.light,r.color.dark];for(let e=0;e<s;e++)for(let n=0;n<s;n++){let u=(e*s+n)*4,d=r.color.light;if(e>=c&&n>=c&&e<s-c&&n<s-c){let t=Math.floor((e-c)/o),r=Math.floor((n-c)/o);d=l[+!!a[t*i+r]]}t[u++]=d.r,t[u++]=d.g,t[u++]=d.b,t[u]=d.a}}})),P=o((e=>{var t=N();function n(e,t,n){e.clearRect(0,0,t.width,t.height),t.style||={},t.height=n,t.width=n,t.style.height=n+`px`,t.style.width=n+`px`}function r(){try{return document.createElement(`canvas`)}catch{throw Error(`You need to specify a canvas element`)}}e.render=function(e,i,a){let o=a,s=i;o===void 0&&(!i||!i.getContext)&&(o=i,i=void 0),i||(s=r()),o=t.getOptions(o);let c=t.getImageWidth(e.modules.size,o),l=s.getContext(`2d`),u=l.createImageData(c,c);return t.qrToImageData(u.data,e,o),n(l,s,c),l.putImageData(u,0,0),s},e.renderToDataURL=function(t,n,r){let i=r;i===void 0&&(!n||!n.getContext)&&(i=n,n=void 0),i||={};let a=e.render(t,n,i),o=i.type||`image/png`,s=i.rendererOpts||{};return a.toDataURL(o,s.quality)}})),F=o((e=>{var t=N();function n(e,t){let n=e.a/255,r=t+`="`+e.hex+`"`;return n<1?r+` `+t+`-opacity="`+n.toFixed(2).slice(1)+`"`:r}function r(e,t,n){let r=e+t;return n!==void 0&&(r+=` `+n),r}function i(e,t,n){let i=``,a=0,o=!1,s=0;for(let c=0;c<e.length;c++){let l=Math.floor(c%t),u=Math.floor(c/t);!l&&!o&&(o=!0),e[c]?(s++,c>0&&l>0&&e[c-1]||(i+=o?r(`M`,l+n,.5+u+n):r(`m`,a,0),a=0,o=!1),l+1<t&&e[c+1]||(i+=r(`h`,s),s=0)):a++}return i}e.render=function(e,r,a){let o=t.getOptions(r),s=e.modules.size,c=e.modules.data,l=s+o.margin*2,u=o.color.light.a?`<path `+n(o.color.light,`fill`)+` d="M0 0h`+l+`v`+l+`H0z"/>`:``,d=`<path `+n(o.color.dark,`stroke`)+` d="`+i(c,s,o.margin)+`"/>`,f=`viewBox="0 0 `+l+` `+l+`"`,p=`<svg xmlns="http://www.w3.org/2000/svg" `+(o.width?`width="`+o.width+`" height="`+o.width+`" `:``)+f+` shape-rendering="crispEdges">`+u+d+`</svg>
+`;return typeof a==`function`&&a(null,p),p}})),I=c(o((e=>{var t=l(),n=M(),r=P(),i=F();function a(e,r,i,a,o){let s=[].slice.call(arguments,1),c=s.length,l=typeof s[c-1]==`function`;if(!l&&!t())throw Error(`Callback required as last argument`);if(l){if(c<2)throw Error(`Too few arguments provided`);c===2?(o=i,i=r,r=a=void 0):c===3&&(r.getContext&&o===void 0?(o=a,a=void 0):(o=a,a=i,i=r,r=void 0))}else{if(c<1)throw Error(`Too few arguments provided`);return c===1?(i=r,r=a=void 0):c===2&&!r.getContext&&(a=i,i=r,r=void 0),new Promise(function(t,o){try{t(e(n.create(i,a),r,a))}catch(e){o(e)}})}try{let t=n.create(i,a);o(null,e(t,r,a))}catch(e){o(e)}}e.create=n.create,e.toCanvas=a.bind(null,r.render),e.toDataURL=a.bind(null,r.renderToDataURL),e.toString=a.bind(null,function(e,t,n){return i.render(e,n)})}))()),L={};(function e(t,n,r,i){var a=!!(t.Worker&&t.Blob&&t.Promise&&t.OffscreenCanvas&&t.OffscreenCanvasRenderingContext2D&&t.HTMLCanvasElement&&t.HTMLCanvasElement.prototype.transferControlToOffscreen&&t.URL&&t.URL.createObjectURL),o=typeof Path2D==`function`&&typeof DOMMatrix==`function`,s=(function(){if(!t.OffscreenCanvas)return!1;try{var e=new OffscreenCanvas(1,1),n=e.getContext(`2d`);n.fillRect(0,0,1,1);var r=e.transferToImageBitmap();n.createPattern(r,`no-repeat`)}catch{return!1}return!0})();function c(){}function l(e){var r=n.exports.Promise,i=r===void 0?t.Promise:r;return typeof i==`function`?new i(e):(e(c,c),null)}var u=(function(e,t){return{transform:function(n){if(e)return n;if(t.has(n))return t.get(n);var r=new OffscreenCanvas(n.width,n.height);return r.getContext(`2d`).drawImage(n,0,0),t.set(n,r),r},clear:function(){t.clear()}}})(s,new Map),d=function(){var e,t,n={},r=0;return typeof requestAnimationFrame==`function`&&typeof cancelAnimationFrame==`function`?(e=function(e){var t=Math.random();return n[t]=requestAnimationFrame(function i(a){r===a||r+16-1<a?(r=a,delete n[t],e()):n[t]=requestAnimationFrame(i)}),t},t=function(e){n[e]&&cancelAnimationFrame(n[e])}):(e=function(e){return setTimeout(e,16)},t=function(e){return clearTimeout(e)}),{frame:e,cancel:t}}(),f=(function(){var t,n,i={};function o(e){function t(t,n){e.postMessage({options:t||{},callback:n})}e.init=function(t){var n=t.transferControlToOffscreen();e.postMessage({canvas:n},[n])},e.fire=function(r,a,o){if(n)return t(r,null),n;var s=Math.random().toString(36).slice(2);return n=l(function(a){function c(t){t.data.callback===s&&(delete i[s],e.removeEventListener(`message`,c),n=null,u.clear(),o(),a())}e.addEventListener(`message`,c),t(r,s),i[s]=c.bind(null,{data:{callback:s}})}),n},e.reset=function(){for(var t in e.postMessage({reset:!0}),i)i[t](),delete i[t]}}return function(){if(t)return t;if(!r&&a){var n=[`var CONFETTI, SIZE = {}, module = {};`,`(`+e.toString()+`)(this, module, true, SIZE);`,`onmessage = function(msg) {`,`  if (msg.data.options) {`,`    CONFETTI(msg.data.options).then(function () {`,`      if (msg.data.callback) {`,`        postMessage({ callback: msg.data.callback });`,`      }`,`    });`,`  } else if (msg.data.reset) {`,`    CONFETTI && CONFETTI.reset();`,`  } else if (msg.data.resize) {`,`    SIZE.width = msg.data.resize.width;`,`    SIZE.height = msg.data.resize.height;`,`  } else if (msg.data.canvas) {`,`    SIZE.width = msg.data.canvas.width;`,`    SIZE.height = msg.data.canvas.height;`,`    CONFETTI = module.exports.create(msg.data.canvas);`,`  }`,`}`].join(`
+`);try{t=new Worker(URL.createObjectURL(new Blob([n])))}catch(e){return typeof console<`u`&&typeof console.warn==`function`&&console.warn(`🎊 Could not load worker`,e),null}o(t)}return t}})(),p={particleCount:50,angle:90,spread:45,startVelocity:45,decay:.9,gravity:1,drift:0,ticks:200,x:.5,y:.5,shapes:[`square`,`circle`],zIndex:100,colors:[`#26ccff`,`#a25afd`,`#ff5e7e`,`#88ff5a`,`#fcff42`,`#ffa62d`,`#ff36ff`],disableForReducedMotion:!1,scalar:1};function m(e,t){return t?t(e):e}function h(e){return e!=null}function g(e,t,n){return m(e&&h(e[t])?e[t]:p[t],n)}function _(e){return e<0?0:Math.floor(e)}function v(e,t){return Math.floor(Math.random()*(t-e))+e}function y(e){return parseInt(e,16)}function b(e){return e.map(x)}function x(e){var t=String(e).replace(/[^0-9a-f]/gi,``);return t.length<6&&(t=t[0]+t[0]+t[1]+t[1]+t[2]+t[2]),{r:y(t.substring(0,2)),g:y(t.substring(2,4)),b:y(t.substring(4,6))}}function S(e){var t=g(e,`origin`,Object);return t.x=g(t,`x`,Number),t.y=g(t,`y`,Number),t}function C(e){e.width=document.documentElement.clientWidth,e.height=document.documentElement.clientHeight}function w(e){var t=e.getBoundingClientRect();e.width=t.width,e.height=t.height}function T(e){var t=document.createElement(`canvas`);return t.style.position=`fixed`,t.style.top=`0px`,t.style.left=`0px`,t.style.pointerEvents=`none`,t.style.zIndex=e,t}function E(e,t,n,r,i,a,o,s,c){e.save(),e.translate(t,n),e.rotate(a),e.scale(r,i),e.arc(0,0,1,o,s,c),e.restore()}function D(e){var t=e.angle*(Math.PI/180),n=e.spread*(Math.PI/180);return{x:e.x,y:e.y,wobble:Math.random()*10,wobbleSpeed:Math.min(.11,Math.random()*.1+.05),velocity:e.startVelocity*.5+Math.random()*e.startVelocity,angle2D:-t+(.5*n-Math.random()*n),tiltAngle:(Math.random()*.5+.25)*Math.PI,color:e.color,shape:e.shape,tick:0,totalTicks:e.ticks,decay:e.decay,drift:e.drift,random:Math.random()+2,tiltSin:0,tiltCos:0,wobbleX:0,wobbleY:0,gravity:e.gravity*3,ovalScalar:.6,scalar:e.scalar,flat:e.flat}}function O(e,t){t.x+=Math.cos(t.angle2D)*t.velocity+t.drift,t.y+=Math.sin(t.angle2D)*t.velocity+t.gravity,t.velocity*=t.decay,t.flat?(t.wobble=0,t.wobbleX=t.x+10*t.scalar,t.wobbleY=t.y+10*t.scalar,t.tiltSin=0,t.tiltCos=0,t.random=1):(t.wobble+=t.wobbleSpeed,t.wobbleX=t.x+10*t.scalar*Math.cos(t.wobble),t.wobbleY=t.y+10*t.scalar*Math.sin(t.wobble),t.tiltAngle+=.1,t.tiltSin=Math.sin(t.tiltAngle),t.tiltCos=Math.cos(t.tiltAngle),t.random=Math.random()+2);var n=t.tick++/t.totalTicks,r=t.x+t.random*t.tiltCos,i=t.y+t.random*t.tiltSin,a=t.wobbleX+t.random*t.tiltCos,s=t.wobbleY+t.random*t.tiltSin;if(e.fillStyle=`rgba(`+t.color.r+`, `+t.color.g+`, `+t.color.b+`, `+(1-n)+`)`,e.beginPath(),o&&t.shape.type===`path`&&typeof t.shape.path==`string`&&Array.isArray(t.shape.matrix))e.fill(N(t.shape.path,t.shape.matrix,t.x,t.y,Math.abs(a-r)*.1,Math.abs(s-i)*.1,Math.PI/10*t.wobble));else if(t.shape.type===`bitmap`){var c=Math.PI/10*t.wobble,l=Math.abs(a-r)*.1,d=Math.abs(s-i)*.1,f=t.shape.bitmap.width*t.scalar,p=t.shape.bitmap.height*t.scalar,m=new DOMMatrix([Math.cos(c)*l,Math.sin(c)*l,-Math.sin(c)*d,Math.cos(c)*d,t.x,t.y]);m.multiplySelf(new DOMMatrix(t.shape.matrix));var h=e.createPattern(u.transform(t.shape.bitmap),`no-repeat`);h.setTransform(m),e.globalAlpha=1-n,e.fillStyle=h,e.fillRect(t.x-f/2,t.y-p/2,f,p),e.globalAlpha=1}else if(t.shape===`circle`)e.ellipse?e.ellipse(t.x,t.y,Math.abs(a-r)*t.ovalScalar,Math.abs(s-i)*t.ovalScalar,Math.PI/10*t.wobble,0,2*Math.PI):E(e,t.x,t.y,Math.abs(a-r)*t.ovalScalar,Math.abs(s-i)*t.ovalScalar,Math.PI/10*t.wobble,0,2*Math.PI);else if(t.shape===`star`)for(var g=Math.PI/2*3,_=4*t.scalar,v=8*t.scalar,y=t.x,b=t.y,x=5,S=Math.PI/x;x--;)y=t.x+Math.cos(g)*v,b=t.y+Math.sin(g)*v,e.lineTo(y,b),g+=S,y=t.x+Math.cos(g)*_,b=t.y+Math.sin(g)*_,e.lineTo(y,b),g+=S;else e.moveTo(Math.floor(t.x),Math.floor(t.y)),e.lineTo(Math.floor(t.wobbleX),Math.floor(i)),e.lineTo(Math.floor(a),Math.floor(s)),e.lineTo(Math.floor(r),Math.floor(t.wobbleY));return e.closePath(),e.fill(),t.tick<t.totalTicks}function k(e,t,n,a,o){var s=t.slice(),c=e.getContext(`2d`),f,p,m=l(function(t){function l(){f=p=null,c.clearRect(0,0,a.width,a.height),u.clear(),o(),t()}function m(){r&&(a.width!==i.width||a.height!==i.height)&&(a.width=e.width=i.width,a.height=e.height=i.height),!a.width&&!a.height&&(n(e),a.width=e.width,a.height=e.height),c.clearRect(0,0,a.width,a.height),s=s.filter(function(e){return O(c,e)}),s.length?f=d.frame(m):l()}f=d.frame(m),p=l});return{addFettis:function(e){return s=s.concat(e),m},canvas:e,promise:m,reset:function(){f&&d.cancel(f),p&&p()}}}function A(e,n){var r=!e,i=!!g(n||{},`resize`),o=!1,s=g(n,`disableForReducedMotion`,Boolean),c=a&&g(n||{},`useWorker`)?f():null,u=r?C:w,d=e&&c?!!e.__confetti_initialized:!1,p=typeof matchMedia==`function`&&matchMedia(`(prefers-reduced-motion)`).matches,m;function h(t,n,r){for(var i=g(t,`particleCount`,_),a=g(t,`angle`,Number),o=g(t,`spread`,Number),s=g(t,`startVelocity`,Number),c=g(t,`decay`,Number),l=g(t,`gravity`,Number),d=g(t,`drift`,Number),f=g(t,`colors`,b),p=g(t,`ticks`,Number),h=g(t,`shapes`),y=g(t,`scalar`),x=!!g(t,`flat`),C=S(t),w=i,T=[],E=e.width*C.x,O=e.height*C.y;w--;)T.push(D({x:E,y:O,angle:a,spread:o,startVelocity:s,color:f[w%f.length],shape:h[v(0,h.length)],ticks:p,decay:c,gravity:l,drift:d,scalar:y,flat:x}));return m?m.addFettis(T):(m=k(e,T,u,n,r),m.promise)}function y(n){var a=s||g(n,`disableForReducedMotion`,Boolean),f=g(n,`zIndex`,Number);if(a&&p)return l(function(e){e()});r&&m?e=m.canvas:r&&!e&&(e=T(f),document.body.appendChild(e)),i&&!d&&u(e);var _={width:e.width,height:e.height};c&&!d&&c.init(e),d=!0,c&&(e.__confetti_initialized=!0);function v(){if(c){var t={getBoundingClientRect:function(){if(!r)return e.getBoundingClientRect()}};u(t),c.postMessage({resize:{width:t.width,height:t.height}});return}_.width=_.height=null}function y(){m=null,i&&(o=!1,t.removeEventListener(`resize`,v)),r&&e&&(document.body.contains(e)&&document.body.removeChild(e),e=null,d=!1)}return i&&!o&&(o=!0,t.addEventListener(`resize`,v,!1)),c?c.fire(n,_,y):h(n,_,y)}return y.reset=function(){c&&c.reset(),m&&m.reset()},y}var j;function M(){return j||=A(null,{useWorker:!0,resize:!0}),j}function N(e,t,n,r,i,a,o){var s=new Path2D(e),c=new Path2D;c.addPath(s,new DOMMatrix(t));var l=new Path2D;return l.addPath(c,new DOMMatrix([Math.cos(o)*i,Math.sin(o)*i,-Math.sin(o)*a,Math.cos(o)*a,n,r])),l}function P(e){if(!o)throw Error(`path confetti are not supported in this browser`);var t,n;typeof e==`string`?t=e:(t=e.path,n=e.matrix);var r=new Path2D(t),i=document.createElement(`canvas`).getContext(`2d`);if(!n){for(var a=1e3,s=a,c=a,l=0,u=0,d,f,p=0;p<a;p+=2)for(var m=0;m<a;m+=2)i.isPointInPath(r,p,m,`nonzero`)&&(s=Math.min(s,p),c=Math.min(c,m),l=Math.max(l,p),u=Math.max(u,m));d=l-s,f=u-c;var h=10,g=Math.min(h/d,h/f);n=[g,0,0,g,-Math.round(d/2+s)*g,-Math.round(f/2+c)*g]}return{type:`path`,path:t,matrix:n}}function F(e){var t,n=1,r=`#000000`,i=`"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "EmojiOne Color", "Android Emoji", "Twemoji Mozilla", "system emoji", sans-serif`;typeof e==`string`?t=e:(t=e.text,n=`scalar`in e?e.scalar:n,i=`fontFamily`in e?e.fontFamily:i,r=`color`in e?e.color:r);var a=10*n,o=``+a+`px `+i,s=new OffscreenCanvas(a,a),c=s.getContext(`2d`);c.font=o;var l=c.measureText(t),u=Math.ceil(l.actualBoundingBoxRight+l.actualBoundingBoxLeft),d=Math.ceil(l.actualBoundingBoxAscent+l.actualBoundingBoxDescent),f=2,p=l.actualBoundingBoxLeft+f,m=l.actualBoundingBoxAscent+f;u+=f+f,d+=f+f,s=new OffscreenCanvas(u,d),c=s.getContext(`2d`),c.font=o,c.fillStyle=r,c.fillText(t,p,m);var h=1/n;return{type:`bitmap`,bitmap:s.transferToImageBitmap(),matrix:[h,0,0,h,-u*h/2,-d*h/2]}}n.exports=function(){return M().apply(this,arguments)},n.exports.reset=function(){M().reset()},n.exports.create=A,n.exports.shapeFromPath=P,n.exports.shapeFromText=F})((function(){return typeof window<`u`?window:typeof self<`u`?self:this||{}})(),L,!1);var R=L.exports;L.exports.create;var z=window.location.hostname===`localhost`?`http://localhost:3001/api`:`/api`,B={currentUser:JSON.parse(localStorage.getItem(`revly_user`)||`null`),authView:new URLSearchParams(window.location.search).get(`view`)===`login`||window.location.hash===`#login`?`login`:`landing`,currentTab:`profile`,clients:[],clientProfile:null,clientAnalytics:null,clientCategories:[],clientQuestions:[],clientCustomers:[],customerSearchQuery:``,adminSearchQuery:``,customizationDraft:null,analyticsPeriod:`today`,selectedRatingForQ:null,isRatingTransitioning:!1,modal:null,customerSession:null,customerStep:1,customerInfo:{name:``,mobile:``},currentQuestionIdx:0,customerAnswers:[],generatedReview:``,loading:!1,error:``},V={bolt:`<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,sparkles:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>`,users:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,qr:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M14 20h6"/><path d="M20 14v6"/></svg>`,star:`<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,building:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><line x1="8" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg>`,chart:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,palette:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,phone:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,search:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,copy:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,lock:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,user:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,trash:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,externalLink:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,plus:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,check:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,google:`<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.9 7.5 23.5 12 23.5z"/></svg>`};function ee(){let e=window.location.search||``,t=window.location.pathname||``,n=e.match(/^\?scan\/([^&?#]+)/i);if(n&&n[1])return decodeURIComponent(n[1]);let r=t.match(/^\/scan\/([^&?#]+)/i);if(r&&r[1])return decodeURIComponent(r[1]);let i=new URLSearchParams(e);return i.get(`scan`)||i.get(`biz`)||null}var H=ee();function U(){let e=document.getElementById(`app`);if(e){if(H){e.innerHTML=Re(),setTimeout(()=>{let e=document.getElementById(`editableDraft`);e&&(e.style.height=`auto`,e.style.height=Math.max(160,e.scrollHeight+10)+`px`)},50);return}if(!B.currentUser){e.innerHTML=B.authView===`login`?re():ne();return}if(B.currentUser.role===`admin`){e.innerHTML=se();return}e.innerHTML=fe(),setTimeout(()=>{let e=document.getElementById(`clientQrCanvas`);if(e&&B.currentUser){let t=`${window.location.origin}/?scan/${B.currentUser.username}`;I.toCanvas(e,t,{width:220,margin:2,color:{dark:B.clientProfile?.qr_color||`#0f172a`,light:`#ffffff`}})}},50)}}function te(e){B.authView=e,B.error=``,e===`login`?window.location.hash=`#login`:window.location.hash===`#login`&&history.replaceState(null,``,window.location.pathname),U()}function ne(){return`
     <div class="landing-viewport">
       <!-- Google 4-Color Brand Ribbon -->
       <div class="google-brand-strip"></div>
@@ -57,7 +58,7 @@ Minimum version required to store current data is: `+c+`.
 
             <div class="landing-cta-row">
               <a href="/?scan/royalcafe" target="_blank" class="landing-btn-primary">
-                ${L.qr}
+                ${V.qr}
                 Test Live Customer QR &rarr;
               </a>
               <button type="button" class="landing-btn-secondary" onclick="switchAuthView('login')">
@@ -87,7 +88,7 @@ Minimum version required to store current data is: `+c+`.
           <div class="landing-hero-visual">
             <div class="acrylic-stand-card">
               <div class="stand-header">
-                ${L.google}
+                ${V.google}
                 <span class="stand-header-text">Review Us on Google</span>
               </div>
 
@@ -117,7 +118,7 @@ Minimum version required to store current data is: `+c+`.
                   "Had a wonderful experience at Royal Cafe! The food was delicious and the staff were very polite and attentive."
                 </p>
                 <div class="posted-google-tag">
-                  ${L.google}
+                  ${V.google}
                   <span>Verified Google Review</span>
                 </div>
               </div>
@@ -129,7 +130,7 @@ Minimum version required to store current data is: `+c+`.
         <div class="landing-features-grid">
           <div class="feature-item-card">
             <div class="feature-icon" style="background:#e8f0fe; color:#1a73e8;">
-              ${L.qr}
+              ${V.qr}
             </div>
             <div class="feature-text">
               <h4>Smart Acrylic Stands</h4>
@@ -139,7 +140,7 @@ Minimum version required to store current data is: `+c+`.
 
           <div class="feature-item-card">
             <div class="feature-icon" style="background:#fef7e0; color:#b06000;">
-              ${L.star}
+              ${V.star}
             </div>
             <div class="feature-text">
               <h4>3-Question Star Survey</h4>
@@ -149,7 +150,7 @@ Minimum version required to store current data is: `+c+`.
 
           <div class="feature-item-card">
             <div class="feature-icon" style="background:#e6f4ea; color:#137333;">
-              ${L.sparkles}
+              ${V.sparkles}
             </div>
             <div class="feature-text">
               <h4>Authentic AI Review Draft</h4>
@@ -159,7 +160,7 @@ Minimum version required to store current data is: `+c+`.
 
           <div class="feature-item-card">
             <div class="feature-icon" style="background:#fce8e6; color:#c5221f;">
-              ${L.chart}
+              ${V.chart}
             </div>
             <div class="feature-text">
               <h4>Real-Time Analytics</h4>
@@ -178,7 +179,7 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </footer>
     </div>
-  `}function ie(){return`
+  `}function re(){return`
     <div class="login-split-page">
       <div class="login-card-pro">
         <div style="margin-bottom:18px;">
@@ -189,7 +190,7 @@ Minimum version required to store current data is: `+c+`.
 
         <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
           <div class="brand-icon" style="width:44px; height:44px;">
-            ${L.bolt}
+            ${V.bolt}
           </div>
           <div>
             <div style="font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.035em; line-height:1.2;">Revly</div>
@@ -198,16 +199,16 @@ Minimum version required to store current data is: `+c+`.
         </div>
 
         <div style="display:inline-flex; align-items:center; gap:6px; background:#e8f0fe; border:1px solid #d2e3fc; padding:5px 12px; border-radius:99px; margin-bottom:20px;">
-          ${L.google}
+          ${V.google}
           <span style="font-size:11.5px; font-weight:700; color:#1a73e8;">Google Business Partner Station</span>
         </div>
 
         <h2 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:6px;">Sign in to your dashboard</h2>
         <p style="font-size:13px; color:#64748b; margin-bottom:24px;">Enter your credentials to access your business portal</p>
 
-        ${I.error?`
+        ${B.error?`
           <div style="background:#fee2e2; border:1px solid #fecaca; color:#b91c1c; padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
-            <span>⚠️</span> <span>${I.error}</span>
+            <span>⚠️</span> <span>${B.error}</span>
           </div>
         `:``}
 
@@ -216,7 +217,7 @@ Minimum version required to store current data is: `+c+`.
             <label class="input-label">Username</label>
             <div style="position:relative;">
               <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
-                ${L.user}
+                ${V.user}
               </span>
               <input type="text" id="loginUsername" class="pro-input" required placeholder="admin or client username" style="padding-left:42px;" autofocus>
             </div>
@@ -226,14 +227,14 @@ Minimum version required to store current data is: `+c+`.
             <label class="input-label">Password</label>
             <div style="position:relative;">
               <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
-                ${L.lock}
+                ${V.lock}
               </span>
               <input type="password" id="loginPassword" class="pro-input" required placeholder="Enter password" style="padding-left:42px;">
             </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;" ${I.loading?`disabled`:``}>
-            ${I.loading?`Authenticating...`:`Sign In to Portal &rarr;`}
+          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;" ${B.loading?`disabled`:``}>
+            ${B.loading?`Authenticating...`:`Sign In to Portal &rarr;`}
           </button>
         </form>
 
@@ -252,13 +253,13 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function ae(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function oe(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;I.loading=!0,I.error=``,B();try{let e=await fetch(`${F}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(I.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await V():await K()):I.error=r.error||`Login failed`}catch{I.error=`Unable to connect to server`}finally{I.loading=!1,B()}}function se(){I.currentUser=null,I.authView=`landing`,localStorage.removeItem(`revly_user`),window.location.hash===`#login`&&history.replaceState(null,``,window.location.pathname),B()}async function V(){try{let e=await fetch(`${F}/admin/clients`);e.ok&&(I.clients=await e.json())}catch(e){console.error(e)}}function H(){let e=I.clients.length,t=I.clients.reduce((e,t)=>e+(Number(t.scan_count)||0),0),n=I.clients.reduce((e,t)=>e+(Number(t.generated_count)||0),0),r=(I.adminSearchQuery||``).toLowerCase().trim(),i=I.clients.filter(e=>!r||(e.name||``).toLowerCase().includes(r)||(e.username||``).toLowerCase().includes(r)||(e.phone||``).toLowerCase().includes(r));return`
+  `}function ie(e,t){document.getElementById(`loginUsername`).value=e,document.getElementById(`loginPassword`).value=t}async function ae(e){e.preventDefault();let t=document.getElementById(`loginUsername`).value,n=document.getElementById(`loginPassword`).value;B.loading=!0,B.error=``,U();try{let e=await fetch(`${z}/auth/login`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({username:t,password:n})}),r=await e.json();e.ok?(B.currentUser=r.user,localStorage.setItem(`revly_user`,JSON.stringify(r.user)),r.user.role===`admin`?await W():await G()):B.error=r.error||`Login failed`}catch{B.error=`Unable to connect to server`}finally{B.loading=!1,U()}}function oe(){B.currentUser=null,B.authView=`landing`,localStorage.removeItem(`revly_user`),window.location.hash===`#login`&&history.replaceState(null,``,window.location.pathname),U()}async function W(){try{let e=await fetch(`${z}/admin/clients`);e.ok&&(B.clients=await e.json())}catch(e){console.error(e)}}function se(){let e=B.clients.length,t=B.clients.reduce((e,t)=>e+(Number(t.scan_count)||0),0),n=B.clients.reduce((e,t)=>e+(Number(t.generated_count)||0),0),r=(B.adminSearchQuery||``).toLowerCase().trim(),i=B.clients.filter(e=>!r||(e.name||``).toLowerCase().includes(r)||(e.username||``).toLowerCase().includes(r)||(e.phone||``).toLowerCase().includes(r));return`
     <div class="dashboard-shell">
       <!-- Sidebar -->
       <aside class="dash-sidebar">
         <div class="sidebar-header">
           <div class="brand-icon">
-            ${L.bolt}
+            ${V.bolt}
           </div>
           <div>
             <div class="brand-title">Revly</div>
@@ -269,7 +270,7 @@ Minimum version required to store current data is: `+c+`.
         <nav class="sidebar-nav">
           <div class="nav-category-label">Management</div>
           <button class="nav-link active">
-            ${L.users}
+            ${V.users}
             Client Businesses
           </button>
         </nav>
@@ -300,7 +301,7 @@ Minimum version required to store current data is: `+c+`.
               Live Database Connected
             </span>
             <button class="btn-pro btn-pro-primary" onclick="openModal('create-client')">
-              ${L.plus}
+              ${V.plus}
               Create New Client
             </button>
           </div>
@@ -313,7 +314,7 @@ Minimum version required to store current data is: `+c+`.
               <div class="kpi-top">
                 <span class="kpi-label">Active Businesses</span>
                 <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">
-                  ${L.building}
+                  ${V.building}
                 </div>
               </div>
               <div class="kpi-number">${e}</div>
@@ -326,7 +327,7 @@ Minimum version required to store current data is: `+c+`.
               <div class="kpi-top">
                 <span class="kpi-label">Total QR Scans</span>
                 <div class="kpi-icon-bubble" style="background:#f0f9ff; color:#0284c7;">
-                  ${L.qr}
+                  ${V.qr}
                 </div>
               </div>
               <div class="kpi-number">${t}</div>
@@ -339,7 +340,7 @@ Minimum version required to store current data is: `+c+`.
               <div class="kpi-top">
                 <span class="kpi-label">AI Reviews Placed</span>
                 <div class="kpi-icon-bubble" style="background:#fdf2f8; color:#db2777;">
-                  ${L.sparkles}
+                  ${V.sparkles}
                 </div>
               </div>
               <div class="kpi-number">${n}</div>
@@ -357,8 +358,8 @@ Minimum version required to store current data is: `+c+`.
                 <div class="dash-card-desc">View business credentials, preview QR flows, and manage passwords</div>
               </div>
               <div class="search-input-wrap" style="max-width:320px;">
-                ${L.search}
-                <input type="text" class="pro-input" placeholder="Search clients..." value="${I.adminSearchQuery||``}" oninput="state.adminSearchQuery = this.value; render();" style="padding-left:40px;">
+                ${V.search}
+                <input type="text" class="pro-input" placeholder="Search clients..." value="${B.adminSearchQuery||``}" oninput="state.adminSearchQuery = this.value; render();" style="padding-left:40px;">
               </div>
             </div>
 
@@ -411,15 +412,15 @@ Minimum version required to store current data is: `+c+`.
                       <td style="text-align:right;">
                         <div style="display:inline-flex; gap:6px;">
                           <a href="/?scan/${e.username}" target="_blank" class="btn-pro btn-pro-secondary btn-pro-sm" title="Preview Customer QR Flow">
-                            ${L.externalLink}
+                            ${V.externalLink}
                             View QR
                           </a>
                           <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="openModal('reset-password', { id: ${e.id}, name: '${e.name.replace(/'/g,`\\'`)}' })" title="Reset Client Password">
-                            ${L.lock}
+                            ${V.lock}
                             Password
                           </button>
                           <button class="btn-pro btn-pro-danger btn-pro-sm" onclick="deleteClient(${e.id})" title="Delete Client">
-                            ${L.trash}
+                            ${V.trash}
                           </button>
                         </div>
                       </td>
@@ -434,7 +435,7 @@ Minimum version required to store current data is: `+c+`.
 
       ${$()}
     </div>
-  `}async function U(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${F}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await V(),B()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function W(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${F}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function G(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${F}/admin/clients/${e}`,{method:`DELETE`}),await V(),B()}catch{alert(`Failed to delete client`)}}async function K(){if(!I.currentUser)return;let e=I.currentUser.id,t=I.analyticsPeriod||`today`;try{let[n,r,i,a,o]=await Promise.all([fetch(`${F}/client/profile/${e}`).then(e=>e.json()),fetch(`${F}/client/analytics/${e}?period=${t}`).then(e=>e.json()),fetch(`${F}/client/categories/${e}`).then(e=>e.json()),fetch(`${F}/client/questions/${e}`).then(e=>e.json()),fetch(`${F}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);I.clientProfile=n,I.clientAnalytics=r,I.clientCategories=i,I.clientQuestions=a,I.clientCustomers=Array.isArray(o)?o:[]}catch(e){console.error(`Error loading client data:`,e)}}async function ce(e){if(I.analyticsPeriod=e,I.currentUser)try{let t=await fetch(`${F}/client/analytics/${I.currentUser.id}?period=${e}`);t.ok&&(I.clientAnalytics=await t.json(),B())}catch(e){console.error(`Error changing analytics period:`,e)}}function le(){let e=I.currentUser,t=I.clientProfile||e,n=I.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=I.clientCustomers?I.clientCustomers.length:0;return`
+  `}async function ce(e){e.preventDefault();let t=document.getElementById(`clientName`).value,n=document.getElementById(`clientUsername`).value,r=document.getElementById(`clientPassword`).value,i=document.getElementById(`clientPhone`).value;try{let e=await fetch(`${z}/admin/clients`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,username:n,password:r,phone:i})}),a=await e.json();e.ok?(Q(),await W(),U()):alert(a.error||`Failed to create client`)}catch{alert(`Error connecting to server`)}}async function le(e,t){e.preventDefault();let n=document.getElementById(`newPasswordInput`).value;try{(await fetch(`${z}/admin/clients/${t}/password`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({newPassword:n})})).ok?(alert(`Password updated successfully`),Q()):alert(`Failed to update password`)}catch{alert(`Error updating password`)}}async function ue(e){if(confirm(`Are you sure you want to delete this client? All questions, scans, and feedback will be removed.`))try{await fetch(`${z}/admin/clients/${e}`,{method:`DELETE`}),await W(),U()}catch{alert(`Failed to delete client`)}}async function G(){if(!B.currentUser)return;let e=B.currentUser.id,t=B.analyticsPeriod||`today`;try{let[n,r,i,a,o]=await Promise.all([fetch(`${z}/client/profile/${e}`).then(e=>e.json()),fetch(`${z}/client/analytics/${e}?period=${t}`).then(e=>e.json()),fetch(`${z}/client/categories/${e}`).then(e=>e.json()),fetch(`${z}/client/questions/${e}`).then(e=>e.json()),fetch(`${z}/client/customers/${e}`).then(e=>e.json()).catch(()=>[])]);B.clientProfile=n,B.clientAnalytics=r,B.clientCategories=i,B.clientQuestions=a,B.clientCustomers=Array.isArray(o)?o:[]}catch(e){console.error(`Error loading client data:`,e)}}async function de(e){if(B.analyticsPeriod=e,B.currentUser)try{let t=await fetch(`${z}/client/analytics/${B.currentUser.id}?period=${e}`);t.ok&&(B.clientAnalytics=await t.json(),U())}catch(e){console.error(`Error changing analytics period:`,e)}}function fe(){let e=B.currentUser,t=B.clientProfile||e,n=B.clientAnalytics||{total_scans:0,total_generated:0,category_ratings:[],recent_feedback:[]},r=B.clientCustomers?B.clientCustomers.length:0;return`
     <div class="dashboard-shell">
       <!-- Modern Sidebar -->
       <aside class="dash-sidebar">
@@ -452,29 +453,29 @@ Minimum version required to store current data is: `+c+`.
 
         <nav class="sidebar-nav">
           <div class="nav-category-label">Workspace</div>
-          <button class="nav-link ${I.currentTab===`profile`?`active`:``}" onclick="switchTab('profile')">
-            ${L.qr}
+          <button class="nav-link ${B.currentTab===`profile`?`active`:``}" onclick="switchTab('profile')">
+            ${V.qr}
             Profile & QR Studio
           </button>
 
-          <button class="nav-link ${I.currentTab===`customization`?`active`:``}" onclick="switchTab('customization')">
-            ${L.palette}
+          <button class="nav-link ${B.currentTab===`customization`?`active`:``}" onclick="switchTab('customization')">
+            ${V.palette}
             Customization
             <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:10px; padding:2px 7px;">Live</span>
           </button>
 
-          <button class="nav-link ${I.currentTab===`analytics`?`active`:``}" onclick="switchTab('analytics')">
-            ${L.chart}
+          <button class="nav-link ${B.currentTab===`analytics`?`active`:``}" onclick="switchTab('analytics')">
+            ${V.chart}
             Analytics & Reviews
           </button>
 
-          <button class="nav-link ${I.currentTab===`customers`?`active`:``}" onclick="switchTab('customers')">
-            ${L.users}
+          <button class="nav-link ${B.currentTab===`customers`?`active`:``}" onclick="switchTab('customers')">
+            ${V.users}
             Customers
             <span class="badge-pro badge-indigo" style="margin-left:auto; font-size:11px; padding:2px 8px;">${r}</span>
           </button>
 
-          <button class="nav-link ${I.currentTab===`questions`?`active`:``}" onclick="switchTab('questions')">
+          <button class="nav-link ${B.currentTab===`questions`?`active`:``}" onclick="switchTab('questions')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Questions & Category
           </button>
@@ -499,33 +500,33 @@ Minimum version required to store current data is: `+c+`.
         <header class="dash-topbar">
           <div class="topbar-left">
             <h1 class="page-heading">
-              ${I.currentTab===`profile`?`Profile & QR Studio`:``}
-              ${I.currentTab===`customization`?`Review Page Customization & Mobile Studio`:``}
-              ${I.currentTab===`analytics`?`Analytics & Performance`:``}
-              ${I.currentTab===`customers`?`Customer Directory & Unique Visitors`:``}
-              ${I.currentTab===`questions`?`Questions & Categories`:``}
+              ${B.currentTab===`profile`?`Profile & QR Studio`:``}
+              ${B.currentTab===`customization`?`Review Page Customization & Mobile Studio`:``}
+              ${B.currentTab===`analytics`?`Analytics & Performance`:``}
+              ${B.currentTab===`customers`?`Customer Directory & Unique Visitors`:``}
+              ${B.currentTab===`questions`?`Questions & Categories`:``}
             </h1>
           </div>
           <div class="topbar-right">
             <a href="/?scan/${e.username}" target="_blank" class="btn-pro btn-pro-primary">
-              ${L.externalLink}
+              ${V.externalLink}
               Test Customer QR &rarr;
             </a>
           </div>
         </header>
 
         <div class="dash-content">
-          ${I.currentTab===`profile`?de(t):``}
-          ${I.currentTab===`customization`?_e(t):``}
-          ${I.currentTab===`analytics`?Ee(n):``}
-          ${I.currentTab===`customers`?Oe():``}
-          ${I.currentTab===`questions`?De():``}
+          ${B.currentTab===`profile`?me(t):``}
+          ${B.currentTab===`customization`?be(t):``}
+          ${B.currentTab===`analytics`?ke(n):``}
+          ${B.currentTab===`customers`?je():``}
+          ${B.currentTab===`questions`?Ae():``}
         </div>
       </main>
 
       ${$()}
     </div>
-  `}function ue(e){I.currentTab=e,B()}function de(e){let t=`${window.location.origin}/?scan/${I.currentUser.username}`;return`
+  `}function pe(e){B.currentTab=e,U()}function me(e){let t=`${window.location.origin}/?scan/${B.currentUser.username}`;return`
     <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:flex-start;">
       <!-- Profile Form -->
       <div class="dash-card">
@@ -580,7 +581,7 @@ Minimum version required to store current data is: `+c+`.
                 </div>
               </div>
               <div id="industryChipsContainer" style="display:flex; flex-wrap:wrap; gap:6px;">
-                ${J(I.selectedIndustryPreset||`cafe`)}
+                ${q(B.selectedIndustryPreset||`cafe`)}
               </div>
             </div>
           </div>
@@ -615,7 +616,7 @@ Minimum version required to store current data is: `+c+`.
             Scan to Review
           </div>
           <div style="font-size:17px; font-weight:800; color:#0f172a; margin-bottom:12px;">
-            ${e.name||I.currentUser.name}
+            ${e.name||B.currentUser.name}
           </div>
 
           <div style="background:#f8fafc; padding:12px; border-radius:14px; border:1px solid #e2e8f0; display:inline-block;">
@@ -629,25 +630,25 @@ Minimum version required to store current data is: `+c+`.
 
         <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="btn-pro btn-pro-primary" onclick="downloadQrCode()">
-            ${L.qr}
+            ${V.qr}
             Download Tabletop Stand (PNG)
           </button>
 
           <div style="display:flex; gap:8px;">
             <input type="text" class="pro-input" style="font-size:12px; font-family:var(--font-mono);" value="${t}" readonly>
             <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="navigator.clipboard.writeText('${t}'); alert('Customer review scan link copied to clipboard!');">
-              ${L.copy}
+              ${V.copy}
               Copy
             </button>
           </div>
         </div>
       </div>
     </div>
-  `}function fe(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&I.currentUser){let n=`${window.location.origin}/?scan/${I.currentUser.username}`;P.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}var q={cafe:[`best cafe in town`,`cozy cafe to relax`,`great hospitality cafe`,`peaceful hangout spot`,`top rated local cafe`],salon:[`best salon in the area`,`expert hair stylist`,`hygienic beauty salon`,`relaxing luxury spa`,`top rated hair studio`],clinic:[`best clinic in the city`,`caring doctor consultation`,`clean and hygienic clinic`,`gentle and professional care`,`trusted dental care`],gym:[`best fitness gym near me`,`great gym equipment`,`supportive fitness trainers`,`motivating workout environment`,`clean and spacious gym`],service:[`highly recommended local service`,`prompt and professional team`,`exceptional customer care`,`reliable business in town`,`top rated experience`]};function J(e){return(q[e]||q.cafe).map(e=>`
+  `}function he(e){document.getElementById(`profQrColor`).value=e;let t=document.getElementById(`clientQrCanvas`);if(t&&B.currentUser){let n=`${window.location.origin}/?scan/${B.currentUser.username}`;I.toCanvas(t,n,{width:220,margin:2,color:{dark:e,light:`#ffffff`}})}}var K={cafe:[`best cafe in town`,`cozy cafe to relax`,`great hospitality cafe`,`peaceful hangout spot`,`top rated local cafe`],salon:[`best salon in the area`,`expert hair stylist`,`hygienic beauty salon`,`relaxing luxury spa`,`top rated hair studio`],clinic:[`best clinic in the city`,`caring doctor consultation`,`clean and hygienic clinic`,`gentle and professional care`,`trusted dental care`],gym:[`best fitness gym near me`,`great gym equipment`,`supportive fitness trainers`,`motivating workout environment`,`clean and spacious gym`],service:[`highly recommended local service`,`prompt and professional team`,`exceptional customer care`,`reliable business in town`,`top rated experience`]};function q(e){return(K[e]||K.cafe).map(e=>`
     <button type="button" class="btn-pro btn-pro-secondary btn-pro-sm" onclick="addKeywordChip('${e.replace(/'/g,`\\'`)}')" style="padding:4px 9px; font-size:11px;">
       + ${e}
     </button>
-  `).join(``)}function pe(e){I.selectedIndustryPreset=e;let t=document.getElementById(`industryChipsContainer`);t&&(t.innerHTML=J(e))}function me(e){let t=document.getElementById(`profKeywords`);if(!t)return;let n=t.value.trim();n?n.split(`,`).map(e=>e.trim().toLowerCase()).includes(e.toLowerCase())||(t.value=n+`, `+e):t.value=e}async function he(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value,i=document.getElementById(`profKeywords`)?.value.trim();try{(await fetch(`${F}/client/profile/${I.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r,seo_keywords:i})})).ok&&(alert(`Profile and SEO keywords updated successfully`),await K(),B())}catch{alert(`Failed to save profile`)}}function ge(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${I.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function _e(e){I.customizationDraft||={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`};let t=I.customizationDraft;return`
+  `).join(``)}function ge(e){B.selectedIndustryPreset=e;let t=document.getElementById(`industryChipsContainer`);t&&(t.innerHTML=q(e))}function _e(e){let t=document.getElementById(`profKeywords`);if(!t)return;let n=t.value.trim();n?n.split(`,`).map(e=>e.trim().toLowerCase()).includes(e.toLowerCase())||(t.value=n+`, `+e):t.value=e}async function ve(e){e.preventDefault();let t=document.getElementById(`profName`).value,n=document.getElementById(`profGoogleUrl`).value,r=document.getElementById(`profQrColor`).value,i=document.getElementById(`profKeywords`)?.value.trim();try{(await fetch(`${z}/client/profile/${B.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t,google_review_url:n,qr_color:r,seo_keywords:i})})).ok&&(alert(`Profile and SEO keywords updated successfully`),await G(),U())}catch{alert(`Failed to save profile`)}}function ye(){let e=document.getElementById(`clientQrCanvas`);if(!e)return;let t=document.createElement(`a`);t.href=e.toDataURL(`image/png`),t.download=`${B.currentUser.username}_qr_code.png`,document.body.appendChild(t),t.click(),document.body.removeChild(t)}function be(e){B.customizationDraft||={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`};let t=B.customizationDraft;return`
     <div class="customization-grid">
       <!-- Left: Customization Settings -->
       <div class="dash-card">
@@ -789,7 +790,7 @@ Minimum version required to store current data is: `+c+`.
           </div>
 
           <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%;">
-            ${L.check}
+            ${V.check}
             Save Customization Changes
           </button>
         </form>
@@ -855,15 +856,15 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function Y(e){if(!I.customizationDraft){let e=I.clientProfile||I.currentUser;I.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}I.customizationDraft.bgColor=e;let t=document.getElementById(`mockupDeviceScreen`);t&&(t.style.backgroundColor=e);let n=document.getElementById(`bgColorHexLabel`);n&&(n.textContent=e),document.querySelectorAll(`.bg-color-swatch`).forEach(t=>{t.getAttribute(`data-color`)&&t.getAttribute(`data-color`).toLowerCase()===e.toLowerCase()?t.classList.add(`active`):t.classList.remove(`active`)})}function ve(e){Y(e)}function ye(e){Y(e);let t=document.getElementById(`customBgColorPicker`);t&&e.startsWith(`#`)&&e.length===7&&(t.value=e)}function be(e){if(!I.customizationDraft){let e=I.clientProfile||I.currentUser;I.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}I.customizationDraft.qrColor=e;let t=document.getElementById(`mockupButtonPreview`);t&&(t.style.backgroundColor=e),document.querySelectorAll(`.qr-color-swatch`).forEach(t=>{t.getAttribute(`data-color`)===e?t.classList.add(`active`):t.classList.remove(`active`)})}async function xe(e,t){let n=e.target.files&&e.target.files[0];if(!n)return;if(n.size>10485760){alert(`Selected image exceeds 10MB limit. Please choose a smaller image.`);return}let r=document.getElementById(`${t}UploadStatus`);r&&(r.innerHTML=`<span style="color:#4f46e5; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+  `}function J(e){if(!B.customizationDraft){let e=B.clientProfile||B.currentUser;B.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}B.customizationDraft.bgColor=e;let t=document.getElementById(`mockupDeviceScreen`);t&&(t.style.backgroundColor=e);let n=document.getElementById(`bgColorHexLabel`);n&&(n.textContent=e),document.querySelectorAll(`.bg-color-swatch`).forEach(t=>{t.getAttribute(`data-color`)&&t.getAttribute(`data-color`).toLowerCase()===e.toLowerCase()?t.classList.add(`active`):t.classList.remove(`active`)})}function xe(e){J(e)}function Se(e){J(e);let t=document.getElementById(`customBgColorPicker`);t&&e.startsWith(`#`)&&e.length===7&&(t.value=e)}function Ce(e){if(!B.customizationDraft){let e=B.clientProfile||B.currentUser;B.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}B.customizationDraft.qrColor=e;let t=document.getElementById(`mockupButtonPreview`);t&&(t.style.backgroundColor=e),document.querySelectorAll(`.qr-color-swatch`).forEach(t=>{t.getAttribute(`data-color`)===e?t.classList.add(`active`):t.classList.remove(`active`)})}async function we(e,t){let n=e.target.files&&e.target.files[0];if(!n)return;if(n.size>10485760){alert(`Selected image exceeds 10MB limit. Please choose a smaller image.`);return}let r=document.getElementById(`${t}UploadStatus`);r&&(r.innerHTML=`<span style="color:#4f46e5; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
       <span style="display:inline-block; width:12px; height:12px; border:2px solid #4f46e5; border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></span>
       Uploading image to server...
-    </span>`);let i=new FileReader;i.onload=async e=>{let i=e.target.result;if(!I.customizationDraft){let e=I.clientProfile||I.currentUser;I.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}if(I.customizationDraft[t]=i,t===`logoUrl`){let e=document.getElementById(`logoPreviewWrap`);e&&(e.innerHTML=`<img id="logoPreviewThumb" src="${i}" style="width:100%; height:100%; object-fit:cover;">`);let t=document.getElementById(`mockupLogoContainer`);t&&(t.innerHTML=`<img src="${i}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px; object-fit:cover;">`)}else if(t===`bannerUrl`){let e=document.getElementById(`bannerPreviewThumb`);e&&(e.src=i);let t=document.getElementById(`mockupBannerImg`);t&&(t.src=i)}try{let e=await fetch(`${F}/upload`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({data:i,filename:n.name})});if(e.ok){let n=await e.json();n.url&&(I.customizationDraft[t]=n.url,r&&(r.innerHTML=`<span style="color:#10b981; font-size:12px; font-weight:600;">✓ Uploaded successfully</span>`))}else{let t=await e.json().catch(()=>({}));r&&(r.innerHTML=`<span style="color:#f59e0b; font-size:12px; font-weight:600;">⚠️ ${t.error||`Server upload failed, using local preview`}</span>`)}}catch(e){console.error(`Upload error:`,e),r&&(r.innerHTML=`<span style="color:#f59e0b; font-size:12px; font-weight:600;">⚠️ Network error during upload, preview is active</span>`)}},i.readAsDataURL(n)}function Se(){if(!I.customizationDraft){let e=I.clientProfile||I.currentUser;I.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}I.customizationDraft.logoUrl=``,B()}function Ce(e){if(!I.customizationDraft){let t=I.clientProfile||I.currentUser;I.customizationDraft={bgColor:t.bg_color||`#edf4fc`,logoUrl:``,bannerUrl:e,qrColor:t.qr_color||`#0f172a`}}I.customizationDraft.bannerUrl=e;let t=document.getElementById(`mockupBannerImg`);t&&(t.src=e);let n=document.getElementById(`bannerPreviewThumb`);n&&(n.src=e)}function we(e,t){if(!I.customizationDraft){let e=I.clientProfile||I.currentUser;I.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}I.customizationDraft[e]=t,B()}async function Te(e){e.preventDefault();let t=I.customizationDraft;try{(await fetch(`${F}/client/profile/${I.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({bg_color:t.bgColor,logo_url:t.logoUrl,banner_url:t.bannerUrl,qr_color:t.qrColor})})).ok?(alert(`Customization saved successfully!`),await K(),B()):alert(`Failed to save customization`)}catch{alert(`Error saving customization`)}}function Ee(e){let t=I.analyticsPeriod||`today`,n={today:`Today`,week:`This Week (7 Days)`,month:`This Month (30 Days)`,all:`All Time`}[t]||`Today`;return`
+    </span>`);let i=new FileReader;i.onload=async e=>{let i=e.target.result;if(!B.customizationDraft){let e=B.clientProfile||B.currentUser;B.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}if(B.customizationDraft[t]=i,t===`logoUrl`){let e=document.getElementById(`logoPreviewWrap`);e&&(e.innerHTML=`<img id="logoPreviewThumb" src="${i}" style="width:100%; height:100%; object-fit:cover;">`);let t=document.getElementById(`mockupLogoContainer`);t&&(t.innerHTML=`<img src="${i}" class="customer-logo-img" style="width:56px; height:56px; border-radius:16px; margin:0 auto 12px; object-fit:cover;">`)}else if(t===`bannerUrl`){let e=document.getElementById(`bannerPreviewThumb`);e&&(e.src=i);let t=document.getElementById(`mockupBannerImg`);t&&(t.src=i)}try{let e=await fetch(`${z}/upload`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({data:i,filename:n.name})});if(e.ok){let n=await e.json();n.url&&(B.customizationDraft[t]=n.url,r&&(r.innerHTML=`<span style="color:#10b981; font-size:12px; font-weight:600;">✓ Uploaded successfully</span>`))}else{let t=await e.json().catch(()=>({}));r&&(r.innerHTML=`<span style="color:#f59e0b; font-size:12px; font-weight:600;">⚠️ ${t.error||`Server upload failed, using local preview`}</span>`)}}catch(e){console.error(`Upload error:`,e),r&&(r.innerHTML=`<span style="color:#f59e0b; font-size:12px; font-weight:600;">⚠️ Network error during upload, preview is active</span>`)}},i.readAsDataURL(n)}function Te(){if(!B.customizationDraft){let e=B.clientProfile||B.currentUser;B.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}B.customizationDraft.logoUrl=``,U()}function Ee(e){if(!B.customizationDraft){let t=B.clientProfile||B.currentUser;B.customizationDraft={bgColor:t.bg_color||`#edf4fc`,logoUrl:``,bannerUrl:e,qrColor:t.qr_color||`#0f172a`}}B.customizationDraft.bannerUrl=e;let t=document.getElementById(`mockupBannerImg`);t&&(t.src=e);let n=document.getElementById(`bannerPreviewThumb`);n&&(n.src=e)}function De(e,t){if(!B.customizationDraft){let e=B.clientProfile||B.currentUser;B.customizationDraft={bgColor:e.bg_color||`#edf4fc`,logoUrl:e.logo_url||``,bannerUrl:e.banner_url||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,qrColor:e.qr_color||`#0f172a`}}B.customizationDraft[e]=t,U()}async function Oe(e){e.preventDefault();let t=B.customizationDraft;try{(await fetch(`${z}/client/profile/${B.currentUser.id}`,{method:`PUT`,headers:{"Content-Type":`application/json`},body:JSON.stringify({bg_color:t.bgColor,logo_url:t.logoUrl,banner_url:t.bannerUrl,qr_color:t.qrColor})})).ok?(alert(`Customization saved successfully!`),await G(),U()):alert(`Failed to save customization`)}catch{alert(`Error saving customization`)}}function ke(e){let t=B.analyticsPeriod||`today`,n={today:`Today`,week:`This Week (7 Days)`,month:`This Month (30 Days)`,all:`All Time`}[t]||`Today`;return`
     <!-- Timeline Filter Section -->
     <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:16px 20px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
       <div style="display:flex; align-items:center; gap:12px;">
         <div style="width:38px; height:38px; border-radius:10px; background:#eef2ff; color:#4f46e5; display:flex; align-items:center; justify-content:center;">
-          ${L.chart}
+          ${V.chart}
         </div>
         <div>
           <div style="font-size:14px; font-weight:800; color:#0f172a;">Analytics Time Range</div>
@@ -893,7 +894,7 @@ Minimum version required to store current data is: `+c+`.
         <div class="kpi-top">
           <span class="kpi-label">No. of QR Scans</span>
           <div class="kpi-icon-bubble" style="background:#eef2ff; color:#4f46e5;">
-            ${L.qr}
+            ${V.qr}
           </div>
         </div>
         <div class="kpi-number">${e.total_scans}</div>
@@ -906,7 +907,7 @@ Minimum version required to store current data is: `+c+`.
         <div class="kpi-top">
           <span class="kpi-label">Reviews Generated</span>
           <div class="kpi-icon-bubble" style="background:#ecfdf5; color:#059669;">
-            ${L.sparkles}
+            ${V.sparkles}
           </div>
         </div>
         <div class="kpi-number">${e.total_generated}</div>
@@ -919,7 +920,7 @@ Minimum version required to store current data is: `+c+`.
         <div class="kpi-top">
           <span class="kpi-label">Conversion Rate</span>
           <div class="kpi-icon-bubble" style="background:#fffbeb; color:#d97706;">
-            ${L.chart}
+            ${V.chart}
           </div>
         </div>
         <div class="kpi-number">${e.total_scans>0?Math.round(e.total_generated/e.total_scans*100):0}%</div>
@@ -932,7 +933,7 @@ Minimum version required to store current data is: `+c+`.
         <div class="kpi-top">
           <span class="kpi-label">Average Rating</span>
           <div class="kpi-icon-bubble" style="background:#fef3c7; color:#d97706;">
-            ${L.star}
+            ${V.star}
           </div>
         </div>
         <div class="kpi-number" style="color:#d97706;">★ ${e.overall_avg===void 0?`5.0`:e.overall_avg}</div>
@@ -1005,7 +1006,7 @@ Minimum version required to store current data is: `+c+`.
         `}
       </div>
     </div>
-  `}function De(){return`
+  `}function Ae(){return`
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:flex-start;">
       <!-- Categories Section -->
       <div class="dash-card">
@@ -1029,11 +1030,11 @@ Minimum version required to store current data is: `+c+`.
               </tr>
             </thead>
             <tbody>
-              ${I.clientCategories.length===0?`
+              ${B.clientCategories.length===0?`
                 <tr>
                   <td colspan="3" style="text-align:center; padding:24px; color:#64748b;">No categories created yet.</td>
                 </tr>
-              `:I.clientCategories.map(e=>`
+              `:B.clientCategories.map(e=>`
                 <tr>
                   <td><strong style="color:#0f172a;">${e.name}</strong></td>
                   <td><span class="badge-pro badge-indigo">${e.question_count} questions</span></td>
@@ -1069,11 +1070,11 @@ Minimum version required to store current data is: `+c+`.
               </tr>
             </thead>
             <tbody>
-              ${I.clientQuestions.length===0?`
+              ${B.clientQuestions.length===0?`
                 <tr>
                   <td colspan="3" style="text-align:center; padding:24px; color:#64748b;">No questions added yet.</td>
                 </tr>
-              `:I.clientQuestions.map(e=>`
+              `:B.clientQuestions.map(e=>`
                 <tr>
                   <td style="font-weight:600; color:#0f172a; max-width:240px;">${e.question_text}</td>
                   <td><span class="badge-pro badge-indigo">${e.category_name}</span></td>
@@ -1087,12 +1088,12 @@ Minimum version required to store current data is: `+c+`.
         </div>
       </div>
     </div>
-  `}function Oe(){let e=I.clientCustomers||[],t=(I.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length,o=r>0?Math.round(a/r*100):0,s=e.reduce((e,t)=>e+(Number(t.reviews_count)||0),0);return`
+  `}function je(){let e=B.clientCustomers||[],t=(B.customerSearchQuery||``).toLowerCase().trim(),n=e.filter(e=>!t||(e.name||``).toLowerCase().includes(t)||(e.mobile||``).toLowerCase().includes(t)),r=e.length,i=e.reduce((e,t)=>e+(Number(t.visit_count)||1),0),a=e.filter(e=>(Number(e.visit_count)||1)>1).length,o=r>0?Math.round(a/r*100):0,s=e.reduce((e,t)=>e+(Number(t.reviews_count)||0),0);return`
     <!-- Top KPI Cards for Customers -->
     <div class="customer-stats-grid">
       <div class="customer-stat-box">
         <div class="customer-stat-icon" style="background:#eef2ff; color:#4f46e5;">
-          ${L.users}
+          ${V.users}
         </div>
         <div>
           <div class="customer-stat-val">${r}</div>
@@ -1102,7 +1103,7 @@ Minimum version required to store current data is: `+c+`.
 
       <div class="customer-stat-box">
         <div class="customer-stat-icon" style="background:#ecfdf5; color:#059669;">
-          ${L.qr}
+          ${V.qr}
         </div>
         <div>
           <div class="customer-stat-val">${i}</div>
@@ -1122,7 +1123,7 @@ Minimum version required to store current data is: `+c+`.
 
       <div class="customer-stat-box">
         <div class="customer-stat-icon" style="background:#f1f5f9; color:#0f172a;">
-          ${L.star}
+          ${V.star}
         </div>
         <div>
           <div class="customer-stat-val">${s}</div>
@@ -1141,7 +1142,7 @@ Minimum version required to store current data is: `+c+`.
 
         <div class="search-input-wrap">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" class="pro-input" placeholder="Search by name or mobile number..." value="${I.customerSearchQuery||``}" oninput="state.customerSearchQuery = this.value; render();">
+          <input type="text" class="pro-input" placeholder="Search by name or mobile number..." value="${B.customerSearchQuery||``}" oninput="state.customerSearchQuery = this.value; render();">
         </div>
       </div>
 
@@ -1215,188 +1216,338 @@ Minimum version required to store current data is: `+c+`.
         </div>
       `}
     </div>
-  `}async function ke(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${F}/client/customers/${e}`,{method:`DELETE`})).ok&&(I.clientCustomers=I.clientCustomers.filter(t=>t.id!==e),B())}catch(e){console.error(`Failed to delete customer:`,e)}}async function Ae(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${F}/client/categories/${I.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await K(),B())}catch{alert(`Failed to add category`)}}async function je(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${F}/client/categories/${e}`,{method:`DELETE`}),await K(),B()}catch{alert(`Failed to delete category`)}}async function Me(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${F}/client/questions/${I.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await K(),B())}catch{alert(`Failed to add question`)}}async function Ne(e){if(confirm(`Delete this question?`))try{await fetch(`${F}/client/questions/${e}`,{method:`DELETE`}),await K(),B()}catch{alert(`Failed to delete question`)}}async function Pe(){if(!I.customerSession)try{let e=await fetch(`${F}/customer/session/${z}`);e.ok?(I.customerSession=await e.json(),B()):(I.error=`Business not found or invalid QR link`,B())}catch{I.error=`Unable to connect`,B()}}function Fe(){if(!I.customerSession&&!I.error)return Pe(),`
-      <div class="customer-clean-page" style="background: #edf4fc;">
-        <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
-          <div style="width:48px; height:48px; border:3px solid #e2e8f0; border-top-color:#4f46e5; border-radius:50%; margin:0 auto 20px; animation:spin 0.8s linear infinite;"></div>
-          <div style="font-size:16px; font-weight:700; color:#0f172a;">Connecting to review station...</div>
-          <p style="font-size:13px; color:#64748b; margin-top:6px;">Please wait a moment</p>
+  `}async function Me(e){if(confirm(`Are you sure you want to remove this customer record?`))try{(await fetch(`${z}/client/customers/${e}`,{method:`DELETE`})).ok&&(B.clientCustomers=B.clientCustomers.filter(t=>t.id!==e),U())}catch(e){console.error(`Failed to delete customer:`,e)}}async function Ne(e){e.preventDefault();let t=document.getElementById(`catNameInput`).value;try{(await fetch(`${z}/client/categories/${B.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({name:t})})).ok&&(Q(),await G(),U())}catch{alert(`Failed to add category`)}}async function Pe(e){if(confirm(`Delete this category and its questions?`))try{await fetch(`${z}/client/categories/${e}`,{method:`DELETE`}),await G(),U()}catch{alert(`Failed to delete category`)}}async function Fe(e){e.preventDefault();let t=document.getElementById(`qCatSelect`).value,n=document.getElementById(`qTextInput`).value;try{(await fetch(`${z}/client/questions/${B.currentUser.id}`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({category_id:t,question_text:n})})).ok&&(Q(),await G(),U())}catch{alert(`Failed to add question`)}}async function Ie(e){if(confirm(`Delete this question?`))try{await fetch(`${z}/client/questions/${e}`,{method:`DELETE`}),await G(),U()}catch{alert(`Failed to delete question`)}}async function Le(){if(!B.customerSession)try{let e=await fetch(`${z}/customer/session/${H}`);e.ok?(B.customerSession=await e.json(),U()):(B.error=`Business not found or invalid QR link`,U())}catch{B.error=`Unable to connect`,U()}}function Y(e){return[``,`😡 Disappointing (1/5)`,`🙁 Could be better (2/5)`,`😐 Average experience (3/5)`,`😊 Very Good! (4/5)`,`🤩 Outstanding! (5/5)`][e]||``}function X(){try{typeof R==`function`&&(R({particleCount:85,spread:75,origin:{y:.6},colors:[`#6d5af6`,`#8b77ff`,`#10b981`,`#f59e0b`,`#ec4899`,`#3b82f6`]}),setTimeout(()=>{R({particleCount:45,angle:60,spread:55,origin:{x:0}}),R({particleCount:45,angle:120,spread:55,origin:{x:1}})},250))}catch(e){console.warn(`Confetti trigger error`,e)}}function Re(){if(!B.customerSession&&!B.error)return Le(),`
+      <div class="cflow-page">
+        <div class="cflow-card" style="justify-content:center; align-items:center;">
+          <div class="cflow-spinner-wrap">
+            <div class="cflow-spinner"></div>
+            <div style="font-size:16px; font-weight:700; color:#0f172a; margin-top:12px;">Connecting to review station...</div>
+            <p style="font-size:13px; color:#64748b;">Please wait a moment</p>
+          </div>
         </div>
       </div>
-    `;if(I.error)return`
-      <div class="customer-clean-page" style="background: #edf4fc;">
-        <div class="customer-clean-card" style="text-align:center; padding:50px 24px;">
-          <div style="font-size:36px; margin-bottom:16px;">⚠️</div>
-          <h2 style="font-size:20px; font-weight:800; color:#ef4444; margin-bottom:8px;">Notice</h2>
-          <p style="color:#64748b; font-size:14px; line-height:1.5;">${I.error}</p>
+    `;if(B.error)return`
+      <div class="cflow-page">
+        <div class="cflow-card" style="justify-content:center; align-items:center;">
+          <div class="cflow-error-wrap">
+            <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
+            <h2 style="font-size:22px; font-weight:800; color:#ef4444; margin-bottom:8px;">Notice</h2>
+            <p style="color:#64748b; font-size:14px; line-height:1.6; max-width:280px;">${B.error}</p>
+          </div>
         </div>
       </div>
-    `;let e=I.customerSession,t=``;if(I.customerStep===1)t=`
-      <div style="text-align:center;">
-        <!-- 1. Top Logo -->
-        ${e.logoUrl?`<img src="${e.logoUrl}" alt="${e.businessName}" class="customer-logo-img">`:`<div class="customer-logo-img" style="background:${e.qrColor||`#4f46e5`}; color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin:0 auto 14px;">${e.businessName.slice(0,2).toUpperCase()}</div>`}
+    `;let e=B.customerSession,t=e.logoUrl?`<img src="${e.logoUrl}" alt="${e.businessName}">`:`<div class="cflow-logo-initials">${(e.businessName||`BZ`).slice(0,2).toUpperCase()}</div>`,n=e.bannerUrl||`https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80`,r=``,i=``,a=``;if(B.customerStep===1)r=`
+      <div class="cflow-animate">
+        <!-- 1. Cover Banner -->
+        <img src="${n}" alt="${e.businessName} cover" class="cflow-banner">
 
-        <!-- 2. Rectangular Image Banner -->
-        ${e.bannerUrl?`<img src="${e.bannerUrl}" alt="${e.businessName} cover" class="customer-banner-img">`:`<img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="${e.businessName} banner" class="customer-banner-img">`}
+        <!-- 2. Floating Business Logo Card -->
+        <div class="cflow-logo-card">
+          ${t}
+        </div>
 
-        <!-- 3. Rest of Content -->
-        <h1 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px; line-height:1.3;">${e.businessName}</h1>
-        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:24px;">
-          Share your experience in 3 quick questions. Our AI will help prepare your review draft.
-        </p>
+        <div style="text-align:center;">
+          <!-- 3. Purpose Badge -->
+          <div class="cflow-feedback-badge">
+            ${V.sparkles}
+            <span>Your feedback matters!</span>
+          </div>
 
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; color:#475569; margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:8px;">
-          ${L.bolt}
-          <span>Takes less than 45 seconds &bull; 100% genuine</span>
+          <!-- 4. Hero Title & Subtitle -->
+          <h1 class="cflow-hero-title">
+            Share your <span>experience</span>
+          </h1>
+          <p class="cflow-hero-sub">
+            Answer 3 quick questions about your visit at <strong>${e.businessName}</strong>. Our AI will craft an authentic Google review draft for you!
+          </p>
+
+          <!-- 5. 3 Feature Highlights -->
+          <div class="cflow-feature-row">
+            <div class="cflow-feature-item">
+              <div class="cflow-feature-icon blue">⚡</div>
+              <span class="cflow-feature-label">Quick &amp; Easy<br>&lt; 45 sec</span>
+            </div>
+            <div class="cflow-feature-item">
+              <div class="cflow-feature-icon green">🛡️</div>
+              <span class="cflow-feature-label">100% Genuine<br>Your Voice</span>
+            </div>
+            <div class="cflow-feature-item">
+              <div class="cflow-feature-icon red">💖</div>
+              <span class="cflow-feature-label">Helps Us<br>Grow</span>
+            </div>
+          </div>
+
+          <!-- 6. Main Action Button -->
+          <button class="cflow-btn-primary" onclick="customerNextStep(2)">
+            Start Review &rarr;
+          </button>
+
+          <div class="cflow-time-note">
+            <span>⏱ Takes ~30 seconds &bull; No app or login needed</span>
+          </div>
         </div>
       </div>
-
-      <button class="btn-pro btn-pro-primary btn-pro-lg" onclick="customerNextStep(2)" style="width:100%; font-size:16px; padding:14px 20px; background:${e.qrColor||`#4f46e5`};">
-        ${L.sparkles}
-        Start Feedback &rarr;
-      </button>
-    `;else if(I.customerStep===2)t=`
-      <div>
-        <div style="font-size:12px; font-weight:700; color:#4f46e5; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Step 1 of 2</div>
-        <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:6px;">Your Information</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:24px; line-height:1.5;">Optional: tell us your name so ${e.businessName} knows who visited.</p>
+    `;else if(B.customerStep===2)i=`
+      <div class="cflow-topbar">
+        <button type="button" class="cflow-back-btn" onclick="customerPrevStep()" title="Go back">
+          &larr;
+        </button>
+        <div style="font-size:13px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <span>⭐</span> <span>${e.businessName}</span>
+        </div>
+        <div style="width:34px;"></div>
+      </div>
+    `,a=`
+      <div class="cflow-step-label">Step 1 of 3 &bull; Your Details</div>
+      <div class="cflow-progress-track">
+        <div class="cflow-progress-fill" style="width: 25%;"></div>
+      </div>
+    `,r=`
+      <div class="cflow-animate">
+        <h2 class="cflow-step-heading">Tell us about yourself</h2>
+        <p class="cflow-step-sub">Optional: Let <strong>${e.businessName}</strong> know who visited, or continue anonymously.</p>
 
         <form onsubmit="handleCustomerInfoSubmit(event)">
           <div style="margin-bottom:18px;">
-            <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Your Name (Optional)</label>
-            <div style="position:relative;">
-              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
-                ${L.user}
+            <label class="cflow-field-label">Your Name (Optional)</label>
+            <div class="cflow-input-wrap">
+              <span class="cflow-input-icon">
+                ${V.user}
               </span>
-              <input type="text" id="custNameInput" class="pro-input" placeholder="e.g. Alex" value="${I.customerInfo.name}" style="padding-left:42px; font-size:14px;">
+              <input type="text" id="custNameInput" class="cflow-input" placeholder="e.g. Rahul Sharma" value="${B.customerInfo.name||``}">
             </div>
           </div>
 
           <div style="margin-bottom:24px;">
-            <label class="input-label" style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Mobile Number (Optional)</label>
-            <div style="position:relative;">
-              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; display:flex;">
-                ${L.phone}
+            <label class="cflow-field-label">Mobile Number (Optional)</label>
+            <div class="cflow-input-wrap">
+              <span class="cflow-input-icon">
+                ${V.phone}
               </span>
-              <input type="tel" id="custMobileInput" class="pro-input" placeholder="+1 (555) 000-0000" value="${I.customerInfo.mobile}" style="padding-left:42px; font-size:14px;">
+              <input type="tel" id="custMobileInput" class="cflow-input" placeholder="+91 98765 43210" value="${B.customerInfo.mobile||``}">
             </div>
           </div>
 
-          <button type="submit" class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:15px; padding:13px 20px; background:${e.qrColor||`#4f46e5`};">
-            Continue to Questions &rarr;
+          <button type="submit" class="cflow-btn-primary">
+            Continue to Rating &rarr;
           </button>
         </form>
-      </div>
 
-      <div style="text-align:center; margin-top:16px;">
-        <button class="btn-pro btn-pro-secondary btn-pro-sm" onclick="skipCustomerInfo()" style="color:#64748b; border:none; background:transparent; font-size:13px; cursor:pointer;">
-          Skip & Continue Anonymously
+        <button type="button" class="cflow-skip-link" onclick="skipCustomerInfo()">
+          Skip &amp; Continue Anonymously
         </button>
       </div>
-    `;else if(I.customerStep===3){let n=e.questions;if(!n||n.length===0)t=`
-        <div style="text-align:center; padding:40px 10px;">
-          <p style="color:#64748b; font-size:14px;">No questions configured by the business yet.</p>
+    `;else if(B.customerStep===3){let t=e.questions||[],n=t.length;if(i=`
+      <div class="cflow-topbar">
+        <button type="button" class="cflow-back-btn" onclick="customerPrevStep()" title="Go back">
+          &larr;
+        </button>
+        <div style="font-size:13px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <span>⭐</span> <span>${e.businessName}</span>
         </div>
-      `;else{let e=n[I.currentQuestionIdx],r=n.length;t=`
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <span class="badge-pro badge-indigo" style="font-weight:700;">Question ${I.currentQuestionIdx+1} of ${r}</span>
-            <span style="font-size:13px; font-weight:700; color:#475569;">${e.category_name}</span>
-          </div>
+        <div style="width:34px;"></div>
+      </div>
+    `,n===0)r=`
+        <div class="cflow-animate" style="text-align:center; padding:50px 10px;">
+          <p style="color:#64748b; font-size:14px; margin-bottom:20px;">No questions configured yet by the business.</p>
+          <button class="cflow-btn-primary" onclick="generateCustomerReview()">
+            Generate Review Draft &rarr;
+          </button>
+        </div>
+      `;else{let e=t[B.currentQuestionIdx],i=Math.round((B.currentQuestionIdx+1)/n*75+15);a=`
+        <div class="cflow-step-label">Question ${B.currentQuestionIdx+1} of ${n} &bull; Rating</div>
+        <div class="cflow-progress-track">
+          <div class="cflow-progress-fill" style="width: ${i}%;"></div>
+        </div>
+      `;let o=(e.category_name||`Experience`).replace(/'/g,`\\'`).replace(/"/g,`&quot;`),s=(e.question_text||``).replace(/'/g,`\\'`).replace(/"/g,`&quot;`);r=`
+        <div class="cflow-animate" key="q_${B.currentQuestionIdx}">
+          <div style="text-align:center;">
+            <div class="cflow-category-badge">
+              ${V.sparkles}
+              <span>${e.category_name||`General Feedback`}</span>
+            </div>
 
-          <div style="height:6px; background:#e2e8f0; border-radius:99px; margin-bottom:32px; overflow:hidden;">
-            <div style="height:100%; background:#4f46e5; border-radius:99px; width:${(I.currentQuestionIdx+1)/r*100}%; transition:width 0.3s ease;"></div>
-          </div>
-
-          <div style="text-align:center; padding:10px 0;">
-            <h2 style="font-size:22px; font-weight:800; color:#0f172a; line-height:1.4; margin-bottom:28px;">
+            <h2 class="cflow-question-text">
               ${e.question_text}
             </h2>
 
-            <div class="star-interactive-row" id="starInteractiveRow" onmouseleave="resetStarsHover()">
-              ${[1,2,3,4,5].map(t=>`
-                <button type="button" 
-                  class="star-btn-lg ${I.selectedRatingForQ&&I.selectedRatingForQ>=t?`star-filled`:``}" 
-                  id="starBtn_${t}"
-                  data-star="${t}"
-                  title="${t} Star${t>1?`s`:``}" 
-                  onmouseenter="highlightStars(${t})"
-                  onclick="rateStar(${e.id}, '${e.category_name.replace(/'/g,`\\'`)}', '${e.question_text.replace(/'/g,`\\'`)}', ${t})">
-                  ★
-                </button>
-              `).join(``)}
+            <div class="cflow-tap-hint">
+              Tap an emoji to rate your experience:
             </div>
 
-            <div id="starFeedbackText" style="font-size:15px; font-weight:700; color:#d97706; min-height:24px;">
-              Tap a star (1 to 5) to rate
+            <div class="cflow-emoji-row">
+              <button type="button"
+                class="cflow-emoji-btn emoji-1 ${B.selectedRatingForQ===1?`selected`:``}"
+                title="1 Star - Disappointing"
+                onclick="rateStar(${e.id}, '${o}', '${s}', 1)">
+                <div class="cflow-emoji-face">😡</div>
+                <span class="cflow-emoji-label">Terrible</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-2 ${B.selectedRatingForQ===2?`selected`:``}"
+                title="2 Stars - Could be better"
+                onclick="rateStar(${e.id}, '${o}', '${s}', 2)">
+                <div class="cflow-emoji-face">🙁</div>
+                <span class="cflow-emoji-label">Bad</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-3 ${B.selectedRatingForQ===3?`selected`:``}"
+                title="3 Stars - Average"
+                onclick="rateStar(${e.id}, '${o}', '${s}', 3)">
+                <div class="cflow-emoji-face">😐</div>
+                <span class="cflow-emoji-label">Okay</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-4 ${B.selectedRatingForQ===4?`selected`:``}"
+                title="4 Stars - Very Good"
+                onclick="rateStar(${e.id}, '${o}', '${s}', 4)">
+                <div class="cflow-emoji-face">😊</div>
+                <span class="cflow-emoji-label">Good</span>
+              </button>
+
+              <button type="button"
+                class="cflow-emoji-btn emoji-5 ${B.selectedRatingForQ===5?`selected`:``}"
+                title="5 Stars - Outstanding"
+                onclick="rateStar(${e.id}, '${o}', '${s}', 5)">
+                <div class="cflow-emoji-face">🤩</div>
+                <span class="cflow-emoji-label">Amazing</span>
+              </button>
+            </div>
+
+            <div id="starFeedbackText" style="font-size:14px; font-weight:700; color:#6d5af6; min-height:24px; margin-top:14px;">
+              ${B.selectedRatingForQ?Y(B.selectedRatingForQ):``}
             </div>
           </div>
-        </div>
 
-        <div style="text-align:center; font-size:12px; color:#94a3b8; margin-top:20px;">
-          Automatically moves to next question after rating
-        </div>
-      `}}else I.customerStep===4?t=I.loading?`
-        <div style="text-align:center; padding:50px 10px;">
-          <div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #4f46e5, #06b6d4); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px; margin:0 auto 20px; box-shadow:0 10px 25px rgba(79, 70, 229, 0.3);">
-            ${L.sparkles}
+          <div class="cflow-auto-note">
+            ⚡ Automatically advances to next question after rating
           </div>
-          <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:8px;">Crafting your review...</h2>
-          <p style="font-size:14px; color:#64748b; line-height:1.5;">Our AI is synthesizing your answers into an authentic review draft.</p>
+        </div>
+      `}}else if(B.customerStep===4)i=`
+      <div class="cflow-topbar">
+        <button type="button" class="cflow-back-btn" onclick="customerPrevStep()" title="Go back">
+          &larr;
+        </button>
+        <div style="font-size:13px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <span>⭐</span> <span>${e.businessName}</span>
+        </div>
+        <div style="width:34px;"></div>
+      </div>
+    `,a=`
+      <div class="cflow-step-label">Step 3 of 3 &bull; AI Review Draft</div>
+      <div class="cflow-progress-track">
+        <div class="cflow-progress-fill" style="width: 100%;"></div>
+      </div>
+    `,r=B.loading?`
+        <div class="cflow-ai-loading cflow-animate">
+          <div class="cflow-ai-orb">
+            ${V.sparkles}
+          </div>
+          <h2 class="cflow-ai-title">Crafting your review...</h2>
+          <p class="cflow-ai-sub">Our AI is synthesizing your answers into an authentic, humanized review draft.</p>
+          <div class="cflow-ai-dots">
+            <div class="cflow-ai-dot"></div>
+            <div class="cflow-ai-dot"></div>
+            <div class="cflow-ai-dot"></div>
+          </div>
         </div>
       `:`
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h2 style="font-size:20px; font-weight:800; color:#0f172a;">Your Review Draft</h2>
-            <span class="badge-pro badge-indigo">${L.sparkles} AI Generated</span>
+        <div class="cflow-animate">
+          <div class="cflow-draft-header">
+            <h2 class="cflow-draft-title">Your Review Draft</h2>
+            <span class="cflow-ai-badge">${V.sparkles} AI Draft</span>
           </div>
 
-          <p style="font-size:13px; color:#64748b; margin-bottom:16px; line-height:1.4;">
-            Feel free to edit your text below before continuing to Google.
+          <p class="cflow-draft-sub">
+            Feel free to customize your review text below before posting to Google.
           </p>
 
-          <textarea id="editableDraft" class="review-arial-box" rows="7" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${I.generatedReview}</textarea>
+          <textarea id="editableDraft" class="cflow-draft-textarea" rows="6" placeholder="Your review text..." oninput="state.generatedReview = this.value; this.style.height='auto'; this.style.height=(this.scrollHeight+10)+'px'">${B.generatedReview||``}</textarea>
 
-          <div style="background:#ecfdf5; border:1px solid #bbf7d0; border-radius:10px; padding:12px 14px; font-size:12px; color:#047857; line-height:1.5; margin-bottom:24px; display:flex; align-items:flex-start; gap:8px;">
-            <span style="display:flex; margin-top:1px;">${L.check}</span>
-            <span>Clicking below copies this review and opens ${e.businessName}'s Google review page. Simply paste and post!</span>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+            <button type="button" class="cflow-btn-ghost" onclick="generateCustomerReview()">
+              ${V.sparkles} Regenerate Variation
+            </button>
           </div>
 
-          <button class="btn-pro btn-pro-primary btn-pro-lg" style="width:100%; font-size:16px; padding:14px 20px; display:flex; align-items:center; justify-content:center; gap:10px; background:#0f172a;" onclick="copyAndRedirectToGoogle()">
-            ${L.google}
-            Copy & Continue to Google &rarr;
+          <div class="cflow-hint-box">
+            <span style="display:flex; margin-top:2px;">${V.check}</span>
+            <span>Clicking below copies this review and opens <strong>${e.businessName}</strong>'s Google review page. Simply paste and post!</span>
+          </div>
+
+          <button type="button" class="cflow-btn-google" onclick="copyAndRedirectToGoogle()">
+            ${V.google}
+            Copy &amp; Post on Google &rarr;
           </button>
         </div>
-      `:I.customerStep===5&&(t=`
-      <div style="text-align:center; padding:40px 10px;">
-        <div style="width:72px; height:72px; border-radius:50%; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:32px; margin:0 auto 20px; border:2px solid #bbf7d0;">
-          ${L.check}
+      `;else if(B.customerStep===5){let t=B.googleReviewUrl||e.googleReviewUrl||``;r=`
+      <div class="cflow-thanks-wrap cflow-animate">
+        <!-- Celebration Ring -->
+        <div class="cflow-confetti-ring">
+          🎉
         </div>
-        <h2 style="font-size:24px; font-weight:800; color:#0f172a; margin-bottom:8px;">Thank You!</h2>
-        <p style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:28px;">
-          Your review draft was copied to your clipboard. Simply paste and submit it on the Google review window.
+
+        <!-- 5 Animated Pop-in Golden Stars -->
+        <div class="cflow-thanks-stars">
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+          <span class="cflow-thanks-star">⭐</span>
+        </div>
+
+        <h2 class="cflow-thanks-title">Thank You so much!</h2>
+        <p class="cflow-thanks-sub">
+          Your review means the world to <strong>${e.businessName}</strong>. Thank you for supporting our team!
         </p>
 
-        <button class="btn-pro btn-pro-secondary btn-pro-lg" onclick="customerNextStep(1)" style="width:100%;">
+        <!-- Copied to clipboard card -->
+        <div class="cflow-thanks-card">
+          <div class="cflow-thanks-card-icon">📋</div>
+          <div class="cflow-thanks-card-text">
+            <strong>Draft Copied to Clipboard!</strong>
+            <span>Simply paste and submit on the Google review window.</span>
+          </div>
+        </div>
+
+        ${t?`
+          <button type="button" class="cflow-btn-direct-google" onclick="window.open('${t}', '_blank', 'noopener,noreferrer')">
+            ${V.google}
+            Open Google Review Page &rarr;
+          </button>
+        `:``}
+
+        <button type="button" class="cflow-btn-secondary" onclick="customerNextStep(1)">
           Start New Review
         </button>
       </div>
-    `);let n=I.customerStep>1?`
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f1f5f9;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:18px;">⭐</span>
-        <span style="font-weight:700; font-size:15px; color:#0f172a;">${e.businessName}</span>
+    `}return`
+    <div class="cflow-page">
+      <div class="cflow-card">
+        <!-- Decorative corner dashes -->
+        <div class="cflow-deco-tl">
+          <div class="cflow-dash" style="background:#6d5af6;"></div>
+          <div class="cflow-dash" style="background:#06b6d4;"></div>
+          <div class="cflow-dash" style="background:#f59e0b;"></div>
+        </div>
+        <div class="cflow-deco-tr">
+          <div class="cflow-dash" style="background:#10b981;"></div>
+          <div class="cflow-dash" style="background:#ec4899;"></div>
+        </div>
+        <div class="cflow-deco-br"></div>
+
+        ${i}
+        ${a}
+
+        <div class="cflow-body">
+          ${r}
+        </div>
       </div>
-      <span style="font-size:12px; font-weight:600; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; padding:4px 10px; border-radius:99px;">Verified Review</span>
     </div>
-  `:``;return`
-    <div class="customer-clean-page" style="background: ${e.bgColor||`#edf4fc`};">
-      <div class="customer-clean-card">
-        ${n}
-        ${t}
-      </div>
-    </div>
-  `}function Ie(e){I.customerStep=e,B()}function Le(){I.customerInfo.name=`Guest`,I.customerInfo.mobile=``,I.customerStep=3,I.currentQuestionIdx=0,I.customerAnswers=[],B()}function X(e){e.preventDefault(),I.customerInfo.name=document.getElementById(`custNameInput`).value.trim(),I.customerInfo.mobile=document.getElementById(`custMobileInput`).value.trim(),I.customerInfo.mobile&&I.customerSession&&fetch(`${F}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:I.customerSession.clientId,name:I.customerInfo.name,mobile:I.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),I.customerStep=3,I.currentQuestionIdx=0,I.customerAnswers=[],B()}function Z(e){I.isRatingTransitioning&&I.selectedRatingForQ&&(e=I.selectedRatingForQ);for(let t=1;t<=5;t++){let n=document.getElementById(`starBtn_${t}`);n&&(t<=e?n.classList.add(`star-filled`):n.classList.remove(`star-filled`))}let t=document.getElementById(`starFeedbackText`);t&&(t.textContent=[``,`Disappointing (1/5)`,`Needs Improvement (2/5)`,`Average (3/5)`,`Very Good! (4/5)`,`Outstanding! (5/5)`][e]||`${e} Stars Selected`,t.style.color=`#d97706`)}function Re(){if(I.isRatingTransitioning&&I.selectedRatingForQ){Z(I.selectedRatingForQ);return}for(let e=1;e<=5;e++){let t=document.getElementById(`starBtn_${e}`);t&&t.classList.remove(`star-filled`)}let e=document.getElementById(`starFeedbackText`);e&&(e.textContent=`Tap a star (1 to 5) to rate`,e.style.color=`#64748b`)}function ze(e,t,n,r){if(I.isRatingTransitioning)return;I.isRatingTransitioning=!0,I.selectedRatingForQ=r,Z(r);let i=document.getElementById(`starBtn_${r}`);i&&i.classList.add(`star-pop`);let a=document.getElementById(`starFeedbackText`);a&&(a.textContent=[``,`★☆☆☆☆ Disappointing (1/5)`,`★★☆☆☆ Needs Improvement (2/5)`,`★★★☆☆ Average Experience (3/5)`,`★★★★☆ Very Good! (4/5)`,`★★★★★ Outstanding! (5/5)`][r]||`${r} Stars Selected`,a.style.color=`#d97706`),I.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r}),setTimeout(()=>{I.isRatingTransitioning=!1,I.selectedRatingForQ=null;let e=I.customerSession.questions.length;I.currentQuestionIdx<e-1?(I.currentQuestionIdx+=1,B()):Be()},450)}async function Be(){I.customerStep=4,I.loading=!0,B();try{let e=await(await fetch(`${F}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:I.customerSession.clientId,customerName:I.customerInfo.name||`Anonymous`,customerMobile:I.customerInfo.mobile||``,answers:I.customerAnswers})})).json();I.generatedReview=e.reviewDraft,I.feedbackId=e.feedbackId,I.googleReviewUrl=e.googleReviewUrl}catch{I.generatedReview=`I had a great experience at ${I.customerSession.businessName}. The service was excellent!`}finally{I.loading=!1,B()}}async function Ve(){let e=I.generatedReview||document.getElementById(`editableDraft`)?.value;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}I.feedbackId&&fetch(`${F}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:I.feedbackId})});let t=I.googleReviewUrl||I.customerSession.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied! Note: Google Review URL is not configured yet by the business.`),I.customerStep=5,B()}function He(e,t=null){I.modal={type:e,data:t},B()}function Q(){I.modal=null,B()}function $(){if(!I.modal)return``;let{type:e,data:t}=I.modal;return e===`create-client`?`
+  `}function ze(e){B.customerStep=e,U()}function Be(){B.isRatingTransitioning||(B.customerStep===2?(B.customerStep=1,U()):B.customerStep===3?B.currentQuestionIdx>0?(--B.currentQuestionIdx,B.customerAnswers.pop(),B.selectedRatingForQ=null,U()):(B.customerStep=2,U()):B.customerStep===4&&(B.customerStep=3,B.currentQuestionIdx=Math.max(0,(B.customerSession?.questions?.length||1)-1),B.selectedRatingForQ=null,U()))}function Ve(){B.customerInfo.name=`Guest`,B.customerInfo.mobile=``,B.customerStep=3,B.currentQuestionIdx=0,B.customerAnswers=[],U()}function He(e){e.preventDefault(),B.customerInfo.name=document.getElementById(`custNameInput`)?.value?.trim()||``,B.customerInfo.mobile=document.getElementById(`custMobileInput`)?.value?.trim()||``,B.customerInfo.mobile&&B.customerSession&&fetch(`${z}/customer/record-info`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:B.customerSession.clientId,name:B.customerInfo.name,mobile:B.customerInfo.mobile})}).catch(e=>console.warn(`Could not record customer info immediately`,e)),B.customerStep=3,B.currentQuestionIdx=0,B.customerAnswers=[],U()}function Ue(e){let t=document.getElementById(`starFeedbackText`);t&&(t.textContent=Y(e))}function We(){let e=document.getElementById(`starFeedbackText`);e&&!B.selectedRatingForQ&&(e.textContent=``)}function Ge(e,t,n,r){if(B.isRatingTransitioning)return;B.isRatingTransitioning=!0,B.selectedRatingForQ=r;let i=document.getElementById(`starFeedbackText`);i&&(i.textContent=Y(r)),document.querySelectorAll(`.cflow-emoji-btn`).forEach(e=>e.classList.remove(`selected`));let a=document.querySelector(`.cflow-emoji-btn.emoji-${r}`);a&&a.classList.add(`selected`),B.customerAnswers.push({category_id:e,category_name:t,question_text:n,rating:r}),setTimeout(()=>{B.isRatingTransitioning=!1,B.selectedRatingForQ=null;let e=B.customerSession?.questions?.length||0;B.currentQuestionIdx<e-1?(B.currentQuestionIdx+=1,U()):Z()},420)}async function Z(){B.customerStep=4,B.loading=!0,U();try{let e=await(await fetch(`${z}/customer/generate-review`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({clientId:B.customerSession.clientId,customerName:B.customerInfo.name||`Anonymous`,customerMobile:B.customerInfo.mobile||``,answers:B.customerAnswers})})).json();B.generatedReview=e.reviewDraft||`I had a wonderful experience at ${B.customerSession.businessName}. Highly recommended!`,B.feedbackId=e.feedbackId,B.googleReviewUrl=e.googleReviewUrl}catch{B.generatedReview=`I had a wonderful experience at ${B.customerSession?.businessName||`this place`}. Excellent service and quality!`}finally{B.loading=!1,U()}}async function Ke(){let e=B.generatedReview||document.getElementById(`editableDraft`)?.value||``;try{await navigator.clipboard.writeText(e)}catch{console.warn(`Clipboard write error`)}B.feedbackId&&fetch(`${z}/customer/redirect`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({feedbackId:B.feedbackId})}).catch(e=>console.warn(`Redirect record error`,e));let t=B.googleReviewUrl||B.customerSession?.googleReviewUrl;t?window.open(t,`_blank`,`noopener,noreferrer`):alert(`Review text copied to clipboard! Note: Google Review URL is not configured yet by the business.`),B.customerStep=5,U(),setTimeout(X,100)}function qe(e,t=null){B.modal={type:e,data:t},U()}function Q(){B.modal=null,U()}function $(){if(!B.modal)return``;let{type:e,data:t}=B.modal;return e===`create-client`?`
       <div class="pro-modal-backdrop" onclick="closeModal()">
         <div class="pro-modal-box" onclick="event.stopPropagation()">
           <div class="pro-modal-header">
@@ -1486,7 +1637,7 @@ Minimum version required to store current data is: `+c+`.
               <div style="margin-bottom:16px;">
                 <label class="input-label">Category</label>
                 <select id="qCatSelect" class="pro-select" required>
-                  ${I.clientCategories.map(e=>`
+                  ${B.clientCategories.map(e=>`
                     <option value="${e.id}">${e.name}</option>
                   `).join(``)}
                 </select>
@@ -1503,4 +1654,4 @@ Minimum version required to store current data is: `+c+`.
           </form>
         </div>
       </div>
-    `:``}window.switchAuthView=ne,window.handleLogin=oe,window.handleLogout=se,window.quickFill=ae,window.openModal=He,window.closeModal=Q,window.handleCreateClient=U,window.handleResetPassword=W,window.deleteClient=G,window.switchTab=ue,window.selectColor=fe,window.addKeywordChip=me,window.switchKeywordCategory=pe,window.handleSaveProfile=he,window.downloadQrCode=ge,window.updateCustomization=we,window.handleColorPickerInput=Y,window.handleColorPickerChange=ve,window.selectBgColorPreset=ye,window.selectQrColorPreset=be,window.handleImageUpload=xe,window.removeLogoImage=Se,window.setBannerPreset=Ce,window.handleSaveCustomization=Te,window.handleAddCategory=Ae,window.deleteCategory=je,window.handleAddQuestion=Me,window.deleteQuestion=Ne,window.customerNextStep=Ie,window.skipCustomerInfo=Le,window.handleCustomerInfoSubmit=X,window.changeAnalyticsPeriod=ce,window.highlightStars=Z,window.resetStarsHover=Re,window.rateStar=ze,window.copyAndRedirectToGoogle=Ve,window.deleteCustomer=ke,I.currentUser?I.currentUser.role===`admin`?V().then(B):K().then(B):B();
+    `:``}window.switchAuthView=te,window.handleLogin=ae,window.handleLogout=oe,window.quickFill=ie,window.openModal=qe,window.closeModal=Q,window.handleCreateClient=ce,window.handleResetPassword=le,window.deleteClient=ue,window.switchTab=pe,window.selectColor=he,window.addKeywordChip=_e,window.switchKeywordCategory=ge,window.handleSaveProfile=ve,window.downloadQrCode=ye,window.updateCustomization=De,window.handleColorPickerInput=J,window.handleColorPickerChange=xe,window.selectBgColorPreset=Se,window.selectQrColorPreset=Ce,window.handleImageUpload=we,window.removeLogoImage=Te,window.setBannerPreset=Ee,window.handleSaveCustomization=Oe,window.handleAddCategory=Ne,window.deleteCategory=Pe,window.handleAddQuestion=Fe,window.deleteQuestion=Ie,window.customerNextStep=ze,window.customerPrevStep=Be,window.skipCustomerInfo=Ve,window.handleCustomerInfoSubmit=He,window.changeAnalyticsPeriod=de,window.highlightStars=Ue,window.resetStarsHover=We,window.rateStar=Ge,window.generateCustomerReview=Z,window.copyAndRedirectToGoogle=Ke,window.triggerConfetti=X,window.deleteCustomer=Me,B.currentUser?B.currentUser.role===`admin`?W().then(U):G().then(U):U();
