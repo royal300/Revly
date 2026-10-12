@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revly — Pitch Deck Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #07090e;
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* Deck Container */
+    .deck-container {
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      background: #0b0f19;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      padding: 48px 56px;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.3s ease;
+    }
+    .slide.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 12px;
+    }
+    .badge-purple { background: rgba(129,110,255,0.15); color: #816eff; border: 1px solid rgba(129,110,255,0.3); }
+    .badge-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+    .badge-green { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+    .badge-cyan { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.3); }
+
+    .slide-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .slide-title span { color: #816eff; }
+    .slide-sub {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 24px;
+    }
+
+    /* Cards */
+    .card-grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      flex: 1;
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      flex: 1;
+    }
+    .card-grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      flex: 1;
+    }
+    .deck-card {
+      background: #171e30;
+      border: 1px solid #28324b;
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .deck-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .deck-card-desc {
+      font-size: 12.5px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    /* Comparison Cards */
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+    .compare-card {
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .compare-bad {
+      background: rgba(239,68,68,0.06);
+      border: 1.5px solid rgba(239,68,68,0.3);
+    }
+    .compare-good {
+      background: rgba(16,185,129,0.06);
+      border: 1.5px solid rgba(16,185,129,0.3);
+    }
+
+    /* Bottom Bar */
+    .callout-bar {
+      background: #111827;
+      border: 1px solid rgba(129,110,255,0.3);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .btn-nav {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-nav:hover { background: #816eff; border-color: #816eff; }
+    .slide-counter { font-size: 14px; color: #64748b; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+
+    <!-- SLIDE 1: INTRO -->
+    <div class="slide active" id="slide1">
+      <div style="display:flex; height:100%; gap:40px; align-items:center;">
+        <div style="flex:1.2;">
+          <div class="badge badge-purple">✨ AI-POWERED GOOGLE MAPS ENGINE</div>
+          <h1 style="font-size:42px; font-weight:900; line-height:1.15; margin-bottom:14px;">
+            Turn Every Walk-In<br>Into a 5-Star<br><span style="color:#816eff;">Google Review.</span>
+          </h1>
+          <p style="font-size:15px; color:#94a3b8; line-height:1.6; margin-bottom:28px;">
+            Revly turns tabletop QR feedback into authentic, keyword-rich Google reviews in 30 seconds — boosting your Google Maps #1 rank automatically.
+          </p>
+          <div style="background:#111827; border:1px solid #374151; border-radius:12px; padding:12px 18px; font-size:12.5px; font-weight:700; display:inline-flex; gap:16px;">
+            <span>⏱️ 30 Sec Journey</span>
+            <span>•</span>
+            <span>⚡ 100% Staff-Free</span>
+            <span>•</span>
+            <span>📱 Zero App Needed</span>
+          </div>
+        </div>
+
+        <div style="flex:0.8; height:100%; display:flex; align-items:center; justify-content:center;">
+          <img src="C:/Users/AMIT/.gemini/antigravity-ide/brain/57426d26-9a80-48d1-bde5-6d3eaa15d5ee/revly_qr_stand_mockup_1791808615898.png" style="max-height:92%; max-width:100%; border-radius:16px; border:2px solid #816eff; box-shadow:0 15px 40px rgba(129,110,255,0.25); object-fit:contain;" alt="Revly QR Stand">
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: THE PROBLEM -->
+    <div class="slide" id="slide2">
+      <div>
+        <div class="badge badge-red">THE PROBLEM</div>
+        <h2 class="slide-title">Why Great Businesses Stay Invisible on Google Maps</h2>
+        <p class="slide-sub">Even with great footfall, 95% of happy customers never help your local ranking.</p>
+      </div>
+
+      <div class="card-grid-2x2">
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#f59e0b;">1. Hidden on Google Maps</div>
+          <div class="deck-card-desc">88% of shoppers search on Google before visiting, but competitors take the top 3 spots. If you're not in the top 3, over 75% of locals never see your shop.</div>
+        </div>
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#816eff;">2. The Friction Barrier</div>
+          <div class="deck-card-desc">95% of happy customers leave without reviewing. Asking in person is awkward for staff, and customers forget the second they step outside.</div>
+        </div>
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#ef4444;">3. The 'Nice & Good' Trap</div>
+          <div class="deck-card-desc">When customers do write, they post 2 words: 'Nice food' or 'Good salon'. These contain zero search keywords, giving Google zero ranking signals.</div>
+        </div>
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#06b6d4;">4. Zero Customer Data</div>
+          <div class="deck-card-desc">Customers pay via cash/UPI and leave. The owner has no contact number, no visit history, and no way to invite them back for slow weekdays.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: THE SOLUTION -->
+    <div class="slide" id="slide3">
+      <div>
+        <div class="badge badge-green">THE SOLUTION</div>
+        <h2 class="slide-title">The Revly <span>30-Second Growth Engine</span></h2>
+        <p class="slide-sub">Frictionless customer loop that turns daily footfall into ranking power.</p>
+      </div>
+
+      <div class="card-grid-3">
+        <div class="deck-card">
+          <div style="font-size:11px; font-weight:800; color:#816eff; margin-bottom:4px;">STEP 1</div>
+          <div class="deck-card-title">Scan Tabletop QR</div>
+          <div class="deck-card-desc">
+            Customer scans the branded stander with their smartphone camera.<br><br>
+            • Zero app download<br>
+            • Instant web load (<1s)<br>
+            • Zero login barrier
+          </div>
+        </div>
+        <div class="deck-card">
+          <div style="font-size:11px; font-weight:800; color:#06b6d4; margin-bottom:4px;">STEP 2</div>
+          <div class="deck-card-title">3-Tap Micro-Feedback</div>
+          <div class="deck-card-desc">
+            Customer rates 2-3 quick emoji questions about their visit.<br><br>
+            • AI weaves their ratings<br>
+            • Inserts targeted SEO keywords<br>
+            • 100% authentic human tone
+          </div>
+        </div>
+        <div class="deck-card">
+          <div style="font-size:11px; font-weight:800; color:#10b981; margin-bottom:4px;">STEP 3</div>
+          <div class="deck-card-title">1-Tap Google Post</div>
+          <div class="deck-card-desc">
+            Customer taps 'Post on Google'. Review is copied & Google Maps opens.<br><br>
+            • Customer pastes & posts in 3s<br>
+            • Review goes live instantly<br>
+            • Name & mobile saved to CRM
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-bar">
+        🚀 Result: Customer leaves review effortlessly • Business gains Google SEO ranking + Verified Customer Contact.
+      </div>
+    </div>
+
+    <!-- SLIDE 4: WHY KEYWORDS WIN -->
+    <div class="slide" id="slide4">
+      <div>
+        <div class="badge badge-purple">LOCAL SEO SECRET</div>
+        <h2 class="slide-title">Why <span>Keyword-Rich Reviews</span> Drive Rankings</h2>
+        <p class="slide-sub">Google ranks businesses that have specific dish, service & location terms in reviews.</p>
+      </div>
+
+      <div class="compare-container">
+        <div class="compare-card compare-bad">
+          <div style="font-size:15px; font-weight:800; color:#ef4444; margin-bottom:12px;">❌ WITHOUT REVLY (Generic Review)</div>
+          <div style="font-size:18px; font-weight:800; color:#fff; margin-bottom:16px;">“Nice food, super place.”</div>
+          <div class="deck-card-desc">
+            • Zero dish names or service mentions<br>
+            • Zero local search signals<br>
+            • Google's algorithm ignores it<br>
+            • Completely invisible for 'near me' searches
+          </div>
+        </div>
+
+        <div class="compare-card compare-good">
+          <div style="font-size:15px; font-weight:800; color:#10b981; margin-bottom:12px;">✅ WITH REVLY (AI Keyword-Rich Review)</div>
+          <div style="font-size:16px; font-weight:700; color:#fff; line-height:1.5; margin-bottom:16px;">“Loved the creamy Alfredo pasta and hazelnut cold brew! The seating atmosphere was so relaxing. Top cafe spot in the area.”</div>
+          <div class="deck-card-desc">
+            • Keywords Indexed: <em>Alfredo pasta, hazelnut cold brew, relaxing atmosphere</em><br>
+            • Signals high relevance to Google Maps algorithm<br>
+            • Ranks at the Top when locals search for pasta or cold brew<br>
+            • 100% human, genuine, customer-verified
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: CORE FEATURES -->
+    <div class="slide" id="slide5">
+      <div>
+        <div class="badge badge-cyan">POWERFUL PLATFORM</div>
+        <h2 class="slide-title">Core Features Built for Store Owners</h2>
+        <p class="slide-sub">Everything needed to automate reviews, understand quality, and retain customers.</p>
+      </div>
+
+      <div class="card-grid-2x2">
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#816eff;">🎯 Custom Question Builder</div>
+          <div class="deck-card-desc">Configure questions for Cafes, Salons, Clinics, Gyms & Retail. 3 random questions served per scan so reviews cover all aspects of your service.</div>
+        </div>
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#10b981;">👥 Customer Directory (CRM)</div>
+          <div class="deck-card-desc">Captures customer names and mobile numbers automatically. Identify loyal repeat guests and build your own SMS/WhatsApp marketing database.</div>
+        </div>
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#06b6d4;">📊 Operational Health Analytics</div>
+          <div class="deck-card-desc">Track scan counts, review conversion rates, and department scores (Food Taste, Service Speed, Cleanliness) to fix operational flaws fast.</div>
+        </div>
+        <div class="deck-card">
+          <div class="deck-card-title" style="color:#f59e0b;">🏷️ Branded Tabletop Standers</div>
+          <div class="deck-card-desc">Customized with your shop's official colors, logo badge, and high-resolution print-ready QR codes for tables, counters, and bill folders.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: ROI & IMPACT -->
+    <div class="slide" id="slide6">
+      <div>
+        <div class="badge badge-green">PROVEN BUSINESS IMPACT</div>
+        <h2 class="slide-title">Measurable ROI from Day One</h2>
+        <p class="slide-sub">Transform physical footfall into your #1 unfair marketing advantage.</p>
+      </div>
+
+      <div class="card-grid-4">
+        <div class="deck-card" style="text-align:center; align-items:center;">
+          <div style="font-size:32px; font-weight:900; color:#816eff; margin-bottom:8px;">5x–10x</div>
+          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">More Google Reviews</div>
+          <div class="deck-card-desc">Turn silent walk-ins into active 5-star brand advocates.</div>
+        </div>
+        <div class="deck-card" style="text-align:center; align-items:center;">
+          <div style="font-size:32px; font-weight:900; color:#10b981; margin-bottom:8px;">#1 Rank</div>
+          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Google Maps 3-Pack</div>
+          <div class="deck-card-desc">Outrank competitors without spending on paid Google ads.</div>
+        </div>
+        <div class="deck-card" style="text-align:center; align-items:center;">
+          <div style="font-size:32px; font-weight:900; color:#06b6d4; margin-bottom:8px;">500–2k</div>
+          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Phone Leads / Mo</div>
+          <div class="deck-card-desc">Own your customer contact list for repeat campaigns.</div>
+        </div>
+        <div class="deck-card" style="text-align:center; align-items:center;">
+          <div style="font-size:32px; font-weight:900; color:#f59e0b; margin-bottom:8px;">100%</div>
+          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Automated Loop</div>
+          <div class="deck-card-desc">Zero manual follow-ups, zero awkward staff begging.</div>
+        </div>
+      </div>
+
+      <div class="callout-bar" style="background:#1e1b4b; border-color:#816eff; padding:14px;">
+        🎯 Every customer who visits your store is a Google Ranking opportunity. Revly turns daily footfall into permanent Google Maps dominance.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="controls">
+    <button class="btn-nav" onclick="prevSlide()">&larr; Previous</button>
+    <div class="slide-counter" id="counter">Slide 1 of 6</div>
+    <button class="btn-nav" onclick="nextSlide()">Next &rarr;</button>
+  </div>
+
+  <script>
+    let current = 1;
+    const total = 6;
+
+    function showSlide(idx) {
+      if (idx < 1) idx = 1;
+      if (idx > total) idx = total;
+      current = idx;
+      for (let i = 1; i <= total; i++) {
+        document.getElementById(`slide${i}`).classList.remove('active');
+      }
+      document.getElementById(`slide${current}`).classList.add('active');
+      document.getElementById('counter').textContent = `Slide ${current} of ${total}`;
+    }
+
+    function prevSlide() { showSlide(current - 1); }
+    function nextSlide() { showSlide(current + 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+  </script>
+</body>
+</html>
