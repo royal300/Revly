@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Revly — Stat-Driven Executive Pitch Deck</title>
+  <title>Revly — White & Purple Pitch Deck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #05070c;
-      color: #f8fafc;
+      background: #ede9fe;
+      color: #1e1b4b;
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
     }
 
     .deck-container {
       width: 100%;
       max-width: 1200px;
       aspect-ratio: 16 / 9;
-      background: #080c15;
-      border-radius: 20px;
-      border: 1.5px solid rgba(255,255,255,0.08);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+      background: #f8f7ff;
+      border-radius: 24px;
+      border: 1.5px solid #ddd6fe;
+      box-shadow: 0 25px 70px rgba(109, 40, 217, 0.12);
       position: relative;
       overflow: hidden;
       display: flex;
@@ -47,7 +47,7 @@
     .slide.active { display: flex; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
@@ -55,23 +55,23 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 99px;
       font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       margin-bottom: 8px;
+      width: fit-content;
     }
-    .badge-purple { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.3); }
-    .badge-red { background: rgba(244,63,94,0.15); color: #f43f5e; border: 1px solid rgba(244,63,94,0.3); }
-    .badge-green { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
-    .badge-cyan { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.3); }
+    .badge-purple { background: #f3f0ff; color: #6d28d9; border: 1.5px solid #c4b5fd; }
+    .badge-red { background: #fff1f2; color: #e11d48; border: 1.5px solid #fecdd3; }
+    .badge-green { background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0; }
 
     .slide-title {
       font-size: 32px;
       font-weight: 800;
-      color: #ffffff;
+      color: #1e1b4b;
       line-height: 1.2;
       margin-bottom: 24px;
     }
@@ -84,25 +84,31 @@
       flex: 1;
     }
     .metric-card {
-      background: #121827;
-      border: 1.5px solid #1f293d;
-      border-radius: 16px;
+      background: #ffffff;
+      border: 1.5px solid #ddd6fe;
+      border-radius: 18px;
       padding: 24px 28px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      box-shadow: 0 4px 15px rgba(109, 40, 217, 0.03);
     }
     .stat-num {
       font-size: 46px;
       font-weight: 900;
       line-height: 1.1;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       letter-spacing: -0.02em;
     }
+    .stat-tag {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1e1b4b;
+      margin-bottom: 4px;
+    }
     .stat-line {
-      font-size: 15px;
-      font-weight: 600;
-      color: #f1f5f9;
+      font-size: 13.5px;
+      color: #64748b;
       line-height: 1.5;
     }
 
@@ -114,12 +120,13 @@
       flex: 1;
     }
     .step-card {
-      background: #121827;
-      border: 1.5px solid #1f293d;
-      border-radius: 16px;
+      background: #ffffff;
+      border: 1.5px solid #ddd6fe;
+      border-radius: 18px;
       padding: 28px 24px;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 4px 15px rgba(109, 40, 217, 0.03);
     }
     .step-badge {
       font-size: 11px;
@@ -128,15 +135,20 @@
       margin-bottom: 12px;
     }
     .step-title {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 12px;
+      color: #1e1b4b;
+      margin-bottom: 6px;
       line-height: 1.25;
     }
-    .step-desc {
+    .step-sub {
       font-size: 13.5px;
-      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: #64748b;
       line-height: 1.6;
     }
 
@@ -148,27 +160,28 @@
       flex: 1;
     }
     .stat-card-v {
-      background: #121827;
-      border: 1.5px solid #1f293d;
-      border-radius: 16px;
+      background: #ffffff;
+      border: 1.5px solid #ddd6fe;
+      border-radius: 18px;
       padding: 24px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       justify-content: center;
+      box-shadow: 0 4px 15px rgba(109, 40, 217, 0.03);
     }
 
     /* Callout Strip */
     .strip {
-      background: #1a1436;
-      border: 1.5px solid rgba(139,92,246,0.35);
+      background: #f3f0ff;
+      border: 1.5px solid #c4b5fd;
       border-radius: 14px;
       padding: 14px 22px;
       text-align: center;
       font-size: 13px;
       font-weight: 700;
-      color: #f8fafc;
+      color: #6d28d9;
       margin-top: 16px;
     }
 
@@ -180,13 +193,13 @@
       flex: 1;
     }
     .split-card {
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 28px 30px;
       display: flex;
       flex-direction: column;
     }
-    .split-bad { background: rgba(244,63,94,0.06); border: 1.5px solid rgba(244,63,94,0.3); }
-    .split-good { background: rgba(16,185,129,0.06); border: 1.5px solid rgba(16,185,129,0.3); }
+    .split-bad { background: #fff5f5; border: 1.5px solid #fecdd3; }
+    .split-good { background: #f5f3ff; border: 2px solid #8b5cf6; box-shadow: 0 10px 25px rgba(139,92,246,0.08); }
 
     /* Nav */
     .controls {
@@ -196,37 +209,38 @@
       margin-top: 22px;
     }
     .btn-nav {
-      background: #1e293b;
-      color: #fff;
-      border: 1px solid #334155;
+      background: #ffffff;
+      color: #6d28d9;
+      border: 1.5px solid #c4b5fd;
       padding: 10px 24px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       font-family: inherit;
+      box-shadow: 0 4px 12px rgba(109, 40, 217, 0.08);
       transition: all 0.2s;
     }
-    .btn-nav:hover { background: #8b5cf6; border-color: #8b5cf6; }
-    .counter { font-size: 14px; color: #64748b; font-weight: 600; }
+    .btn-nav:hover { background: #6d28d9; color: #fff; }
+    .counter { font-size: 14px; color: #6d28d9; font-weight: 700; }
   </style>
 </head>
 <body>
 
   <div class="deck-container">
 
-    <!-- SLIDE 1: INTRO -->
+    <!-- SLIDE 1: INTRO (WITH GIVEN IMAGE) -->
     <div class="slide active" id="slide1">
       <div style="display:flex; height:100%; gap:40px; align-items:center;">
         <div style="flex:1.2;">
-          <div class="badge badge-purple">⚡ GOOGLE MAPS GROWTH ENGINE</div>
+          <div class="badge badge-purple">⚡ AI-POWERED LOCAL SEO ENGINE</div>
           <h1 style="font-size:46px; font-weight:900; line-height:1.15; margin-bottom:16px;">
-            Turn Every Walk-In<br>Into a 5-Star<br><span style="color:#8b5cf6;">Google Review.</span>
+            Turn Every Walk-In<br>Into a 5-Star<br><span style="color:#7c3aed;">Google Review.</span>
           </h1>
-          <p style="font-size:16px; color:#94a3b8; line-height:1.6; margin-bottom:28px;">
-            30-second tabletop QR feedback that ranks your local business #1 on Google Maps — automatically.
+          <p style="font-size:16px; color:#475569; line-height:1.6; margin-bottom:28px;">
+            30-second tabletop QR feedback that ranks your local business #1 on Google Maps — completely automated.
           </p>
-          <div style="background:#121827; border:1px solid #1f293d; border-radius:12px; padding:14px 22px; font-size:13px; font-weight:700; display:inline-flex; gap:18px;">
+          <div style="background:#ffffff; border:1.5px solid #c4b5fd; border-radius:14px; padding:14px 22px; font-size:13px; font-weight:700; color:#1e1b4b; display:inline-flex; gap:18px; box-shadow:0 4px 15px rgba(109,40,217,0.06);">
             <span>⏱️ 30 Sec Journey</span>
             <span>•</span>
             <span>⚡ 100% Automated</span>
@@ -236,7 +250,7 @@
         </div>
 
         <div style="flex:0.8; height:100%; display:flex; align-items:center; justify-content:center;">
-          <img src="C:/Users/AMIT/.gemini/antigravity-ide/brain/57426d26-9a80-48d1-bde5-6d3eaa15d5ee/revly_qr_stand_mockup_1791808615898.png" style="max-height:92%; max-width:100%; border-radius:16px; border:2px solid #8b5cf6; box-shadow:0 15px 40px rgba(139,92,246,0.3); object-fit:contain;" alt="Revly QR Stand">
+          <img src="/tabletop_stand.png" style="max-height:94%; max-width:100%; filter:drop-shadow(0 20px 30px rgba(109,40,217,0.18)); object-fit:contain;" alt="Revly Tabletop QR Stand">
         </div>
       </div>
     </div>
@@ -250,19 +264,23 @@
 
       <div class="metric-grid-2x2">
         <div class="metric-card">
-          <div class="stat-num" style="color:#f43f5e;">88%</div>
-          <div class="stat-line">People search Google Maps before visiting a local shop.</div>
+          <div class="stat-num" style="color:#e11d48;">88%</div>
+          <div class="stat-tag">Local Search Dominance</div>
+          <div class="stat-line">People search Google Maps before visiting a local shop or cafe.</div>
         </div>
         <div class="metric-card">
-          <div class="stat-num" style="color:#f59e0b;">95%</div>
-          <div class="stat-line">Satisfied walk-in customers leave without writing any review.</div>
+          <div class="stat-num" style="color:#d97706;">95%</div>
+          <div class="stat-tag">The Silent Customer Exit</div>
+          <div class="stat-line">Satisfied walk-in customers leave without writing any Google review.</div>
         </div>
         <div class="metric-card">
-          <div class="stat-num" style="color:#8b5cf6;">Top 3</div>
-          <div class="stat-line">Only the top 3 spots on Google Maps get 75%+ of customer visits.</div>
+          <div class="stat-num" style="color:#6d28d9;">Top 3</div>
+          <div class="stat-tag">The Winner's Circle</div>
+          <div class="stat-line">Only the top 3 spots on Google Maps get 75%+ of all local customer visits.</div>
         </div>
         <div class="metric-card">
-          <div class="stat-num" style="color:#06b6d4;">2 Words</div>
+          <div class="stat-num" style="color:#0284c7;">2 Words</div>
+          <div class="stat-tag">The Generic Review Trap</div>
           <div class="stat-line">Average review length ('Nice food'). Zero keywords for Google ranking.</div>
         </div>
       </div>
@@ -277,33 +295,22 @@
 
       <div class="step-grid-3">
         <div class="step-card">
-          <div class="step-badge" style="color:#8b5cf6;">STEP 1</div>
+          <div class="step-badge" style="color:#6d28d9;">STEP 1</div>
           <div class="step-title">0 App Download</div>
-          <div class="step-desc">
-            Customer scans the branded tabletop QR stander with their smartphone camera.<br><br>
-            • Instant mobile load (&lt;1s)<br>
-            • Zero sign-up barrier
-          </div>
+          <div class="step-sub" style="color:#6d28d9;">📱 Instant Camera Scan</div>
+          <div class="step-desc">Customer scans the tabletop stander with their smartphone camera. Loads in under 1 second.</div>
         </div>
         <div class="step-card">
-          <div class="step-badge" style="color:#06b6d4;">STEP 2</div>
+          <div class="step-badge" style="color:#0284c7;">STEP 2</div>
           <div class="step-title">3 Emojis</div>
-          <div class="step-desc">
-            Customer rates 2-3 quick aspects of their visit with one tap.<br><br>
-            • AI weaves their ratings<br>
-            • Inserts targeted SEO keywords<br>
-            • 100% human tone
-          </div>
+          <div class="step-sub" style="color:#0284c7;">⚡ Smart Micro-Feedback</div>
+          <div class="step-desc">Customer rates 2-3 quick aspects. AI weaves ratings + targeted SEO keywords into a genuine draft.</div>
         </div>
         <div class="step-card">
-          <div class="step-badge" style="color:#10b981;">STEP 3</div>
+          <div class="step-badge" style="color:#059669;">STEP 3</div>
           <div class="step-title">1 Tap Post</div>
-          <div class="step-desc">
-            Review auto-copies & Google Maps opens instantly.<br><br>
-            • Customer pastes & posts in 3s<br>
-            • Review goes live immediately<br>
-            • Verified contact saved
-          </div>
+          <div class="step-sub" style="color:#059669;">⭐ Google Maps Post</div>
+          <div class="step-desc">Review auto-copies & Google Maps opens. Customer pastes and posts in 3 seconds!</div>
         </div>
       </div>
 
@@ -315,26 +322,26 @@
     <!-- SLIDE 4: WHY KEYWORDS WIN -->
     <div class="slide" id="slide4">
       <div>
-        <div class="badge badge-purple">THE SECRET TO RANKING</div>
+        <div class="badge badge-purple">LOCAL SEO SECRET</div>
         <h2 class="slide-title">Why Keywords Make or Break Your Google Rank</h2>
       </div>
 
       <div class="split-grid">
         <div class="split-card split-bad">
-          <div style="font-size:24px; font-weight:900; color:#f43f5e; margin-bottom:14px;">0 Keywords = 0 Ranking</div>
-          <div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:16px;">“Nice food, super place.”</div>
-          <div style="font-size:14px; color:#94a3b8; line-height:1.7;">
-            • Zero dish or service names<br>
-            • Zero search keywords<br>
+          <div style="font-size:24px; font-weight:900; color:#e11d48; margin-bottom:14px;">❌ 0 Keywords = 0 Ranking</div>
+          <div style="font-size:20px; font-weight:800; color:#1e1b4b; margin-bottom:16px;">“Nice food, super place.”</div>
+          <div style="font-size:14px; color:#475569; line-height:1.7;">
+            • Zero dish or service names mentioned<br>
+            • Zero search keywords for Google's algorithm<br>
             • Google Maps completely ignores it<br>
             • Business stays invisible for 'near me' searches
           </div>
         </div>
 
         <div class="split-card split-good">
-          <div style="font-size:24px; font-weight:900; color:#10b981; margin-bottom:14px;">Keywords = Top 3 Rank</div>
-          <div style="font-size:16px; font-weight:700; color:#fff; line-height:1.5; margin-bottom:16px;">“Loved the creamy Alfredo pasta and cold brew! Relaxing seating atmosphere.”</div>
-          <div style="font-size:14px; color:#94a3b8; line-height:1.7;">
+          <div style="font-size:24px; font-weight:900; color:#6d28d9; margin-bottom:14px;">✅ Keywords = Top 3 Rank</div>
+          <div style="font-size:16px; font-weight:700; color:#1e1b4b; line-height:1.5; margin-bottom:16px;">“Loved the creamy Alfredo pasta and cold brew! Relaxing seating atmosphere.”</div>
+          <div style="font-size:14px; color:#475569; line-height:1.7;">
             • Keywords Indexed: <em>Alfredo pasta, cold brew, relaxing atmosphere</em><br>
             • Google recognizes your exact offerings<br>
             • Ranks #1 when locals search pasta, coffee, or hangout<br>
@@ -347,25 +354,25 @@
     <!-- SLIDE 5: FEATURES -->
     <div class="slide" id="slide5">
       <div>
-        <div class="badge badge-cyan">KEY FEATURES</div>
-        <h2 class="slide-title">Built for Store Owners. Zero Tech Skills.</h2>
+        <div class="badge badge-purple">KEY FEATURES</div>
+        <h2 class="slide-title">Built for Store Owners. Zero Tech Skills Needed.</h2>
       </div>
 
       <div class="metric-grid-2x2">
         <div class="metric-card">
-          <div style="font-size:20px; font-weight:800; color:#8b5cf6; margin-bottom:8px;">Custom Question Bank</div>
-          <div class="stat-line">Tailored for Cafes, Salons, Clinics, Gyms & Retail. 3 random questions per scan.</div>
+          <div style="font-size:20px; font-weight:800; color:#6d28d9; margin-bottom:8px;">🎯 Custom Question Bank</div>
+          <div class="stat-line">Tailored for Cafes, Salons, Clinics, Gyms & Retail. 3 random questions per scan so reviews cover all aspects.</div>
         </div>
         <div class="metric-card">
-          <div style="font-size:20px; font-weight:800; color:#10b981; margin-bottom:8px;">Customer Contact CRM</div>
-          <div class="stat-line">Captures names and phone numbers to identify repeat loyal visitors.</div>
+          <div style="font-size:20px; font-weight:800; color:#059669; margin-bottom:8px;">👥 Customer Contact CRM</div>
+          <div class="stat-line">Captures names and mobile numbers. Identify repeat loyal visitors automatically.</div>
         </div>
         <div class="metric-card">
-          <div style="font-size:20px; font-weight:800; color:#06b6d4; margin-bottom:8px;">Operational Health Scores</div>
-          <div class="stat-line">Live ratings for food, staff speed, and cleanliness to catch issues early.</div>
+          <div style="font-size:20px; font-weight:800; color:#0284c7; margin-bottom:8px;">📊 Operational Health Scores</div>
+          <div class="stat-line">Live ratings for food, staff speed, and cleanliness to catch internal service flaws early.</div>
         </div>
         <div class="metric-card">
-          <div style="font-size:20px; font-weight:800; color:#f59e0b; margin-bottom:8px;">Branded Tabletop Standers</div>
+          <div style="font-size:20px; font-weight:800; color:#d97706; margin-bottom:8px;">🏷️ Branded Tabletop Standers</div>
           <div class="stat-line">Custom shop colors, logo, and print-ready QR codes for tables and counters.</div>
         </div>
       </div>
@@ -380,28 +387,28 @@
 
       <div class="stat-row-4">
         <div class="stat-card-v">
-          <div style="font-size:38px; font-weight:900; color:#8b5cf6; margin-bottom:8px;">10x</div>
-          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Review Velocity</div>
-          <div style="font-size:12px; color:#94a3b8;">Turn silent walk-ins into 5-star brand promoters.</div>
+          <div style="font-size:40px; font-weight:900; color:#6d28d9; margin-bottom:8px;">10x</div>
+          <div style="font-weight:800; font-size:14px; color:#1e1b4b; margin-bottom:6px;">Review Velocity</div>
+          <div style="font-size:12px; color:#64748b;">Turn silent walk-ins into 5-star brand promoters.</div>
         </div>
         <div class="stat-card-v">
-          <div style="font-size:38px; font-weight:900; color:#10b981; margin-bottom:8px;">#1 Rank</div>
-          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Google Maps 3-Pack</div>
-          <div style="font-size:12px; color:#94a3b8;">Outrank competitors without spending on paid ads.</div>
+          <div style="font-size:40px; font-weight:900; color:#059669; margin-bottom:8px;">#1 Rank</div>
+          <div style="font-weight:800; font-size:14px; color:#1e1b4b; margin-bottom:6px;">Google Maps 3-Pack</div>
+          <div style="font-size:12px; color:#64748b;">Outrank competitors without spending on paid ads.</div>
         </div>
         <div class="stat-card-v">
-          <div style="font-size:38px; font-weight:900; color:#06b6d4; margin-bottom:8px;">2,000+</div>
-          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">Phone Leads / Mo</div>
-          <div style="font-size:12px; color:#94a3b8;">Own your customer database for festival campaigns.</div>
+          <div style="font-size:40px; font-weight:900; color:#0284c7; margin-bottom:8px;">2,000+</div>
+          <div style="font-weight:800; font-size:14px; color:#1e1b4b; margin-bottom:6px;">Phone Leads / Mo</div>
+          <div style="font-size:12px; color:#64748b;">Own your customer database for festival campaigns.</div>
         </div>
         <div class="stat-card-v">
-          <div style="font-size:38px; font-weight:900; color:#f59e0b; margin-bottom:8px;">0 Effort</div>
-          <div style="font-weight:700; font-size:14px; margin-bottom:8px;">100% Automated</div>
-          <div style="font-size:12px; color:#94a3b8;">Zero manual follow-ups, zero staff begging.</div>
+          <div style="font-size:40px; font-weight:900; color:#d97706; margin-bottom:8px;">0 Effort</div>
+          <div style="font-weight:800; font-size:14px; color:#1e1b4b; margin-bottom:6px;">100% Automated</div>
+          <div style="font-size:12px; color:#64748b;">Zero manual follow-ups, zero staff begging.</div>
         </div>
       </div>
 
-      <div class="strip" style="background:#1a1436; border-color:#8b5cf6; padding:14px;">
+      <div class="strip" style="background:#581c87; color:#ffffff; border-color:#7c3aed; padding:16px;">
         🎯 Every customer who enters your shop is a Google Ranking opportunity. Revly turns daily footfall into permanent Google Maps dominance.
       </div>
     </div>
